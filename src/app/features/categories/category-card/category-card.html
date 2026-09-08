@@ -1,0 +1,17 @@
+<a
+  routerLink="/products"
+  [queryParams]="{ category: category().categoryId }"
+  class="group block rounded-3xl bg-serein-surface p-7 transition duration-300 hover:-translate-y-1 hover:shadow-lg"
+>
+  <div class="mb-8 flex h-14 w-14 items-center justify-center rounded-full bg-serein-bg text-xl">
+    ✦
+  </div>
+
+  <h3 class="font-display text-2xl">
+    {{ displayName() }}
+  </h3>
+
+  <p class="mt-2 text-sm opacity-60">Explore collection</p>
+
+  <div class="mt-6 text-sm text-serein-brand transition group-hover:translate-x-1">Shop now →</div>
+</a>

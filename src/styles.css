@@ -1,0 +1,35 @@
+@import "tailwindcss";
+
+@theme {
+  --color-serein-bg: #f7f1ea;
+  --color-serein-surface: #fffcf8;
+  --color-serein-text: #332b27;
+  --color-serein-brand: #7a5a4b;
+  --color-serein-accent: #c98c78;
+
+  --font-display: Georgia, Cambria, "Times New Roman", serif;
+  --font-body: Inter, ui-sans-serif, system-ui, sans-serif;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: var(--color-serein-bg);
+  color: var(--color-serein-text);
+  font-family: var(--font-body);
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}

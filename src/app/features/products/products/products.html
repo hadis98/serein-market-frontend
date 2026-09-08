@@ -1,0 +1,23 @@
+<section class="mx-auto max-w-7xl px-6 py-16">
+  <header class="mb-12">
+    <p class="mb-3 text-sm uppercase tracking-[0.25em] text-serein-brand">Our collection</p>
+
+    <h1 class="font-display text-5xl md:text-6xl">Shop groceries</h1>
+
+    <p class="mt-4 max-w-xl text-base opacity-70">
+      Everyday essentials presented with a calmer shopping experience.
+    </p>
+  </header>
+
+  @if (loading()) {
+    <p>Loading products...</p>
+  } @else {
+    <div class="grid gap-7 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+      @for (product of visibleProducts(); track product.productId) {
+        <app-product-card [product]="product" />
+      } @empty {
+        <p>No products were found</p>
+      }
+    </div>
+  }
+</section>

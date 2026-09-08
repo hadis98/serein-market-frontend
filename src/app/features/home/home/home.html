@@ -1,0 +1,132 @@
+<!-- HERO -->
+<section class="mx-auto max-w-7xl px-6 pt-12 md:pt-20">
+  <div class="grid overflow-hidden rounded-[2.5rem] bg-serein-surface lg:grid-cols-2">
+    <!-- Hero text -->
+    <div class="flex flex-col justify-center p-8 md:p-14 lg:p-20">
+      <p class="mb-5 text-xs uppercase tracking-[0.3em] text-serein-brand">Everyday essentials</p>
+
+      <h1 class="max-w-xl font-display text-5xl leading-[1.05] md:text-7xl">
+        A softer way to shop everyday.
+      </h1>
+
+      <p class="mt-7 max-w-lg text-base leading-7 opacity-65">
+        Thoughtfully selected groceries, home essentials, personal care and more — all in one calm
+        shopping experience.
+      </p>
+
+      <div class="mt-9 flex flex-wrap gap-4">
+        <a
+          routerLink="/products"
+          class="rounded-2xl bg-serein-brand px-7 py-4 text-sm text-white transition hover:opacity-90"
+        >
+          Shop collection
+        </a>
+
+        <a
+          href="#categories"
+          class="rounded-2xl border border-serein-brand px-7 py-4 text-sm transition hover:bg-serein-brand hover:text-white"
+        >
+          Explore categories
+        </a>
+      </div>
+    </div>
+
+    <!-- Visual -->
+    <div class="relative min-h-[420px] overflow-hidden bg-[#dfcfc4] lg:min-h-[620px]">
+      <div
+        class="absolute left-[12%] top-[15%] h-[45%] w-[45%] rounded-[3rem] bg-serein-accent/70"
+      ></div>
+
+      <div
+        class="absolute bottom-[10%] right-[10%] h-[55%] w-[50%] rounded-[3rem] bg-serein-brand"
+      ></div>
+
+      <div
+        class="absolute bottom-[18%] left-[18%] max-w-xs rounded-3xl bg-serein-surface p-6 shadow-xl"
+      >
+        <p class="text-xs uppercase tracking-[0.2em] text-serein-brand">Curated shopping</p>
+
+        <p class="mt-3 font-display text-3xl">
+          Simple products.
+          <br />
+          Beautiful experience.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CATEGORIES -->
+<section id="categories" class="mx-auto max-w-7xl px-6 py-24">
+  <div class="mb-12 flex flex-col justify-between gap-4 md:flex-row md:items-end">
+    <div>
+      <p class="mb-3 text-xs uppercase tracking-[0.3em] text-serein-brand">Discover</p>
+
+      <h2 class="font-display text-4xl md:text-5xl">Shop by category</h2>
+    </div>
+
+    <a routerLink="/products" class="text-sm text-serein-brand"> View everything → </a>
+  </div>
+
+  @if (loading()) {
+    <p>Loading categories...</p>
+  } @else {
+    <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+      @for (category of categories(); track category.categoryId) {
+        <app-category-card [category]="category" />
+      }
+    </div>
+  }
+</section>
+
+<!-- FEATURED PRODUCTS -->
+<section class="bg-serein-surface py-24">
+  <div class="mx-auto max-w-7xl px-6">
+    <div class="mb-12 flex flex-col justify-between gap-4 md:flex-row md:items-end">
+      <div>
+        <p class="mb-3 text-xs uppercase tracking-[0.3em] text-serein-brand">Selected for you</p>
+
+        <h2 class="font-display text-4xl md:text-5xl">Featured products</h2>
+      </div>
+
+      <a routerLink="/products" class="text-sm text-serein-brand"> Shop all → </a>
+    </div>
+
+    @if (loading()) {
+      <p>Loading products...</p>
+    } @else {
+      <div class="grid gap-7 sm:grid-cols-2 lg:grid-cols-4">
+        @for (product of featuredProducts(); track product.productId) {
+          <app-product-card [product]="product" />
+        }
+      </div>
+    }
+  </div>
+</section>
+
+<!-- PROMO -->
+<section class="mx-auto max-w-7xl px-6 py-24">
+  <div class="grid overflow-hidden rounded-[2.5rem] bg-serein-brand text-white md:grid-cols-2">
+    <div class="p-10 md:p-16">
+      <p class="text-xs uppercase tracking-[0.3em] opacity-70">Serein Market</p>
+
+      <h2 class="mt-5 max-w-lg font-display text-4xl md:text-5xl">
+        Essentials delivered with less noise.
+      </h2>
+
+      <p class="mt-6 max-w-md leading-7 opacity-75">
+        Discover groceries, care products and household essentials through a simpler shopping
+        experience.
+      </p>
+
+      <a
+        routerLink="/products"
+        class="mt-8 inline-block rounded-2xl bg-serein-surface px-7 py-4 text-sm text-serein-text"
+      >
+        Start shopping
+      </a>
+    </div>
+
+    <div class="min-h-80 bg-serein-accent"></div>
+  </div>
+</section>
