@@ -11,3 +11,5 @@ export interface Product {
   productImageUrl: string;
   categoryName: string;
 }
+
+export type SortOption = 'default' | 'price-low' | 'price-high' | 'name';

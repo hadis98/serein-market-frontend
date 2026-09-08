@@ -1,0 +1,36 @@
+<section class="mx-auto flex min-h-[70vh] max-w-4xl items-center px-6 py-20">
+  <div class="w-full rounded-[3rem] bg-serein-surface p-10 text-center md:p-20">
+    <div
+      class="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-serein-brand text-3xl text-white"
+    >
+      ✓
+    </div>
+
+    <p class="mt-8 text-xs uppercase tracking-[0.3em] text-serein-brand">Order confirmed</p>
+
+    <h1 class="mt-4 font-display text-5xl md:text-6xl">Thank you.</h1>
+
+    <p class="mx-auto mt-6 max-w-md leading-7 opacity-60">
+      Your order has been received and is being prepared.
+    </p>
+
+    @if (total > 0) {
+      <p class="mt-8 text-xl">
+        Order total:
+        <strong>
+          {{ total | currency: 'INR' : 'symbol' : '1.0-0' }}
+        </strong>
+      </p>
+    }
+
+    <div class="mt-10 flex flex-wrap justify-center gap-4">
+      <a routerLink="/products" class="rounded-2xl bg-serein-brand px-7 py-4 text-sm text-white">
+        Continue shopping
+      </a>
+
+      <a routerLink="/" class="rounded-2xl border border-serein-brand px-7 py-4 text-sm">
+        Back home
+      </a>
+    </div>
+  </div>
+</section>

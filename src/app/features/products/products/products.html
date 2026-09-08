@@ -8,9 +8,53 @@
       Everyday essentials presented with a calmer shopping experience.
     </p>
   </header>
+  <div class="mb-10 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+    <!-- Search -->
+    <div class="relative w-full max-w-md">
+      <input
+        type="search"
+        placeholder="Search products..."
+        class="w-full rounded-2xl border border-black/10 bg-serein-surface px-5 py-4 outline-none transition focus:border-serein-brand"
+        [value]="searchTerm()"
+        (input)="updateSearch($event)"
+      />
+    </div>
 
+    <div class="flex items-center gap-5">
+      <p class="text-sm opacity-60">{{ visibleProducts().length }} products</p>
+
+      <select
+        class="rounded-2xl border border-black/10 bg-serein-surface px-4 py-3 text-sm outline-none"
+        (change)="updateSort($event)"
+      >
+        <option value="default">Sort by</option>
+
+        <option value="price-low">Price: Low to High</option>
+
+        <option value="price-high">Price: High to Low</option>
+
+        <option value="name">Name</option>
+      </select>
+    </div>
+  </div>
   @if (loading()) {
-    <p>Loading products...</p>
+    <div class="grid gap-7 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+      @for (item of skeletonItems; track $index) {
+        <div class="overflow-hidden rounded-3xl bg-serein-surface">
+          <div class="aspect-square animate-pulse bg-black/5"></div>
+
+          <div class="space-y-4 p-5">
+            <div class="h-3 w-24 animate-pulse rounded bg-black/5"></div>
+
+            <div class="h-7 w-3/4 animate-pulse rounded bg-black/5"></div>
+
+            <div class="h-4 w-full animate-pulse rounded bg-black/5"></div>
+
+            <div class="h-10 w-full animate-pulse rounded bg-black/5"></div>
+          </div>
+        </div>
+      }
+    </div>
   } @else {
     <div class="grid gap-7 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
       @for (product of visibleProducts(); track product.productId) {

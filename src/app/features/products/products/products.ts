@@ -1,9 +1,10 @@
-import { Component, computed, inject } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { toSignal } from '@angular/core/rxjs-interop';
 
 import { BigBasketApi } from '../../../core/api/big-basket-api';
 import { ProductCard } from '../product-card/product-card';
+import { SortOption } from '../../../core/models/product';
 
 @Component({
   imports: [ProductCard],
@@ -14,7 +15,10 @@ import { ProductCard } from '../product-card/product-card';
 export class Products {
   private readonly api = inject(BigBasketApi);
   private readonly route = inject(ActivatedRoute);
-
+  
+  readonly skeletonItems = Array.from({length: 8});
+  readonly searchTerm = signal('');
+  readonly sortBy = signal<SortOption>('default');
   private readonly productsResponse = toSignal(this.api.getProducts(), { initialValue: null });
 
   private readonly queryParams = toSignal(this.route.queryParamMap, {
@@ -28,13 +32,46 @@ export class Products {
     return category ? Number(category) : null;
   });
 
-  readonly visibleProducts = computed(() => {
-    const categoryId = this.selectedCategoryId();
+  updateSort(event: Event) {
+    const select = event.target as HTMLSelectElement;
 
-    if (!categoryId) {
-      return this.products();
+    this.sortBy.set(select.value as SortOption);
+  }
+
+  updateSearch(event: Event) {
+    const input = event.target as HTMLInputElement;
+    this.searchTerm.set(input.value);
+  }
+
+  readonly visibleProducts = computed(() => {
+    let products = this.products();
+
+    const categoryId = this.selectedCategoryId();
+    const search = this.searchTerm().trim().toLowerCase();
+
+    if (categoryId) {
+      products = products.filter((product) => product.categoryId === categoryId);
     }
-    return this.products().filter((product) => product.categoryId === categoryId);
+
+    if (search) {
+      products = products.filter((product) =>
+        product.productName.toLocaleLowerCase().includes(search),
+      );
+    }
+
+    switch (this.sortBy()) {
+      case 'price-low':
+        return [...products].sort((a, b) => a.productPrice - b.productPrice);
+
+      case 'price-high':
+        return [...products].sort((a, b) => b.productPrice - a.productPrice);
+
+      case 'name':
+        return [...products].sort((a, b) => a.productName.localeCompare(b.productName));
+
+      default:
+        return products;
+    }
   });
 
   readonly loading = computed(() => this.productsResponse() === null);

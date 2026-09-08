@@ -1,0 +1,248 @@
+<section class="mx-auto max-w-7xl px-6 py-16">
+  <div class="mb-12">
+    <p class="mb-3 text-xs uppercase tracking-[0.3em] text-serein-brand">Almost there</p>
+
+    <h1 class="font-display text-5xl md:text-6xl">Checkout</h1>
+  </div>
+
+  <div class="grid gap-10 lg:grid-cols-[1fr_380px]">
+    <!-- CHECKOUT FORM -->
+    <form
+      id="checkout-form"
+      [formRoot]="checkoutForm"
+      class="rounded-[2.5rem] bg-serein-surface p-7 md:p-10"
+    >
+      <!-- Contact -->
+      <div>
+        <p class="text-xs uppercase tracking-[0.25em] text-serein-brand">Contact</p>
+
+        <h2 class="mt-2 font-display text-3xl">Your details</h2>
+      </div>
+
+      <div class="mt-8 grid gap-6 md:grid-cols-2">
+        <!-- NAME -->
+        <div class="md:col-span-2">
+          <label for="fullName" class="mb-2 block text-sm"> Full name </label>
+
+          <input
+            id="fullName"
+            type="text"
+            placeholder="Your full name"
+            [formField]="checkoutForm.fullName"
+            class="w-full rounded-2xl border border-black/10 bg-white px-5 py-4 outline-none transition focus:border-serein-brand"
+          />
+
+          @if (checkoutForm.fullName().touched() && checkoutForm.fullName().invalid()) {
+            <p class="mt-2 text-sm text-red-700">
+              {{ checkoutForm.fullName().errors()[0].message }}
+            </p>
+          }
+        </div>
+
+        <!-- EMAIL -->
+        <div>
+          <label for="email" class="mb-2 block text-sm"> Email </label>
+
+          <input
+            id="email"
+            type="email"
+            placeholder="you@example.com"
+            [formField]="checkoutForm.email"
+            class="w-full rounded-2xl border border-black/10 bg-white px-5 py-4 outline-none transition focus:border-serein-brand"
+          />
+
+          @if (checkoutForm.email().touched() && checkoutForm.email().invalid()) {
+            <p class="mt-2 text-sm text-red-700">
+              {{ checkoutForm.email().errors()[0].message }}
+            </p>
+          }
+        </div>
+
+        <!-- PHONE -->
+        <div>
+          <label for="phone" class="mb-2 block text-sm"> Phone </label>
+
+          <input
+            id="phone"
+            type="tel"
+            placeholder="Phone number"
+            [formField]="checkoutForm.phone"
+            class="w-full rounded-2xl border border-black/10 bg-white px-5 py-4 outline-none transition focus:border-serein-brand"
+          />
+
+          @if (checkoutForm.phone().touched() && checkoutForm.phone().invalid()) {
+            <p class="mt-2 text-sm text-red-700">
+              {{ checkoutForm.phone().errors()[0].message }}
+            </p>
+          }
+        </div>
+      </div>
+
+      <!-- DELIVERY ADDRESS -->
+      <div class="mt-12 border-t border-black/10 pt-10">
+        <p class="text-xs uppercase tracking-[0.25em] text-serein-brand">Delivery</p>
+
+        <h2 class="mt-2 font-display text-3xl">Shipping address</h2>
+      </div>
+
+      <div class="mt-8 grid gap-6 md:grid-cols-2">
+        <!-- ADDRESS -->
+        <div class="md:col-span-2">
+          <label for="address" class="mb-2 block text-sm"> Address </label>
+
+          <textarea
+            id="address"
+            rows="4"
+            placeholder="Street, building, apartment..."
+            [formField]="checkoutForm.address"
+            class="w-full resize-none rounded-2xl border border-black/10 bg-white px-5 py-4 outline-none transition focus:border-serein-brand"
+          ></textarea>
+
+          @if (checkoutForm.address().touched() && checkoutForm.address().invalid()) {
+            <p class="mt-2 text-sm text-red-700">
+              {{ checkoutForm.address().errors()[0].message }}
+            </p>
+          }
+        </div>
+
+        <!-- CITY -->
+        <div>
+          <label for="city" class="mb-2 block text-sm"> City </label>
+
+          <input
+            id="city"
+            type="text"
+            [formField]="checkoutForm.city"
+            class="w-full rounded-2xl border border-black/10 bg-white px-5 py-4 outline-none transition focus:border-serein-brand"
+          />
+          @if (checkoutForm.city().touched() && checkoutForm.city().invalid()) {
+            <p class="mt-2 text-sm text-red-700">
+              {{ checkoutForm.city().errors()[0].message }}
+            </p>
+          }
+        </div>
+
+        <!-- POSTAL CODE -->
+        <div>
+          <label for="postalCode" class="mb-2 block text-sm"> Postal code </label>
+
+          <input
+            id="postalCode"
+            type="text"
+            [formField]="checkoutForm.postalCode"
+            class="w-full rounded-2xl border border-black/10 bg-white px-5 py-4 outline-none transition focus:border-serein-brand"
+          />
+          @if (checkoutForm.postalCode().touched() && checkoutForm.postalCode().invalid()) {
+            <p class="mt-2 text-sm text-red-700">
+              {{ checkoutForm.postalCode().errors()[0].message }}
+            </p>
+          }
+        </div>
+      </div>
+
+      <!-- PAYMENT -->
+      <div class="mt-12 border-t border-black/10 pt-10">
+        <p class="text-xs uppercase tracking-[0.25em] text-serein-brand">Payment</p>
+
+        <h2 class="mt-2 font-display text-3xl">Payment method</h2>
+
+        <div class="mt-7 grid gap-4">
+          <label
+            class="flex cursor-pointer items-center gap-4 rounded-2xl border border-black/10 p-5"
+          >
+            <input type="radio" value="cod" [formField]="checkoutForm.paymentMethod" />
+
+            <div>
+              <p class="font-medium">Cash on delivery</p>
+
+              <p class="mt-1 text-sm opacity-60">Pay when your order arrives.</p>
+            </div>
+          </label>
+
+          <label
+            class="flex cursor-pointer items-center gap-4 rounded-2xl border border-black/10 p-5"
+          >
+            <input type="radio" value="card" [formField]="checkoutForm.paymentMethod" />
+
+            <div>
+              <p class="font-medium">Card payment</p>
+
+              <p class="mt-1 text-sm opacity-60">Payment integration coming later.</p>
+            </div>
+          </label>
+        </div>
+      </div>
+
+      <!-- MOBILE SUBMIT -->
+      <button
+        type="submit"
+        form="checkout-form"
+        class="mt-10 w-full rounded-2xl bg-serein-brand px-8 py-4 text-white lg:hidden"
+        [disabled]="checkoutForm().submitting()"
+      >
+        @if (checkoutForm().submitting()) {
+          Processing...
+        } @else {
+          Place order
+        }
+      </button>
+    </form>
+
+    <!-- ORDER SUMMARY -->
+    <aside class="h-fit rounded-[2rem] bg-serein-brand p-8 text-white lg:sticky lg:top-28">
+      <p class="text-xs uppercase tracking-[0.25em] opacity-70">Your order</p>
+
+      <h2 class="mt-3 font-display text-3xl">Order summary</h2>
+
+      <div class="mt-8 space-y-5">
+        @for (item of cart.items(); track item.product.productId) {
+          <div class="flex justify-between gap-5">
+            <div>
+              <p class="text-sm">
+                {{ item.product.productName }}
+              </p>
+
+              <p class="mt-1 text-xs opacity-60">Qty {{ item.quantity }}</p>
+            </div>
+
+            <p class="text-sm">
+              {{ item.product.productPrice * item.quantity | currency: 'INR' : 'symbol' : '1.0-0' }}
+            </p>
+          </div>
+        }
+      </div>
+
+      <div class="mt-8 border-t border-white/20 pt-6">
+        <div class="flex justify-between text-sm">
+          <span class="opacity-70"> Subtotal </span>
+
+          <span>
+            {{ cart.subtotal() | currency: 'INR' : 'symbol' : '1.0-0' }}
+          </span>
+        </div>
+
+        <div class="mt-4 flex justify-between text-sm">
+          <span class="opacity-70"> Delivery </span>
+
+          <span> Free </span>
+        </div>
+
+        <div class="mt-7 flex justify-between border-t border-white/20 pt-7 text-xl">
+          <span>Total</span>
+
+          <strong>
+            {{ cart.subtotal() | currency: 'INR' : 'symbol' : '1.0-0' }}
+          </strong>
+        </div>
+      </div>
+
+      <button
+        type="submit"
+        form="checkout-form"
+        class="mt-8 hidden w-full rounded-2xl bg-serein-surface px-6 py-4 text-sm font-medium text-serein-text lg:block"
+      >
+        Place order
+      </button>
+    </aside>
+  </div>
+</section>

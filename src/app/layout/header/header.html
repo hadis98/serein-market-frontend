@@ -1,16 +1,7 @@
-<header
-  class="sticky top-0 z-50 border-b border-black/5 bg-serein-bg/95 backdrop-blur"
->
-  <div
-    class="mx-auto flex max-w-7xl items-center justify-between px-6 py-5"
-  >
+<header class="sticky top-0 z-50 border-b border-black/5 bg-serein-bg/95 backdrop-blur">
+  <div class="mx-auto flex max-w-7xl items-center justify-between px-6 py-5">
     <!-- Logo -->
-    <a
-      routerLink="/"
-      class="font-display text-3xl tracking-tight"
-    >
-      Serein
-    </a>
+    <a routerLink="/" class="font-display text-3xl tracking-tight"> Serein </a>
 
     <!-- Navigation -->
     <nav class="hidden items-center gap-8 md:flex">
@@ -34,18 +25,24 @@
 
     <!-- Actions -->
     <div class="flex items-center gap-3">
-      <button
-        class="rounded-full px-3 py-2 transition hover:bg-black/5"
-        aria-label="Search"
-      >
+      <button class="rounded-full px-3 py-2 transition hover:bg-black/5" aria-label="Search">
         ♡
       </button>
 
-      <button
-        class="rounded-full border border-serein-brand px-5 py-2 text-sm transition hover:bg-serein-brand hover:text-white"
+      <a
+        routerLink="/cart"
+        class="flex items-center gap-2 rounded-full border border-serein-brand px-5 py-2 text-sm transition hover:bg-serein-brand hover:text-white"
       >
         Cart
-      </button>
+
+        @if (cart.itemCount() > 0) {
+          <span
+            class="flex h-6 min-w-6 items-center justify-center rounded-full bg-serein-accent px-1.5 text-xs text-white"
+          >
+            {{ cart.itemCount() }}
+          </span>
+        }
+      </a>
     </div>
   </div>
 </header>
