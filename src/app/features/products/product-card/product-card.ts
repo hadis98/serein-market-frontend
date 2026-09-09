@@ -4,6 +4,8 @@ import { CurrencyPipe } from '@angular/common';
 import { Product } from '../../../core/models/product';
 import { RouterLink } from '@angular/router';
 import { CartStore } from '../../../core/state/cart-store';
+import { WishlistStore } from '../../../core/state/wishlist-store';
+import { ToastStore } from '../../../core/state/toast-store';
 
 @Component({
   imports: [CurrencyPipe, RouterLink],
@@ -14,10 +16,22 @@ import { CartStore } from '../../../core/state/cart-store';
 export class ProductCard {
   readonly product = input.required<Product>();
 
+  readonly wishlist = inject(WishlistStore);
+  private readonly toast = inject(ToastStore);
   readonly cart = inject(CartStore);
 
   addToCart() {
-    console.log("added")
-    this.cart.add(this.product());
+    const product = this.product();
+    this.cart.add(product);
+
+    this.toast.show(`${product.productName} added to cart`);
+  }
+
+  toggleWishlist() {
+    const product = this.product();
+
+    const wasSaved = this.wishlist.has(product.productId);
+    this.wishlist.toggle(product.productId);
+    this.toast.show(wasSaved ? 'Removed from wishlist.' : 'Added to wishlist');
   }
 }

@@ -1,15 +1,30 @@
 <article
   class="group overflow-hidden rounded-3xl bg-serein-surface transition duration-300 hover:-translate-y-1 hover:shadow-lg"
 >
-  <a [routerLink]="['/products', product().productId]">
-    <div class="aspect-square overflow-hidden bg-white">
+  <div class="relative aspect-square overflow-hidden bg-white">
+    <a [routerLink]="['/products', product().productId]">
       <img
         class="h-full w-full object-contain p-6 transition duration-500 group-hover:scale-105"
         [src]="product().productImageUrl"
         [alt]="product().productName"
       />
-    </div>
-  </a>
+    </a>
+
+    <button
+      type="button"
+      class="absolute right-4 top-4 flex h-10 w-10 items-center justify-center rounded-full bg-serein-surface shadow-sm"
+      [attr.aria-label]="
+        wishlist.has(product().productId) ? 'Remove from wishlist' : 'Add to wishlist'
+      "
+      (click)="toggleWishlist()"
+    >
+      @if (wishlist.has(product().productId)) {
+        ♥
+      } @else {
+        ♡
+      }
+    </button>
+  </div>
 
   <div class="p-5">
     <p class="mb-2 text-xs uppercase tracking-widest text-serein-accent">

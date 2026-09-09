@@ -68,11 +68,16 @@
           >
             Add to cart
           </button>
-
           <button
+            type="button"
             class="rounded-2xl border border-serein-brand px-6 py-4 transition hover:bg-serein-brand hover:text-white"
+            (click)="toggleWishlist()"
           >
-            ♡
+            @if (wishlist.has(product.productId)) {
+              ♥ Saved
+            } @else {
+              ♡ Save
+            }
           </button>
         </div>
 

@@ -16,6 +16,16 @@ export const routes: Routes = [
     loadComponent: () => import('./features/auth/register/register').then((m) => m.Register),
   },
   {
+    path: 'profile',
+    canActivate: [authGuard],
+    loadComponent: () => import('./features/account/profile/profile').then((m) => m.Profile),
+  },
+  {
+    path: 'wishlist',
+    canActivate: [authGuard],
+    loadComponent: () => import('./features/wishlist/wishlist/wishlist').then((m) => m.Wishlist),
+  },
+  {
     path: 'products',
     loadComponent: () => import('./features/products/products/products').then((m) => m.Products),
   },

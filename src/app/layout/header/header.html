@@ -25,9 +25,21 @@
 
     <!-- Actions -->
     <div class="flex items-center gap-3">
-      <button class="rounded-full px-3 py-2 transition hover:bg-black/5" aria-label="Search">
+      <a
+        routerLink="/wishlist"
+        class="relative flex h-10 w-10 items-center justify-center rounded-full transition hover:bg-black/5"
+        aria-label="Wishlist"
+      >
         ♡
-      </button>
+
+        @if (wishlist.count() > 0) {
+          <span
+            class="absolute -right-1 -top-1 flex h-5 min-w-5 items-center justify-center rounded-full bg-serein-accent px-1 text-[10px] text-white"
+          >
+            {{ wishlist.count() }}
+          </span>
+        }
+      </a>
 
       <a
         routerLink="/cart"
@@ -45,11 +57,11 @@
       </a>
       @if (auth.isLoggedIn()) {
         <div class="flex items-center gap-3">
-          <span class="hidden text-sm sm:block"> Hi, {{ auth.firstName() }} </span>
+          <a routerLink="/profile" class="text-sm transition hover:text-serein-brand"
+            >Hi, {{ auth.firstName() }}</a
+          >
 
-          <button type="button" class="text-sm text-serein-brand" (click)="auth.logout()">
-            Logout
-          </button>
+          <button type="button" class="text-sm text-serein-brand" (click)="logout()">Logout</button>
         </div>
       } @else {
         <a routerLink="/login" class="text-sm transition hover:text-serein-brand"> Sign in </a>

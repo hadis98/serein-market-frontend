@@ -5,6 +5,8 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 
 import { BigBasketApi } from '../../../core/api/big-basket-api';
 import { CartStore } from '../../../core/state/cart-store';
+import { WishlistStore } from '../../../core/state/wishlist-store';
+import { ToastStore } from '../../../core/state/toast-store';
 
 @Component({
   imports: [CurrencyPipe, RouterLink],
@@ -15,6 +17,8 @@ import { CartStore } from '../../../core/state/cart-store';
 export class ProductDetails {
   private readonly api = inject(BigBasketApi);
   private readonly route = inject(ActivatedRoute);
+  readonly wishlist = inject(WishlistStore);
+  private readonly toast = inject(ToastStore);
   readonly cart = inject(CartStore);
 
   private readonly productsResponse = toSignal(this.api.getProducts(), { initialValue: null });
@@ -36,5 +40,18 @@ export class ProductDetails {
     if (product) {
       this.cart.add(product);
     }
+  }
+
+  toggleWishlist() {
+    const product = this.product();
+
+    if (!product) {
+      return;
+    }
+
+    const wasSaved = this.wishlist.has(product.productId);
+    this.wishlist.toggle(product.productId);
+
+    this.toast.show(wasSaved ? 'Removed from wishlist.' : 'Added to wishlist.');
   }
 }
