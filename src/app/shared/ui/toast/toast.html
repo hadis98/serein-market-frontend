@@ -1,0 +1,20 @@
+@if (toastStore.toast(); as toast) {
+  <div
+    class="fixed right-6 top-24 z-[100] w-[calc(100%-3rem)] max-w-sm rounded-2xl bg-serein-text px-5 py-4 text-white shadow-xl"
+  >
+    <div class="flex items-center justify-between gap-4">
+      <p class="text-sm">
+        {{ toast.message }}
+      </p>
+
+      <button
+        type="button"
+        class="opacity-60 hover:opacity-100"
+        aria-label="Close notification"
+        (click)="toastStore.hide()"
+      >
+        ×
+      </button>
+    </div>
+  </div>
+}

@@ -1,0 +1,175 @@
+<section class="mx-auto max-w-6xl px-6 py-16">
+  <div class="mb-12">
+    <p class="mb-3 text-xs uppercase tracking-[0.3em] text-serein-brand">Account</p>
+
+    <h1 class="font-display text-5xl md:text-6xl">Your profile</h1>
+  </div>
+
+  @if (auth.customer(); as customer) {
+    <div class="grid gap-8 lg:grid-cols-[280px_1fr]">
+      <!-- ACCOUNT MENU -->
+      <aside class="h-fit rounded-[2rem] bg-serein-surface p-6">
+        <div
+          class="flex h-16 w-16 items-center justify-center rounded-full bg-serein-brand text-2xl text-white"
+        >
+          {{ customer.name.charAt(0).toUpperCase() }}
+        </div>
+
+        <h2 class="mt-5 font-display text-2xl">
+          {{ customer.name }}
+        </h2>
+
+        <p class="mt-1 text-sm opacity-60">Customer #{{ customer.custId }}</p>
+
+        <nav class="mt-8 space-y-2">
+          <a routerLink="/profile" class="block rounded-xl bg-serein-bg px-4 py-3 text-sm">
+            Profile
+          </a>
+
+          <a routerLink="/orders" class="block rounded-xl px-4 py-3 text-sm hover:bg-serein-bg">
+            Orders
+          </a>
+
+          <a routerLink="/wishlist" class="block rounded-xl px-4 py-3 text-sm hover:bg-serein-bg">
+            Wishlist
+          </a>
+        </nav>
+      </aside>
+
+      <!-- DETAILS -->
+      <div class="rounded-[2.5rem] bg-serein-surface p-8 md:p-10">
+        <div class="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
+          <div>
+            <p class="text-xs uppercase tracking-[0.25em] text-serein-brand">
+              Personal information
+            </p>
+
+            <h2 class="mt-2 font-display text-3xl">Account details</h2>
+          </div>
+
+          @if (!editing()) {
+            <button
+              type="button"
+              class="rounded-2xl border border-serein-brand px-5 py-3 text-sm transition hover:bg-serein-brand hover:text-white"
+              (click)="startEditing()"
+            >
+              Edit profile
+            </button>
+          }
+        </div>
+
+        @if (!editing()) {
+          @if (auth.customer(); as customer) {
+            <div class="mt-10 space-y-6">
+              <div class="border-b border-black/10 pb-5">
+                <p class="text-xs uppercase tracking-widest opacity-50">Name</p>
+
+                <p class="mt-2 text-lg">
+                  {{ customer.name }}
+                </p>
+              </div>
+
+              <div class="border-b border-black/10 pb-5">
+                <p class="text-xs uppercase tracking-widest opacity-50">Mobile</p>
+
+                <p class="mt-2 text-lg">
+                  {{ customer.mobileNo }}
+                </p>
+              </div>
+
+              <div>
+                <p class="text-xs uppercase tracking-widest opacity-50">Customer ID</p>
+
+                <p class="mt-2 text-lg">
+                  {{ customer.custId }}
+                </p>
+              </div>
+            </div>
+          }
+        } @else {
+          <!-- EDIT FORM -->
+
+          <form [formRoot]="profileForm" class="mt-10 space-y-6">
+            <!-- NAME -->
+
+            <div>
+              <label for="profile-name" class="mb-2 block text-sm"> Name </label>
+
+              <input
+                id="profile-name"
+                type="text"
+                [formField]="profileForm.name"
+                class="w-full rounded-2xl border border-black/10 bg-white px-5 py-4 outline-none focus:border-serein-brand"
+              />
+
+              @if (profileForm.name().touched() && profileForm.name().invalid()) {
+                <p class="mt-2 text-sm text-red-700">
+                  {{ profileForm.name().errors()[0].message }}
+                </p>
+              }
+            </div>
+
+            <!-- MOBILE -->
+
+            <div>
+              <label for="profile-mobile" class="mb-2 block text-sm"> Mobile number </label>
+
+              <input
+                id="profile-mobile"
+                type="tel"
+                [formField]="profileForm.mobileNo"
+                class="w-full rounded-2xl border border-black/10 bg-white px-5 py-4 outline-none focus:border-serein-brand"
+              />
+            </div>
+
+            <!-- PASSWORD -->
+
+            <div>
+              <label for="profile-password" class="mb-2 block text-sm"> Password </label>
+
+              <input
+                id="profile-password"
+                type="password"
+                [formField]="profileForm.password"
+                placeholder="Enter password"
+                class="w-full rounded-2xl border border-black/10 bg-white px-5 py-4 outline-none focus:border-serein-brand"
+              />
+              @if (profileForm.password().touched() && profileForm.password().invalid()) {
+                <p class="mt-2 text-sm text-red-700">
+                  {{ profileForm.password().errors()[0].message }}
+                </p>
+              }
+
+              <p class="mt-2 text-xs opacity-50">
+                The API requires a password when updating your profile.
+              </p>
+            </div>
+
+            @if (errorMessage()) {
+              <p class="rounded-2xl bg-red-50 p-4 text-sm text-red-700">
+                {{ errorMessage() }}
+              </p>
+            }
+
+            <div class="flex flex-wrap gap-4">
+              <button
+                type="submit"
+                class="rounded-2xl bg-serein-brand px-7 py-4 text-sm text-white"
+              >
+                Save changes
+              </button>
+
+              <button
+                type="button"
+                class="rounded-2xl border border-black/10 px-7 py-4 text-sm"
+                (click)="cancelEditing()"
+              >
+                Cancel
+              </button>
+            </div>
+          </form>
+        }
+      </div>
+    </div>
+  }
+</section>

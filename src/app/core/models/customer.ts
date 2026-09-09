@@ -22,3 +22,10 @@ export interface LoginCustomerDto {
   mobileNo: string;
   password: string;
 }
+
+export interface UpdateProfileRequest {
+  CustId: number;
+  Name: string;
+  MobileNo: string;
+  Password: string;
+}

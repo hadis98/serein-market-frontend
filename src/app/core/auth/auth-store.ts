@@ -1,7 +1,12 @@
 import { computed, inject, Injectable, signal } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
 import { AuthApi } from './auth-api';
-import { Customer, LoginRequest, RegisterCustomerRequest } from '../models/customer';
+import {
+  Customer,
+  LoginRequest,
+  RegisterCustomerRequest,
+  UpdateProfileRequest,
+} from '../models/customer';
 
 @Injectable({
   providedIn: 'root',
@@ -48,6 +53,25 @@ export class AuthStore {
   logout() {
     this.customerState.set(null);
     localStorage.removeItem(this.storageKey);
+  }
+
+  async updateProfile(request: UpdateProfileRequest) {
+    const response = await firstValueFrom(this.authApi.updateProfile(request));
+
+    if (!response.result) {
+      throw new Error(response.message || 'Profile update failed');
+    }
+
+    const updatedCustomer: Customer = {
+      custId: request.CustId,
+      name: request.Name,
+      mobileNo: request.MobileNo,
+    };
+
+    this.customerState.set(updatedCustomer);
+    localStorage.setItem(this.storageKey, JSON.stringify(updatedCustomer));
+    
+    return response;
   }
 
   private loadCustomer(): Customer | null {
