@@ -1,0 +1,94 @@
+<section class="mx-auto flex min-h-[75vh] max-w-7xl items-center px-6 py-16">
+  <div
+    class="mx-auto grid w-full max-w-5xl overflow-hidden rounded-[3rem] bg-serein-surface lg:grid-cols-2"
+  >
+    <!-- Decorative side -->
+    <div
+      class="hidden min-h-[620px] bg-serein-accent p-12 text-white lg:flex lg:flex-col lg:justify-end"
+    >
+      <p class="text-xs uppercase tracking-[0.3em] opacity-70">Join Serein</p>
+
+      <h1 class="mt-4 font-display text-5xl">
+        Everyday shopping,
+        <br />
+        made calmer.
+      </h1>
+    </div>
+
+    <!-- Form -->
+    <div class="p-8 md:p-14">
+      <p class="text-xs uppercase tracking-[0.3em] text-serein-brand">Account</p>
+
+      <h1 class="mt-3 font-display text-4xl">Create account</h1>
+
+      <form [formRoot]="registerForm" class="mt-10 space-y-6">
+        <!-- NAME -->
+        <div>
+          <label class="mb-2 block text-sm"> Full name </label>
+
+          <input
+            type="text"
+            [formField]="registerForm.name"
+            class="w-full rounded-2xl border border-black/10 bg-white px-5 py-4 outline-none focus:border-serein-brand"
+          />
+
+          @if (registerForm.name().touched() && registerForm.name().invalid()) {
+            <p class="mt-2 text-sm text-red-700">
+              {{ registerForm.name().errors()[0].message }}
+            </p>
+          }
+        </div>
+
+        <!-- MOBILE -->
+        <div>
+          <label class="mb-2 block text-sm"> Mobile number </label>
+
+          <input
+            type="tel"
+            [formField]="registerForm.mobileNo"
+            class="w-full rounded-2xl border border-black/10 bg-white px-5 py-4 outline-none focus:border-serein-brand"
+          />
+
+          @if (registerForm.mobileNo().touched() && registerForm.mobileNo().invalid()) {
+            <p class="mt-2 text-sm text-red-700">
+              {{ registerForm.mobileNo().errors()[0].message }}
+            </p>
+          }
+        </div>
+
+        <!-- PASSWORD -->
+        <div>
+          <label class="mb-2 block text-sm"> Password </label>
+
+          <input
+            type="password"
+            [formField]="registerForm.password"
+            class="w-full rounded-2xl border border-black/10 bg-white px-5 py-4 outline-none focus:border-serein-brand"
+          />
+
+          @if (registerForm.password().touched() && registerForm.password().invalid()) {
+            <p class="mt-2 text-sm text-red-700">
+              {{ registerForm.password().errors()[0].message }}
+            </p>
+          }
+        </div>
+
+        @if (errorMessage()) {
+          <p class="rounded-2xl bg-red-50 p-4 text-sm text-red-700">
+            {{ errorMessage() }}
+          </p>
+        }
+
+        <button type="submit" class="w-full rounded-2xl bg-serein-brand px-6 py-4 text-white">
+          Create account
+        </button>
+      </form>
+
+      <p class="mt-8 text-center text-sm opacity-70">
+        Already have an account?
+
+        <a routerLink="/login" class="font-medium text-serein-brand"> Sign in </a>
+      </p>
+    </div>
+  </div>
+</section>

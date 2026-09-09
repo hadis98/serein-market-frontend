@@ -1,10 +1,19 @@
 import { Routes } from '@angular/router';
 import { checkoutGuard } from './core/guards/checkout-guard';
+import { authGuard } from './core/guards/auth-guard';
 
 export const routes: Routes = [
   {
     path: '',
     loadComponent: () => import('./features/home/home/home').then((m) => m.Home),
+  },
+  {
+    path: 'login',
+    loadComponent: () => import('./features/auth/login/login').then((m) => m.Login),
+  },
+  {
+    path: 'register',
+    loadComponent: () => import('./features/auth/register/register').then((m) => m.Register),
   },
   {
     path: 'products',
@@ -21,7 +30,7 @@ export const routes: Routes = [
   },
   {
     path: 'checkout',
-    canActivate: [checkoutGuard],
+    canActivate: [checkoutGuard, authGuard],
     loadComponent: () => import('./features/checkout/checkout/checkout').then((m) => m.Checkout),
   },
   {
