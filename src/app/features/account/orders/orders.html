@@ -1,0 +1,69 @@
+<section class="mx-auto max-w-6xl px-6 py-16">
+  <div class="mb-12">
+    <p class="mb-3 text-xs uppercase tracking-[0.3em] text-serein-brand">Account</p>
+
+    <h1 class="font-display text-5xl md:text-6xl">Your orders</h1>
+  </div>
+
+  @if (orderStore.orders().length === 0) {
+    <div class="rounded-[2.5rem] bg-serein-surface py-24 text-center">
+      <h2 class="font-display text-3xl">No orders yet</h2>
+
+      <p class="mt-3 opacity-60">Your completed purchases will appear here.</p>
+
+      <a
+        routerLink="/products"
+        class="mt-8 inline-block rounded-2xl bg-serein-brand px-7 py-4 text-sm text-white"
+      >
+        Start shopping
+      </a>
+    </div>
+  } @else {
+    <div class="space-y-5">
+      @for (order of orderStore.orders(); track order.localId) {
+        <a
+          [routerLink]="['/orders', order.localId]"
+          class="block rounded-3xl bg-serein-surface p-7 transition hover:-translate-y-0.5 hover:shadow-md"
+        >
+          <div class="flex flex-col justify-between gap-5 md:flex-row md:items-center">
+            <div>
+              <p class="text-xs uppercase tracking-widest opacity-50">
+                {{ order.saleDate | date: 'mediumDate' }}
+              </p>
+
+              <h2 class="mt-2 font-display text-2xl">Order #{{ order.localId.slice(0, 8) }}</h2>
+            </div>
+
+            <div class="flex items-center gap-8">
+              <div>
+                <p class="text-xs opacity-50">Items</p>
+
+                <p class="mt-1">
+                  {{ order.items.length }}
+                </p>
+              </div>
+
+              <div>
+                <p class="text-xs opacity-50">Total</p>
+
+                <p class="mt-1 font-semibold">
+                  {{ order.total | currency: 'INR' }}
+                </p>
+              </div>
+
+              @if (order.isCancelled) {
+                <span class="rounded-full bg-red-50 px-4 py-2 text-xs text-red-700">
+                  Cancelled
+                </span>
+              } @else {
+                <span class="rounded-full bg-green-50 px-4 py-2 text-xs text-green-700">
+                  Confirmed
+                </span>
+              }
+            </div>
+          </div>
+        </a>
+      }
+    </div>
+  }
+</section>

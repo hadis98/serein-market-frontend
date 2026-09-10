@@ -5,6 +5,9 @@ import { Router } from '@angular/router';
 
 import { CartStore } from '../../../core/state/cart-store';
 import { CheckoutDetails } from '../../../core/models/checkout-details';
+import { OrderStore } from '../../../core/state/order-store';
+import { ToastStore } from '../../../core/state/toast-store';
+import { AuthStore } from '../../../core/auth/auth-store';
 
 @Component({
   selector: 'app-checkout',
@@ -14,7 +17,9 @@ import { CheckoutDetails } from '../../../core/models/checkout-details';
 })
 export class Checkout {
   readonly cart = inject(CartStore);
-
+  private readonly orders = inject(OrderStore);
+  private readonly auth = inject(AuthStore);
+  private readonly toast = inject(ToastStore);
   private readonly router = inject(Router);
 
   readonly checkoutModel = signal<CheckoutDetails>({
@@ -67,13 +72,57 @@ export class Checkout {
     {
       submission: {
         action: async () => {
-          const total = this.cart.subtotal();
+          const customer = this.auth.customer();
 
-          this.cart.clear();
+          if (!customer) {
+            return;
+          }
 
-          await this.router.navigate(['/order-success'], {
-            state: { total },
-          });
+          const form = this.checkoutModel();
+
+          try {
+            const order = await this.orders.placeOrder({
+              SaleId: 0,
+
+              CustId: customer.custId,
+
+              SaleDate: new Date().toISOString(),
+
+              TotalInvoiceAmount: this.cart.subtotal(),
+
+              Discount: 0,
+
+              PaymentNaration: form.paymentMethod === 'cod' ? 'Cash on delivery' : 'Card',
+
+              DeliveryAddress1: form.address,
+
+              DeliveryAddress2: '',
+
+              DeliveryCity: form.city,
+
+              DeliveryPinCode: form.postalCode,
+
+              DeliveryLandMark: '',
+
+              IsCancelled: false,
+            });
+
+            const total = order.total;
+
+            this.cart.clear();
+
+            await this.router.navigate(['/order-success'], {
+              state: {
+                total,
+                orderId: order.localId,
+              },
+            });
+          } catch (error) {
+            this.toast.show(
+              error instanceof Error ? error.message : 'Could not place your order.',
+              'error',
+            );
+          }
         },
       },
     },

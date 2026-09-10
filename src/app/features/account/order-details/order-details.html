@@ -1,0 +1,206 @@
+<section class="mx-auto max-w-6xl px-6 py-16">
+  <a routerLink="/orders" class="mb-10 inline-block text-sm text-serein-brand">
+    ← Back to orders
+  </a>
+
+  @if (order(); as order) {
+    <div class="grid gap-8 lg:grid-cols-[1fr_340px]">
+      <!-- MAIN CONTENT -->
+      <div class="space-y-8">
+        <!-- ORDER HEADER -->
+        <section class="rounded-[2.5rem] bg-serein-surface p-8 md:p-10">
+          <div class="flex flex-col justify-between gap-6 sm:flex-row sm:items-start">
+            <div>
+              <p class="text-xs uppercase tracking-[0.3em] text-serein-brand">Order details</p>
+
+              <h1 class="mt-3 font-display text-4xl md:text-5xl">
+                Order #{{ order.localId.slice(0, 8) }}
+              </h1>
+
+              <p class="mt-3 text-sm opacity-60">
+                {{ order.saleDate | date: 'medium' }}
+              </p>
+            </div>
+
+            @if (order.isCancelled) {
+              <span class="w-fit rounded-full bg-red-50 px-4 py-2 text-sm text-red-700">
+                Cancelled
+              </span>
+            } @else {
+              <span class="w-fit rounded-full bg-green-50 px-4 py-2 text-sm text-green-700">
+                Confirmed
+              </span>
+            }
+          </div>
+        </section>
+
+        <!-- ORDER ITEMS -->
+        <section class="rounded-[2.5rem] bg-serein-surface p-8 md:p-10">
+          <p class="text-xs uppercase tracking-[0.3em] text-serein-brand">Items</p>
+
+          <h2 class="mt-2 font-display text-3xl">What you ordered</h2>
+
+          <div class="mt-8 divide-y divide-black/10">
+            @for (item of order.items; track item.productId) {
+              <div
+                class="grid grid-cols-[90px_1fr] gap-5 py-6 first:pt-0 last:pb-0 sm:grid-cols-[110px_1fr]"
+              >
+                <!-- IMAGE -->
+                <a
+                  [routerLink]="['/products', item.productId]"
+                  class="aspect-square overflow-hidden rounded-2xl bg-white"
+                >
+                  <img
+                    class="h-full w-full object-contain p-3"
+                    [src]="item.imageUrl"
+                    [alt]="item.name"
+                  />
+                </a>
+
+                <!-- ITEM DETAILS -->
+                <div class="flex flex-col justify-between gap-4 sm:flex-row">
+                  <div>
+                    <a [routerLink]="['/products', item.productId]">
+                      <h3 class="font-display text-xl hover:text-serein-brand">
+                        {{ item.name }}
+                      </h3>
+                    </a>
+
+                    <p class="mt-2 text-sm opacity-60">
+                      {{ item.price | currency: 'INR' : 'symbol' : '1.0-0' }}
+                      ×
+                      {{ item.quantity }}
+                    </p>
+                  </div>
+
+                  <p class="font-semibold">
+                    {{ item.price * item.quantity | currency: 'INR' : 'symbol' : '1.0-0' }}
+                  </p>
+                </div>
+              </div>
+            }
+          </div>
+        </section>
+
+        <!-- DELIVERY -->
+        <section class="rounded-[2.5rem] bg-serein-surface p-8 md:p-10">
+          <p class="text-xs uppercase tracking-[0.3em] text-serein-brand">Delivery</p>
+
+          <h2 class="mt-2 font-display text-3xl">Shipping details</h2>
+
+          <div class="mt-8 grid gap-8 md:grid-cols-2">
+            <!-- CUSTOMER -->
+            <div>
+              <p class="text-xs uppercase tracking-widest opacity-50">Customer</p>
+
+              <p class="mt-3 text-lg">
+                {{ order.customer.name }}
+              </p>
+
+              <p class="mt-1 text-sm opacity-60">
+                {{ order.customer.mobileNo }}
+              </p>
+            </div>
+
+            <!-- ADDRESS -->
+            <div>
+              <p class="text-xs uppercase tracking-widest opacity-50">Address</p>
+
+              <div class="mt-3 leading-7">
+                <p>
+                  {{ order.delivery.address1 }}
+                </p>
+
+                @if (order.delivery.address2) {
+                  <p>
+                    {{ order.delivery.address2 }}
+                  </p>
+                }
+
+                <p>
+                  {{ order.delivery.city }}
+                </p>
+
+                <p>
+                  {{ order.delivery.postalCode }}
+                </p>
+
+                @if (order.delivery.landmark) {
+                  <p class="mt-2 text-sm opacity-60">
+                    Landmark:
+                    {{ order.delivery.landmark }}
+                  </p>
+                }
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <!-- ORDER SUMMARY -->
+      <aside class="h-fit rounded-[2rem] bg-serein-brand p-8 text-white lg:sticky lg:top-28">
+        <p class="text-xs uppercase tracking-[0.25em] opacity-70">Summary</p>
+
+        <h2 class="mt-3 font-display text-3xl">Order total</h2>
+
+        <div class="mt-8 space-y-4 border-b border-white/20 pb-7">
+          <div class="flex justify-between">
+            <span class="opacity-70"> Products </span>
+
+            <span>
+              {{ order.items.length }}
+            </span>
+          </div>
+
+          <div class="flex justify-between">
+            <span class="opacity-70"> Discount </span>
+
+            <span>
+              {{ order.discount | currency: 'INR' : 'symbol' : '1.0-0' }}
+            </span>
+          </div>
+
+          <div class="flex justify-between">
+            <span class="opacity-70"> Payment </span>
+
+            <span class="text-right">
+              {{ order.paymentMethod }}
+            </span>
+          </div>
+        </div>
+
+        <div class="flex justify-between py-7 text-xl">
+          <span>Total</span>
+
+          <strong>
+            {{ order.total | currency: 'INR' : 'symbol' : '1.0-0' }}
+          </strong>
+        </div>
+
+        @if (order.saleId !== null && !order.isCancelled) {
+          <button
+            type="button"
+            class="w-full rounded-2xl bg-serein-surface px-6 py-4 text-sm font-medium text-serein-text"
+          >
+            Cancel order
+          </button>
+        }
+      </aside>
+    </div>
+  } @else {
+    <!-- ORDER NOT FOUND -->
+
+    <div class="rounded-[2.5rem] bg-serein-surface px-6 py-24 text-center">
+      <h1 class="font-display text-4xl">Order not found</h1>
+
+      <p class="mt-3 opacity-60">We couldn't find this order.</p>
+
+      <a
+        routerLink="/orders"
+        class="mt-8 inline-block rounded-2xl bg-serein-brand px-7 py-4 text-sm text-white"
+      >
+        Back to orders
+      </a>
+    </div>
+  }
+</section>
