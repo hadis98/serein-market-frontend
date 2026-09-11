@@ -1,0 +1,64 @@
+<div class="min-h-screen bg-[#f5f2ee]">
+  <div class="grid min-h-screen lg:grid-cols-[260px_1fr]">
+    <!-- SIDEBAR -->
+    <aside class="border-r border-black/10 bg-serein-text p-6 text-white">
+      <a routerLink="/admin" class="font-display text-3xl"> Serein </a>
+
+      <p class="mt-2 text-xs uppercase tracking-[0.25em] opacity-50">Administration</p>
+
+      <nav class="mt-12 space-y-2">
+        <a
+          routerLink="/admin"
+          routerLinkActive="bg-white/10"
+          [routerLinkActiveOptions]="{
+            exact: true,
+          }"
+          class="block rounded-xl px-4 py-3 text-sm transition hover:bg-white/10"
+        >
+          Dashboard
+        </a>
+
+        <a
+          routerLink="/admin/products"
+          routerLinkActive="bg-white/10"
+          class="block rounded-xl px-4 py-3 text-sm transition hover:bg-white/10"
+        >
+          Products
+        </a>
+
+        <a
+          routerLink="/admin/categories"
+          routerLinkActive="bg-white/10"
+          class="block rounded-xl px-4 py-3 text-sm transition hover:bg-white/10"
+        >
+          Categories
+        </a>
+
+        <a
+          routerLink="/admin/customers"
+          routerLinkActive="bg-white/10"
+          class="block rounded-xl px-4 py-3 text-sm transition hover:bg-white/10"
+        >
+          Customers
+        </a>
+
+        <a
+          routerLink="/admin/orders"
+          routerLinkActive="bg-white/10"
+          class="block rounded-xl px-4 py-3 text-sm transition hover:bg-white/10"
+        >
+          Orders
+        </a>
+      </nav>
+
+      <div class="mt-12 border-t border-white/10 pt-6">
+        <a routerLink="/" class="text-sm opacity-60 hover:opacity-100"> ← Back to store </a>
+      </div>
+    </aside>
+
+    <!-- ADMIN PAGE -->
+    <main class="p-6 md:p-10">
+      <router-outlet />
+    </main>
+  </div>
+</div>

@@ -1,0 +1,203 @@
+<section class="mx-auto max-w-5xl">
+  <a routerLink="/admin/products" class="text-sm text-serein-brand"> ← Back to products </a>
+
+  <div class="mt-8">
+    <p class="text-xs uppercase tracking-[0.3em] text-serein-brand">Catalogue</p>
+
+    <h1 class="mt-2 font-display text-4xl">
+      @if (isEditMode()) {
+        Edit product
+      } @else {
+        Add product
+      }
+    </h1>
+  </div>
+
+  @if (isEditMode() && productStore.loading()) {
+    <div class="mt-10 rounded-3xl bg-white p-10">Loading product...</div>
+  } @else if (isEditMode() && productStore.loaded() && !product()) {
+    <div class="mt-10 rounded-3xl bg-white p-10">
+      <h2 class="font-display text-3xl">Product not found</h2>
+
+      <p class="mt-3 opacity-60">This product does not exist.</p>
+    </div>
+  } @else {
+    <form [formRoot]="productForm" class="mt-10 rounded-[2.5rem] bg-white p-8 md:p-10">
+      <div class="grid gap-6 md:grid-cols-2">
+        <!-- PRODUCT NAME -->
+        <div class="md:col-span-2">
+          <label class="mb-2 block text-sm"> Product name </label>
+
+          <input
+            type="text"
+            [formField]="productForm.name"
+            class="w-full rounded-2xl border border-black/10 px-5 py-4 outline-none focus:border-serein-brand"
+          />
+
+          @if (productForm.name().touched() && productForm.name().invalid()) {
+            <p class="mt-2 text-sm text-red-700">
+              {{ productForm.name().errors()[0].message }}
+            </p>
+          }
+        </div>
+
+        <!-- SKU -->
+        <div>
+          <label class="mb-2 block text-sm"> SKU </label>
+
+          <input
+            type="text"
+            [formField]="productForm.sku"
+            class="w-full rounded-2xl border border-black/10 px-5 py-4 outline-none focus:border-serein-brand"
+          />
+
+          @if (productForm.sku().touched() && productForm.sku().invalid()) {
+            <p class="mt-2 text-sm text-red-700">
+              {{ productForm.sku().errors()[0].message }}
+            </p>
+          }
+        </div>
+
+        <!-- SHORT NAME -->
+        <div>
+          <label class="mb-2 block text-sm"> Short name </label>
+
+          <input
+            type="text"
+            [formField]="productForm.shortName"
+            class="w-full rounded-2xl border border-black/10 px-5 py-4 outline-none focus:border-serein-brand"
+          />
+        </div>
+
+        <!-- PRICE -->
+        <div>
+          <label class="mb-2 block text-sm"> Price </label>
+
+          <input
+            type="number"
+            [formField]="productForm.price"
+            class="w-full rounded-2xl border border-black/10 px-5 py-4 outline-none focus:border-serein-brand"
+          />
+
+          @if (productForm.price().touched() && productForm.price().invalid()) {
+            <p class="mt-2 text-sm text-red-700">
+              {{ productForm.price().errors()[0].message }}
+            </p>
+          }
+        </div>
+
+        <!-- CATEGORY -->
+        <div>
+          <label class="mb-2 block text-sm"> Category </label>
+
+          <select
+            [formField]="productForm.categoryId"
+            class="w-full rounded-2xl border border-black/10 bg-white px-5 py-4 outline-none focus:border-serein-brand"
+          >
+            <option value="">Select category</option>
+
+            @for (category of categories(); track category.categoryId) {
+              <option [value]="category.categoryId">
+                {{ category.categoryName }}
+              </option>
+            }
+          </select>
+          @if (productForm.categoryId().touched() && productForm.categoryId().invalid()) {
+            <p class="mt-2 text-sm text-red-700">
+              {{ productForm.categoryId().errors()[0].message }}
+            </p>
+          }
+        </div>
+
+        <!-- DELIVERY -->
+        <div>
+          <label class="mb-2 block text-sm"> Delivery time </label>
+
+          <input
+            type="text"
+            placeholder="e.g. 30 Min"
+            [formField]="productForm.deliveryTimeSpan"
+            class="w-full rounded-2xl border border-black/10 px-5 py-4 outline-none focus:border-serein-brand"
+          />
+
+          @if (
+            productForm.deliveryTimeSpan().touched() && productForm.deliveryTimeSpan().invalid()
+          ) {
+            <p class="mt-2 text-sm text-red-700">
+              {{ productForm.deliveryTimeSpan().errors()[0].message }}
+            </p>
+          }
+        </div>
+
+        <!-- IMAGE URL -->
+        <div>
+          <label class="mb-2 block text-sm"> Image URL </label>
+
+          <input
+            type="url"
+            [formField]="productForm.imageUrl"
+            class="w-full rounded-2xl border border-black/10 px-5 py-4 outline-none focus:border-serein-brand"
+          />
+
+          @if (productForm.imageUrl().touched() && productForm.imageUrl().invalid()) {
+            <p class="mt-2 text-sm text-red-700">
+              {{ productForm.imageUrl().errors()[0].message }}
+            </p>
+          }
+        </div>
+
+        <!-- DESCRIPTION -->
+        <div class="md:col-span-2">
+          <label class="mb-2 block text-sm"> Description </label>
+
+          <textarea
+            rows="5"
+            [formField]="productForm.description"
+            class="w-full resize-none rounded-2xl border border-black/10 px-5 py-4 outline-none focus:border-serein-brand"
+          ></textarea>
+        </div>
+      </div>
+
+      <!-- IMAGE PREVIEW -->
+
+      @if (model().imageUrl) {
+        <div class="mt-10 border-t border-black/10 pt-8">
+          <p class="mb-4 text-xs uppercase tracking-widest opacity-50">Preview</p>
+
+          <div
+            class="flex h-48 w-48 items-center justify-center overflow-hidden rounded-3xl bg-serein-bg"
+          >
+            <img
+              class="h-full w-full object-contain p-4"
+              [src]="model().imageUrl"
+              [alt]="model().name"
+            />
+          </div>
+        </div>
+      }
+
+      <div class="mt-10 flex flex-wrap gap-4">
+        <button
+          type="submit"
+          class="rounded-2xl bg-serein-brand px-8 py-4 text-sm text-white disabled:opacity-50"
+          [disabled]="productForm().submitting()"
+        >
+          @if (productForm().submitting()) {
+            Saving...
+          } @else if (isEditMode()) {
+            Save changes
+          } @else {
+            Create product
+          }
+        </button>
+
+        <a
+          routerLink="/admin/products"
+          class="rounded-2xl border border-black/10 px-8 py-4 text-sm"
+        >
+          Cancel
+        </a>
+      </div>
+    </form>
+  }
+</section>
