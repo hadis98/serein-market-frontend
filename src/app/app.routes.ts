@@ -98,6 +98,13 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./features/admin/products/product-form/product-form').then((m) => m.ProductForm),
       },
+      {
+        path: 'categories',
+        loadComponent: () =>
+          import('./features/admin/categories/admin-categories/admin-categories').then(
+            (m) => m.AdminCategories,
+          ),
+      },
     ],
   },
 

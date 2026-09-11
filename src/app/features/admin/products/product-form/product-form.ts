@@ -7,6 +7,7 @@ import { ProductStore } from '../../../../core/state/product-store';
 import { ToastStore } from '../../../../core/state/toast-store';
 import { BigBasketApi } from '../../../../core/api/big-basket-api';
 import { ProductUpsertRequest } from '../../../../core/models/product-request';
+import { CategoryStore } from '../../../../core/state/category-store';
 
 interface ProductFormModel {
   sku: string;
@@ -27,7 +28,7 @@ interface ProductFormModel {
 })
 export class ProductForm {
   readonly productStore = inject(ProductStore);
-  private readonly api = inject(BigBasketApi);
+  readonly categoryStore = inject(CategoryStore);
   private readonly toast = inject(ToastStore);
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
@@ -36,10 +37,6 @@ export class ProductForm {
 
   private readonly params = toSignal(this.route.paramMap, {
     initialValue: this.route.snapshot.paramMap,
-  });
-
-  private readonly categoriesResponse = toSignal(this.api.getCategories(), {
-    initialValue: null,
   });
 
   readonly productId = computed(() => {
@@ -59,8 +56,6 @@ export class ProductForm {
 
     return this.productStore.getById(id);
   });
-
-  readonly categories = computed(() => this.categoriesResponse()?.data ?? []);
 
   readonly model = signal<ProductFormModel>({
     sku: '',
@@ -161,6 +156,7 @@ export class ProductForm {
 
   constructor() {
     void this.productStore.load();
+    void this.categoryStore.load();
 
     effect(() => {
       if (!this.isEditMode()) {

@@ -96,7 +96,7 @@
           >
             <option value="">Select category</option>
 
-            @for (category of categories(); track category.categoryId) {
+            @for (category of categoryStore.categories(); track category.categoryId) {
               <option [value]="category.categoryId">
                 {{ category.categoryName }}
               </option>

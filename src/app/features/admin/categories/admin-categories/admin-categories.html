@@ -1,0 +1,214 @@
+<section>
+  <!-- HEADER -->
+
+  <div class="flex flex-col justify-between gap-5 md:flex-row md:items-end">
+    <div>
+      <p class="text-xs uppercase tracking-[0.3em] text-serein-brand">Catalogue</p>
+
+      <h1 class="mt-2 font-display text-4xl">Categories</h1>
+
+      <p class="mt-3 opacity-60">Organize products into catalogue categories.</p>
+    </div>
+
+    <button
+      type="button"
+      class="rounded-2xl bg-serein-brand px-6 py-3 text-sm text-white"
+      (click)="openCreateDialog()"
+    >
+      + Add category
+    </button>
+  </div>
+
+  <!-- CONTENT -->
+
+  <div class="mt-10 overflow-hidden rounded-3xl bg-white">
+    @if (categoryStore.loading()) {
+      <p class="p-8">Loading categories...</p>
+    } @else if (categoryStore.categories().length === 0) {
+      <div class="p-12 text-center">
+        <h2 class="font-display text-2xl">No categories</h2>
+
+        <p class="mt-2 opacity-60">Add your first category.</p>
+      </div>
+    } @else {
+      <div class="overflow-x-auto">
+        <table class="w-full text-left">
+          <thead class="border-b border-black/10 text-xs uppercase tracking-wider opacity-50">
+            <tr>
+              <th class="px-6 py-5">Category</th>
+
+              <th class="px-6 py-5">ID</th>
+
+              <th class="px-6 py-5">Products</th>
+
+              <th class="px-6 py-5">Parent</th>
+
+              <th class="px-6 py-5">Actions</th>
+            </tr>
+          </thead>
+
+          <tbody class="divide-y divide-black/5">
+            @for (category of categoryStore.categories(); track category.categoryId) {
+              <tr>
+                <td class="px-6 py-5">
+                  <p class="font-medium">
+                    {{ category.categoryName }}
+                  </p>
+                </td>
+
+                <td class="px-6 py-5 text-sm opacity-60">#{{ category.categoryId }}</td>
+
+                <td class="px-6 py-5">
+                  <span class="rounded-full bg-serein-bg px-3 py-1 text-sm">
+                    {{ productCounts().get(category.categoryId) ?? 0 }}
+                  </span>
+                </td>
+
+                <td class="px-6 py-5 text-sm opacity-60">
+                  @if (category.parentCategoryId === 0) {
+                    Root
+                  } @else {
+                    #{{ category.parentCategoryId }}
+                  }
+                </td>
+
+                <td class="px-6 py-5">
+                  <button
+                    type="button"
+                    class="text-sm text-red-700"
+                    (click)="askToDelete(category)"
+                  >
+                    Delete
+                  </button>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    }
+  </div>
+
+  <!-- CREATE CATEGORY DIALOG -->
+
+  @if (showCreateDialog()) {
+    <div
+      class="fixed inset-0 z-[100] flex items-center justify-center bg-black/30 px-6 backdrop-blur-sm"
+      (click)="closeCreateDialog()"
+    >
+      <div
+        class="w-full max-w-md rounded-[2rem] bg-serein-surface p-8 shadow-2xl"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="create-category-title"
+        (click)="$event.stopPropagation()"
+      >
+        <p class="text-xs uppercase tracking-[0.25em] text-serein-brand">New category</p>
+
+        <h2 id="create-category-title" class="mt-3 font-display text-3xl">Add category</h2>
+
+        <form [formRoot]="categoryForm" class="mt-8">
+          <label class="mb-2 block text-sm"> Category name </label>
+
+          <input
+            type="text"
+            placeholder="e.g. Bakery"
+            [formField]="categoryForm.name"
+            class="w-full rounded-2xl border border-black/10 bg-white px-5 py-4 outline-none focus:border-serein-brand"
+          />
+
+          @if (categoryForm.name().touched() && categoryForm.name().invalid()) {
+            <p class="mt-2 text-sm text-red-700">
+              {{ categoryForm.name().errors()[0].message }}
+            </p>
+          }
+
+          <div class="mt-8 flex gap-4">
+            <button
+              type="submit"
+              class="rounded-2xl bg-serein-brand px-6 py-3 text-sm text-white disabled:opacity-50"
+              [disabled]="categoryForm().submitting()"
+            >
+              @if (categoryForm().submitting()) {
+                Creating...
+              } @else {
+                Create category
+              }
+            </button>
+
+            <button
+              type="button"
+              class="rounded-2xl border border-black/10 px-6 py-3 text-sm"
+              [disabled]="categoryForm().submitting()"
+              (click)="closeCreateDialog()"
+            >
+              Cancel
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  }
+
+  <!-- DELETE CONFIRMATION -->
+
+  @if (pendingDelete(); as category) {
+    <div
+      class="fixed inset-0 z-[100] flex items-center justify-center bg-black/30 px-6 backdrop-blur-sm"
+      (click)="cancelDelete()"
+    >
+      <div
+        class="w-full max-w-md rounded-[2rem] bg-serein-surface p-8 shadow-2xl"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="delete-category-title"
+        (click)="$event.stopPropagation()"
+      >
+        <p class="text-xs uppercase tracking-[0.25em] text-red-700">Delete category</p>
+
+        <h2 id="delete-category-title" class="mt-3 font-display text-3xl">Are you sure?</h2>
+
+        <p class="mt-4 leading-7 opacity-65">
+          You are about to delete
+          <strong>
+            {{ category.categoryName }} </strong
+          >.
+        </p>
+
+        @if ((productCounts().get(category.categoryId) ?? 0) > 0) {
+          <div class="mt-5 rounded-2xl bg-red-50 p-4 text-sm text-red-800">
+            This category currently contains
+
+            {{ productCounts().get(category.categoryId) ?? 0 }}
+
+            products. The backend may prevent deletion while products still reference this category.
+          </div>
+        }
+
+        <div class="mt-8 flex gap-4">
+          <button
+            type="button"
+            class="rounded-2xl bg-red-700 px-6 py-3 text-sm text-white disabled:opacity-50"
+            [disabled]="deleting()"
+            (click)="confirmDelete()"
+          >
+            @if (deleting()) {
+              Deleting...
+            } @else {
+              Delete
+            }
+          </button>
+
+          <button
+            type="button"
+            class="rounded-2xl border border-black/10 px-6 py-3 text-sm"
+            [disabled]="deleting()"
+            (click)="cancelDelete()"
+          >
+            Cancel
+          </button>
+        </div>
+      </div>
+    </div>
+  }
+</section>
