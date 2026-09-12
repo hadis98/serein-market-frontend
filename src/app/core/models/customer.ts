@@ -3,7 +3,12 @@ export interface Customer {
   name: string;
   mobileNo: string;
 }
-
+export interface CustomerApiDto {
+  custId: number;
+  name: string;
+  mobileNo: string;
+  password: string;
+}
 export interface RegisterCustomerRequest {
   CustId: number;
   Name: string;

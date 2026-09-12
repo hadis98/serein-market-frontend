@@ -1,0 +1,51 @@
+<section class="mx-auto max-w-4xl">
+  <a routerLink="/admin/customers" class="text-sm text-serein-brand"> ← Back to customers </a>
+
+  @if (loading()) {
+    <div class="mt-8 rounded-[2rem] bg-white p-10">Loading customer...</div>
+  } @else if (error(); as message) {
+    <div class="mt-8 rounded-[2rem] bg-white p-10">
+      <h1 class="font-display text-3xl">Customer unavailable</h1>
+
+      <p class="mt-3 text-red-700">
+        {{ message }}
+      </p>
+    </div>
+  } @else if (customer(); as customer) {
+    <div class="mt-8 rounded-[2.5rem] bg-white p-8 md:p-10">
+      <div class="flex flex-col gap-6 sm:flex-row sm:items-center">
+        <div
+          class="flex h-20 w-20 items-center justify-center rounded-full bg-serein-bg font-display text-3xl"
+        >
+          {{ customer.name.charAt(0).toUpperCase() }}
+        </div>
+
+        <div>
+          <p class="text-xs uppercase tracking-[0.25em] text-serein-brand">
+            Customer #{{ customer.custId }}
+          </p>
+
+          <h1 class="mt-2 font-display text-4xl">
+            {{ customer.name }}
+          </h1>
+        </div>
+      </div>
+
+      <div class="mt-10 grid gap-6 border-t border-black/10 pt-8 sm:grid-cols-2">
+        <div>
+          <p class="text-xs uppercase tracking-widest opacity-50">Customer ID</p>
+
+          <p class="mt-2">#{{ customer.custId }}</p>
+        </div>
+
+        <div>
+          <p class="text-xs uppercase tracking-widest opacity-50">Mobile number</p>
+
+          <p class="mt-2">
+            {{ customer.mobileNo }}
+          </p>
+        </div>
+      </div>
+    </div>
+  }
+</section>

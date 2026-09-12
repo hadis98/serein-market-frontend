@@ -1,0 +1,41 @@
+.customer-table-scroll {
+  max-height: 70dvh;
+  overflow: auto;
+  overscroll-behavior: contain;
+  scrollbar-color: rgb(122 90 75 / 45%) transparent;
+  scrollbar-gutter: stable;
+  scrollbar-width: thin;
+}
+
+.customer-table-scroll thead {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background: white;
+  opacity: 1;
+}
+
+.customer-table-scroll thead th {
+  color: rgb(51 43 39 / 50%);
+}
+
+.customer-table-scroll::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+.customer-table-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.customer-table-scroll::-webkit-scrollbar-thumb {
+  border: 3px solid white;
+  border-radius: 999px;
+  background: rgb(122 90 75 / 45%);
+}
+
+@media (min-width: 64rem) {
+  .customer-table-scroll {
+    max-height: calc(100dvh - 22rem);
+  }
+}

@@ -105,9 +105,35 @@ export const routes: Routes = [
             (m) => m.AdminCategories,
           ),
       },
+      {
+        path: 'customers',
+
+        loadComponent: () =>
+          import('./features/admin/customers/admin-customers/admin-customers').then(
+            (m) => m.AdminCustomers,
+          ),
+      },
+      {
+        path: 'customers/:id',
+        loadComponent: () =>
+          import('./features/admin/customers/customer-details/customer-details').then(
+            (m) => m.CustomerDetails,
+          ),
+      },
+      {
+        path: 'orders',
+        loadComponent: () =>
+          import('./features/admin/orders/admin-orders/admin-orders').then((m) => m.AdminOrders),
+      },
+      {
+        path: 'orders/:saleId',
+        loadComponent: () =>
+          import('./features/admin/orders/admin-order-details/admin-order-details').then(
+            (m) => m.AdminOrderDetails,
+          ),
+      },
     ],
   },
-
   {
     path: '**',
     redirectTo: '',
