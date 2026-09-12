@@ -14,21 +14,26 @@
       Your order has been received and is being prepared.
     </p>
 
-    @if (total > 0) {
-      <p class="mt-8 text-xl">
-        Order total:
-        <strong>
-          {{ total | currency: 'INR' : 'symbol' : '1.0-0' }}
-        </strong>
-      </p>
-    }
-    @if (orderId) {
-      <a
-        [routerLink]="['/orders', orderId]"
-        class="rounded-2xl border border-serein-brand px-7 py-4 text-sm"
-      >
-        View order
-      </a>
+    @if (total > 0 || orderId) {
+      <div class="mt-8 flex flex-col items-center gap-5">
+        @if (total > 0) {
+          <p class="text-xl">
+            Order total:
+            <strong>
+              {{ total | currency: 'INR' : 'symbol' : '1.0-0' }}
+            </strong>
+          </p>
+        }
+
+        @if (orderId) {
+          <a
+            [routerLink]="['/orders', orderId]"
+            class="inline-flex rounded-2xl border border-serein-brand px-7 py-4 text-sm"
+          >
+            View order
+          </a>
+        }
+      </div>
     }
 
     <div class="mt-10 flex flex-wrap justify-center gap-4">

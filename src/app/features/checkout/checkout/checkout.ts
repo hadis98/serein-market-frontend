@@ -81,6 +81,8 @@ export class Checkout {
           const form = this.checkoutModel();
 
           try {
+            await this.cart.syncToBackend(customer.custId);
+
             const order = await this.orders.placeOrder({
               SaleId: 0,
 
