@@ -27,17 +27,13 @@
     <article class="rounded-3xl bg-white p-7">
       <p class="text-xs uppercase tracking-widest opacity-50">Customers</p>
 
-      <p class="mt-4 font-display text-5xl">—</p>
-
-      <p class="mt-2 text-xs opacity-40">API integration pending</p>
+      <p class="mt-4 font-display text-5xl">{{ customerStore.count() }}</p>
     </article>
 
     <article class="rounded-3xl bg-white p-7">
       <p class="text-xs uppercase tracking-widest opacity-50">Orders</p>
 
-      <p class="mt-4 font-display text-5xl">—</p>
-
-      <p class="mt-2 text-xs opacity-40">API does not expose order history</p>
+      <p class="mt-4 font-display text-5xl">{{ orderStore.count() }}</p>
     </article>
   </div>
 </section>

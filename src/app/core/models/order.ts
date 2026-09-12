@@ -53,3 +53,29 @@ export interface Order {
 
   isCancelled: boolean;
 }
+
+export interface BackendSale {
+  saleId: number;
+  custId: number;
+  saleDate: string;
+  totalInvoiceAmount: number;
+  discount: number;
+  paymentNaration: string;
+  deliveryAddress1: string;
+  deliveryAddress2: string;
+  deliveryCity: string;
+  deliveryPinCode: string;
+  deliveryLandMark: string;
+  isCanceled: boolean;
+}
+
+export interface BackendSaleItem {
+  categoryName: string;
+  productId: number;
+  saleItemId: number;
+  productImageUrl: string;
+  productName: string;
+  productShortName: string;
+  productPrice: number;
+  quantity: number;
+}

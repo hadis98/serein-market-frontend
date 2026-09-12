@@ -1,0 +1,97 @@
+<section class="space-y-10">
+  <header>
+    <p class="mb-3 text-xs uppercase tracking-[0.35em] text-serein-brand">Commerce</p>
+
+    <h1 class="font-display text-5xl text-serein-text">Orders</h1>
+
+    <p class="mt-3 text-lg text-stone-500">View customer orders and purchase activity.</p>
+  </header>
+
+  <input
+    type="search"
+    placeholder="Search by order, customer or city..."
+    class="w-full max-w-xl rounded-2xl border border-stone-200 bg-white px-6 py-4 outline-none focus:border-serein-brand"
+    [value]="search()"
+    (input)="updateSearch($event)"
+  />
+
+  @if (orderStore.loading()) {
+    <div class="rounded-3xl bg-white p-10 text-stone-500">Loading orders...</div>
+  } @else if (orderStore.error()) {
+    <div class="rounded-3xl bg-white p-10 text-red-700">
+      {{ orderStore.error() }}
+    </div>
+  } @else {
+    <div class="overflow-hidden rounded-3xl bg-white">
+      <div
+        class="order-table-scroll"
+        role="region"
+        aria-label="Order list"
+        tabindex="0"
+      >
+        <div
+          class="order-table-header grid grid-cols-[0.6fr_1.3fr_1fr_0.8fr_1fr_0.8fr_0.5fr] gap-6 border-b border-stone-200 px-8 py-5 text-xs font-semibold uppercase tracking-wider text-stone-400"
+        >
+          <span>Order</span>
+          <span>Customer</span>
+          <span>Date</span>
+          <span>Total</span>
+          <span>Payment</span>
+          <span>Status</span>
+          <span>Actions</span>
+        </div>
+
+        @for (order of filteredOrders(); track order.saleId) {
+          <div
+            class="grid grid-cols-[0.6fr_1.3fr_1fr_0.8fr_1fr_0.8fr_0.5fr] items-center gap-6 border-b border-stone-100 px-8 py-6 last:border-b-0"
+          >
+            <span class="font-medium text-serein-text"> #{{ order.saleId }} </span>
+
+            <div>
+              <p class="font-medium text-serein-text">
+                {{ customerName(order.custId) }}
+              </p>
+
+              <p class="mt-1 text-sm text-stone-400">Customer #{{ order.custId }}</p>
+            </div>
+
+            <span class="text-sm text-stone-600">
+              {{ order.saleDate | date: 'mediumDate' }}
+            </span>
+
+            <span class="font-medium text-serein-text">
+              {{ order.totalInvoiceAmount | number: '1.2-2' }}
+            </span>
+
+            <span class="text-sm text-stone-600">
+              {{ order.paymentNaration }}
+            </span>
+
+            <div>
+              @if (order.isCanceled) {
+                <span class="rounded-full bg-red-50 px-3 py-1 text-xs font-medium text-red-700">
+                  Cancelled
+                </span>
+              } @else {
+                <span
+                  class="rounded-full bg-green-50 px-3 py-1 text-xs font-medium text-green-700"
+                >
+                  Active
+                </span>
+              }
+            </div>
+
+            <a
+              [routerLink]="['/admin/orders', order.saleId]"
+              class="text-sm font-medium text-serein-brand"
+            >
+              View
+            </a>
+          </div>
+        } @empty {
+          <div class="p-10 text-center text-stone-500">No orders found.</div>
+        }
+      </div>
+    </div>
+  }
+</section>

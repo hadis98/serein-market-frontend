@@ -28,7 +28,12 @@
     @if (productStore.loading()) {
       <p class="p-8">Loading products...</p>
     } @else {
-      <div class="overflow-x-auto">
+      <div
+        class="product-table-scroll"
+        role="region"
+        aria-label="Product list"
+        tabindex="0"
+      >
         <table class="w-full text-left">
           <thead class="border-b border-black/10 text-xs uppercase tracking-wider opacity-50">
             <tr>

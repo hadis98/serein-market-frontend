@@ -1,4 +1,4 @@
-.product-table-scroll {
+.order-table-scroll {
   max-height: 70dvh;
   overflow: auto;
   overscroll-behavior: contain;
@@ -7,35 +7,30 @@
   scrollbar-width: thin;
 }
 
-.product-table-scroll thead {
+.order-table-header {
   position: sticky;
   top: 0;
   z-index: 1;
   background: white;
-  opacity: 1;
 }
 
-.product-table-scroll thead th {
-  color: rgb(51 43 39 / 50%);
-}
-
-.product-table-scroll::-webkit-scrollbar {
+.order-table-scroll::-webkit-scrollbar {
   width: 10px;
   height: 10px;
 }
 
-.product-table-scroll::-webkit-scrollbar-track {
+.order-table-scroll::-webkit-scrollbar-track {
   background: transparent;
 }
 
-.product-table-scroll::-webkit-scrollbar-thumb {
+.order-table-scroll::-webkit-scrollbar-thumb {
   border: 3px solid white;
   border-radius: 999px;
   background: rgb(122 90 75 / 45%);
 }
 
 @media (min-width: 64rem) {
-  .product-table-scroll {
-    max-height: calc(100dvh - 19.5rem);
+  .order-table-scroll {
+    max-height: calc(100dvh - 25.5rem);
   }
 }
