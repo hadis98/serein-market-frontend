@@ -3,7 +3,6 @@ import { CurrencyPipe } from '@angular/common';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 
-import { BigBasketApi } from '../../../core/api/big-basket-api';
 import { CartStore } from '../../../core/state/cart-store';
 import { WishlistStore } from '../../../core/state/wishlist-store';
 import { ToastStore } from '../../../core/state/toast-store';

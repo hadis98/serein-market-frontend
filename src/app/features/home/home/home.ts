@@ -1,8 +1,6 @@
 import { Component, computed, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { toSignal } from '@angular/core/rxjs-interop';
 
-import { BigBasketApi } from '../../../core/api/big-basket-api';
 import { CategoryCard } from '../../categories/category-card/category-card';
 import { ProductCard } from '../../products/product-card/product-card';
 import { ProductStore } from '../../../core/state/product-store';

@@ -2,7 +2,6 @@ import { Component, computed, inject, signal } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { toSignal } from '@angular/core/rxjs-interop';
 
-import { BigBasketApi } from '../../../core/api/big-basket-api';
 import { ProductCard } from '../product-card/product-card';
 import { SortOption } from '../../../core/models/product';
 import { ProductStore } from '../../../core/state/product-store';

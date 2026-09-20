@@ -5,7 +5,7 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { ProductStore } from '../../../../core/state/product-store';
 import { ToastStore } from '../../../../core/state/toast-store';
-import { BigBasketApi } from '../../../../core/api/big-basket-api';
+
 import { ProductUpsertRequest } from '../../../../core/models/product-request';
 import { CategoryStore } from '../../../../core/state/category-store';
 
