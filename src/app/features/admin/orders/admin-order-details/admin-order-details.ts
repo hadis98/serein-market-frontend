@@ -1,73 +1,102 @@
-import { Component, computed, effect, inject, signal } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
+
+import { CurrencyPipe, DatePipe } from '@angular/common';
+
 import { ActivatedRoute, RouterLink } from '@angular/router';
+
 import { AdminOrderStore } from '../../../../core/state/admin-order-store';
-import { CustomerStore } from '../../../../core/state/customer-store';
-import { toSignal } from '@angular/core/rxjs-interop';
-import { map } from 'rxjs';
-import { BackendSaleItem } from '../../../../core/models/order';
-import { DatePipe, DecimalPipe } from '@angular/common';
+
+import { ToastStore } from '../../../../core/state/toast-store';
+
+import type { AdminOrderDetails as AdminOrderDetailsModel } from '../../../../core/models/admin-order';
+
+import type { OrderStatus } from '../../../../core/models/order';
 
 @Component({
-  imports: [DecimalPipe, DatePipe, RouterLink],
+  imports: [CurrencyPipe, DatePipe, RouterLink],
+
   selector: 'app-admin-order-details',
+
   styleUrl: './admin-order-details.css',
+
   templateUrl: './admin-order-details.html',
 })
 export class AdminOrderDetails {
   private readonly route = inject(ActivatedRoute);
-  readonly orderStore = inject(AdminOrderStore);
-  readonly customerStore = inject(CustomerStore);
-  readonly saleId = toSignal(
-    this.route.paramMap.pipe(map((params) => Number(params.get('saleId')))),
-    {
-      initialValue: 0,
-    },
-  );
 
-  readonly order = computed(() => this.orderStore.getById(this.saleId()));
+  private readonly orderStore = inject(AdminOrderStore);
 
-  readonly customer = computed(() => {
-    const order = this.order();
-    if (!order) {
-      return undefined;
-    }
+  private readonly toast = inject(ToastStore);
 
-    return this.customerStore.customers().find((customer) => customer.custId === order.custId);
-  });
+  readonly order = signal<AdminOrderDetailsModel | null>(null);
 
-  readonly items = signal<BackendSaleItem[]>([]);
+  readonly loading = signal(true);
 
-  readonly itemsLoading = signal(false);
+  readonly updating = signal(false);
 
-  readonly itemsError = signal<string | null>(null);
+  readonly error = signal<string | null>(null);
 
   constructor() {
-    void this.orderStore.load();
-    void this.customerStore.load();
-
-    effect(() => {
-      const saleId = this.saleId();
-
-      if (!saleId) {
-        return;
-      }
-
-      void this.loadItems(saleId);
-    });
+    void this.load();
   }
 
-  private async loadItems(saleId: number): Promise<void> {
-    this.itemsLoading.set(true);
-    this.itemsError.set(null);
+  allowedStatuses(status: OrderStatus): OrderStatus[] {
+    const transitions: Record<OrderStatus, OrderStatus[]> = {
+      PENDING: ['CONFIRMED', 'CANCELLED'],
+
+      CONFIRMED: ['SHIPPED'],
+
+      SHIPPED: ['DELIVERED'],
+
+      DELIVERED: [],
+
+      CANCELLED: [],
+    };
+
+    return transitions[status];
+  }
+
+  async updateStatus(status: OrderStatus): Promise<void> {
+    const order = this.order();
+
+    if (!order) {
+      return;
+    }
+
+    this.updating.set(true);
 
     try {
-      const items = await this.orderStore.getItems(saleId);
+      const updated = await this.orderStore.updateStatus(order.id, status);
 
-      this.items.set(items);
+      this.order.set(updated);
+
+      this.toast.show(`Order marked as ${status.toLowerCase()}.`);
     } catch (error) {
-      this.itemsError.set(error instanceof Error ? error.message : 'Could not load order items.');
+      this.toast.show(error instanceof Error ? error.message : 'Could not update order.', 'error');
     } finally {
-      this.itemsLoading.set(false);
+      this.updating.set(false);
+    }
+  }
+
+  private async load(): Promise<void> {
+    const id = Number(this.route.snapshot.paramMap.get('id'));
+
+    if (!id) {
+      this.error.set('Invalid order.');
+
+      this.loading.set(false);
+
+      return;
+    }
+
+    try {
+      const order = await this.orderStore.loadById(id);
+
+      this.order.set(order);
+    } catch (error) {
+      this.error.set(error instanceof Error ? error.message : 'Order could not be loaded.');
+    } finally {
+      this.loading.set(false);
     }
   }
 }

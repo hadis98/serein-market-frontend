@@ -1,27 +1,40 @@
 import { computed, inject, Injectable, signal } from '@angular/core';
-import { CategoryApi } from '../api/category-api';
-import { Category } from '../models/category';
+
+import { HttpErrorResponse } from '@angular/common/http';
+
 import { firstValueFrom } from 'rxjs';
-import { CreateCategoryRequest } from '../models/create-category-request';
+
+import { CategoryApi } from '../api/category-api';
+
+import type { Category } from '../models/category';
+
+import type { CreateCategoryRequest } from '../models/create-category-request';
 
 @Injectable({
   providedIn: 'root',
 })
 export class CategoryStore {
   private readonly api = inject(CategoryApi);
+
   private readonly categoriesState = signal<Category[]>([]);
+
   private readonly loadingState = signal(false);
+
   private readonly loadedState = signal(false);
+
   private readonly errorState = signal<string | null>(null);
 
   readonly categories = this.categoriesState.asReadonly();
+
   readonly loading = this.loadingState.asReadonly();
+
   readonly loaded = this.loadedState.asReadonly();
+
   readonly error = this.errorState.asReadonly();
 
   readonly count = computed(() => this.categoriesState().length);
 
-  async load(force = false) {
+  async load(force = false): Promise<void> {
     if (this.loadingState()) {
       return;
     }
@@ -34,52 +47,45 @@ export class CategoryStore {
     this.errorState.set(null);
 
     try {
-      const response = await firstValueFrom(this.api.getAll());
+      const categories = await firstValueFrom(this.api.getAll());
 
-      if (!response.result) {
-        throw new Error(response.message || 'Categories could not be loaded.');
-      }
-
-      this.categoriesState.set(response.data ?? []);
+      this.categoriesState.set(categories);
 
       this.loadedState.set(true);
     } catch (error) {
-      this.errorState.set(
-        error instanceof Error ? error.message : 'Categories could not be loaded.',
-      );
+      this.errorState.set(this.getErrorMessage(error, 'Categories could not be loaded.'));
     } finally {
       this.loadingState.set(false);
     }
   }
 
-  async create(request: CreateCategoryRequest) {
-    const response = await firstValueFrom(this.api.create(request));
+  async create(request: CreateCategoryRequest): Promise<void> {
+    try {
+      await firstValueFrom(this.api.create(request));
 
-    if (!response.result) {
-      throw new Error(response.message || 'Category could not be created.');
+      await this.load(true);
+    } catch (error) {
+      throw new Error(this.getErrorMessage(error, 'Category could not be created.'));
     }
-
-    await this.load(true);
   }
 
-  async delete(id: number) {
-    const response = await firstValueFrom(this.api.delete(id));
+  async delete(id: number): Promise<void> {
+    try {
+      await firstValueFrom(this.api.delete(id));
 
-    if (!response.result) {
-      throw new Error(this.getDeleteErrorMessage(response.message));
+      await this.load(true);
+    } catch (error) {
+      throw new Error(this.getErrorMessage(error, 'Category could not be deleted.'));
     }
-
-    await this.load(true);
   }
 
-  private getDeleteErrorMessage(message: string) {
-    if (
-      message?.toLowerCase().includes('reference constraint') ||
-      message?.toLowerCase().includes('foreign key')
-    ) {
-      return 'This category cannot be deleted because ' + 'one or more products currently use it.';
+  private getErrorMessage(error: unknown, fallback: string): string {
+    if (!(error instanceof HttpErrorResponse)) {
+      return fallback;
     }
 
-    return message || 'Category could not be deleted.';
+    const message = error.error?.message;
+
+    return Array.isArray(message) ? message.join(', ') : (message ?? fallback);
   }
 }

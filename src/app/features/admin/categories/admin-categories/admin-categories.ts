@@ -54,10 +54,7 @@ export class AdminCategories {
           const value = field().value();
           try {
             await this.categoryStore.create({
-              CategoryId: 0,
-              CategoryName: value.name.trim(),
-              ParentCategoryId: 0,
-              UserId: 0,
+              name: value.name.trim(),
             });
             this.toast.show('Category created successfully.');
             this.closeCreateDialog();

@@ -1,38 +1,49 @@
 import { computed, inject, Injectable, signal } from '@angular/core';
 
+import { HttpErrorResponse } from '@angular/common/http';
+
 import { firstValueFrom } from 'rxjs';
 
-import { OrderApi } from '../api/order-api';
-import { BackendSale, BackendSaleItem } from '../models/order';
+import { AdminOrderApi } from '../api/admin-order-api';
+
+import type { AdminOrderDetails, AdminOrderSummary } from '../models/admin-order';
+
+import type { OrderStatus } from '../models/order';
+
 @Injectable({
   providedIn: 'root',
 })
 export class AdminOrderStore {
-  private readonly orderApi = inject(OrderApi);
+  private readonly api = inject(AdminOrderApi);
 
-  private readonly ordersState = signal<BackendSale[]>([]);
+  private readonly ordersState = signal<AdminOrderSummary[]>([]);
+
   private readonly loadingState = signal(false);
+
   private readonly loadedState = signal(false);
+
   private readonly errorState = signal<string | null>(null);
 
   readonly orders = this.ordersState.asReadonly();
+
   readonly loading = this.loadingState.asReadonly();
+
   readonly loaded = this.loadedState.asReadonly();
+
   readonly error = this.errorState.asReadonly();
 
   readonly count = computed(() => this.ordersState().length);
-  readonly activeCount = computed(
-    () => this.ordersState().filter((order) => !order.isCanceled).length,
+
+  readonly pendingCount = computed(
+    () => this.ordersState().filter((order) => order.status === 'PENDING').length,
+  );
+
+  readonly completedCount = computed(
+    () => this.ordersState().filter((order) => order.status === 'DELIVERED').length,
   );
 
   readonly cancelledCount = computed(
-    () => this.ordersState().filter((order) => order.isCanceled).length,
-  );
-
-  readonly totalRevenue = computed(() =>
-    this.ordersState()
-      .filter((order) => !order.isCanceled)
-      .reduce((total, order) => total + order.totalInvoiceAmount, 0),
+    () => this.ordersState().filter((order) => order.status === 'CANCELLED').length,
   );
 
   async load(force = false): Promise<void> {
@@ -48,31 +59,44 @@ export class AdminOrderStore {
     this.errorState.set(null);
 
     try {
-      const response = await firstValueFrom(this.orderApi.getAllSales());
+      const orders = await firstValueFrom(this.api.getAll());
 
-      if (!response.result) {
-        throw new Error(response.message || 'Could not load orders.');
-      }
+      this.ordersState.set(orders);
 
-      this.ordersState.set(response.data ?? []);
       this.loadedState.set(true);
     } catch (error) {
-      this.errorState.set(error instanceof Error ? error.message : 'Could not load orders.');
+      this.errorState.set(this.getErrorMessage(error, 'Orders could not be loaded.'));
     } finally {
       this.loadingState.set(false);
     }
   }
 
-  getById(saleId: number): BackendSale | undefined {
-    return this.ordersState().find((order) => order.saleId === saleId);
+  async loadById(id: number): Promise<AdminOrderDetails> {
+    try {
+      return await firstValueFrom(this.api.getById(id));
+    } catch (error) {
+      throw new Error(this.getErrorMessage(error, 'Order could not be loaded.'));
+    }
   }
 
-  async getItems(saleId: number): Promise<BackendSaleItem[]> {
-    const response = await firstValueFrom(this.orderApi.getSaleItems(saleId));
-    if(!response.result){
-        throw new Error(response.message || 'Could not load order items.');
+  async updateStatus(id: number, status: OrderStatus): Promise<AdminOrderDetails> {
+    try {
+      await firstValueFrom(this.api.updateStatus(id, status));
+
+      await this.load(true);
+      return await this.loadById(id);
+    } catch (error) {
+      throw new Error(this.getErrorMessage(error, 'Order status could not be updated.'));
+    }
+  }
+
+  private getErrorMessage(error: unknown, fallback: string): string {
+    if (!(error instanceof HttpErrorResponse)) {
+      return fallback;
     }
 
-    return response.data ?? [];
+    const message = error.error?.message;
+
+    return Array.isArray(message) ? message.join(', ') : (message ?? fallback);
   }
 }

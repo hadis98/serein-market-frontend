@@ -1,89 +1,154 @@
 import { computed, inject, Injectable, signal } from '@angular/core';
+
+import { HttpErrorResponse } from '@angular/common/http';
+
 import { firstValueFrom } from 'rxjs';
+
 import { AuthApi } from './auth-api';
-import {
-  Customer,
+
+import { AuthTokenService } from './auth-token.service';
+
+import type {
+  AuthResponse,
+  AuthUser,
   LoginRequest,
-  RegisterCustomerRequest,
-  UpdateProfileRequest,
-} from '../models/customer';
+  RegisterRequest,
+  SessionUser,
+} from '../models/auth.model';
+
+const USER_STORAGE_KEY = 'serein-user';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthStore {
   private readonly authApi = inject(AuthApi);
-  private readonly storageKey = 'serein-customer';
 
-  private readonly customerState = signal<Customer | null>(this.loadCustomer());
-  readonly customer = this.customerState.asReadonly();
+  private readonly tokenService = inject(AuthTokenService);
 
-  readonly isLoggedIn = computed(() => this.customerState() !== null);
+  private readonly userState = signal<SessionUser | null>(this.loadStoredUser());
+
+  readonly user = this.userState.asReadonly();
+
+  // Temporary compatibility alias.
+  // Some existing templates currently use
+  // auth.customer().
+  readonly customer = this.user;
+
+  readonly isLoggedIn = computed(
+    () => this.userState() !== null && this.tokenService.token() !== null,
+  );
+
+  readonly isAdmin = computed(() => this.userState()?.role === 'ADMIN');
 
   readonly firstName = computed(() => {
-    const name = this.customerState()?.name ?? '';
-    return name.split(' ')[0];
+    const name = this.userState()?.name ?? '';
+
+    return name.split(' ')[0] ?? '';
   });
 
-  async register(request: RegisterCustomerRequest) {
-    const response = await firstValueFrom(this.authApi.register(request));
+  async register(request: RegisterRequest): Promise<void> {
+    try {
+      const response = await firstValueFrom(this.authApi.register(request));
 
-    if (!response.result) {
-      throw new Error(response.message || 'Registeration failed');
+      this.saveSession(response);
+    } catch (error) {
+      throw new Error(this.getErrorMessage(error, 'Registration failed.'));
     }
-    return response;
   }
 
-  async login(request: LoginRequest) {
-    const response = await firstValueFrom(this.authApi.login(request));
-    if (!response.result || !response.data) {
-      throw new Error(response.message || 'Login failed');
+  async login(request: LoginRequest): Promise<void> {
+    try {
+      const response = await firstValueFrom(this.authApi.login(request));
+
+      this.saveSession(response);
+    } catch (error) {
+      throw new Error(this.getErrorMessage(error, 'Login failed.'));
     }
-
-    const customer: Customer = {
-      custId: response.data.custId,
-      name: response.data.name,
-      mobileNo: response.data.mobileNo,
-    };
-
-    this.customerState.set(customer);
-    localStorage.setItem(this.storageKey, JSON.stringify(customer));
   }
 
-  logout() {
-    this.customerState.set(null);
-    localStorage.removeItem(this.storageKey);
-  }
-
-  async updateProfile(request: UpdateProfileRequest) {
-    const response = await firstValueFrom(this.authApi.updateProfile(request));
-
-    if (!response.result) {
-      throw new Error(response.message || 'Profile update failed');
+  async restoreSession(): Promise<void> {
+    if (!this.tokenService.get()) {
+      this.logout();
+      return;
     }
 
-    const updatedCustomer: Customer = {
-      custId: request.CustId,
-      name: request.Name,
-      mobileNo: request.MobileNo,
-    };
+    try {
+      const user = await firstValueFrom(this.authApi.me());
 
-    this.customerState.set(updatedCustomer);
-    localStorage.setItem(this.storageKey, JSON.stringify(updatedCustomer));
-    
-    return response;
+      this.setUser(user);
+    } catch {
+      this.logout();
+    }
   }
 
-  private loadCustomer(): Customer | null {
-    const savedCustomer = localStorage.getItem(this.storageKey);
+  logout(): void {
+    this.userState.set(null);
 
-    if (!savedCustomer) {
+    this.tokenService.clear();
+
+    localStorage.removeItem(USER_STORAGE_KEY);
+  }
+
+  private saveSession(response: AuthResponse): void {
+    this.tokenService.set(response.accessToken);
+
+    this.setUser(response.user);
+  }
+
+  private setUser(user: AuthUser): void {
+    const sessionUser = this.toSessionUser(user);
+    this.userState.set(sessionUser);
+
+    localStorage.setItem(USER_STORAGE_KEY, JSON.stringify(user));
+  }
+
+  private loadStoredUser(): SessionUser | null {
+    const saved = localStorage.getItem(USER_STORAGE_KEY);
+
+    if (!saved) {
       return null;
     }
+
     try {
-      return JSON.parse(savedCustomer);
+      const user = JSON.parse(saved) as AuthUser;
+      return this.toSessionUser(user);
     } catch {
       return null;
     }
+  }
+
+  private getErrorMessage(error: unknown, fallback: string): string {
+    if (error instanceof HttpErrorResponse) {
+      const message = error.error?.message;
+
+      if (Array.isArray(message)) {
+        return message.join(', ');
+      }
+
+      if (typeof message === 'string') {
+        return message;
+      }
+    }
+
+    if (error instanceof Error) {
+      return error.message;
+    }
+
+    return fallback;
+  }
+
+  async updateProfile(_request: unknown): Promise<void> {
+    throw new Error('Profile editing is temporarily unavailable.');
+  }
+
+  private toSessionUser(user: AuthUser): SessionUser {
+    return {
+      ...user,
+
+      // Temporary old-name aliases
+      custId: user.id,
+      mobileNo: user.phoneNumber,
+    };
   }
 }

@@ -13,11 +13,12 @@ interface ProductFormModel {
   sku: string;
   name: string;
   price: number | null;
-  shortName: string;
+  shortDescription: string;
   description: string;
   deliveryTimeSpan: string;
   categoryId: string;
   imageUrl: string;
+  stockQuantity: number | null;
 }
 
 @Component({
@@ -61,11 +62,12 @@ export class ProductForm {
     sku: '',
     name: '',
     price: null,
-    shortName: '',
+    shortDescription: '',
     description: '',
     deliveryTimeSpan: '',
     categoryId: '',
     imageUrl: '',
+    stockQuantity: 0,
   });
 
   readonly productForm = form(
@@ -87,8 +89,8 @@ export class ProductForm {
         message: 'Price is required',
       });
 
-      min(path.price, 1, {
-        message: 'Price is required',
+      min(path.price, 0.01, {
+        message: 'Price must be greater than 0',
       });
 
       required(path.description, {
@@ -106,6 +108,14 @@ export class ProductForm {
       required(path.imageUrl, {
         message: 'Image URL is required',
       });
+
+      required(path.stockQuantity, {
+        message: 'Stock quantity is required.',
+      });
+
+      min(path.stockQuantity, 0, {
+        message: 'Stock cannot be negative',
+      });
     },
     {
       submission: {
@@ -115,22 +125,20 @@ export class ProductForm {
           const existingProduct = this.product();
 
           const request: ProductUpsertRequest = {
-            ProductId: id ?? 0,
-            ProductSku: value.sku,
-            ProductName: value.name,
-            ProductPrice: value.price ?? 0,
-            ProductShortName: value.shortName,
-            ProductDescription: value.description,
-            CreatedDate: existingProduct?.createdDate ?? new Date().toISOString(),
-            DeliveryTimeSpan: value.deliveryTimeSpan,
-            CategoryId: Number(value.categoryId),
-            ProductImageUrl: value.imageUrl,
-            UserId: 0,
+            sku: value.sku,
+            name: value.name,
+            price: value.price ?? 0,
+            shortDescription: value.shortDescription || undefined,
+            description: value.description,
+            deliveryEstimate: value.deliveryTimeSpan || undefined,
+            categoryId: Number(value.categoryId),
+            imageUrl: value.imageUrl,
+            stockQuantity: value.stockQuantity ?? 0,
           };
 
           try {
             if (this.isEditMode()) {
-              await this.productStore.update(request);
+              await this.productStore.update(id!, request);
               this.toast.show('Product updated successfully.');
             } else {
               await this.productStore.create(request);
@@ -180,7 +188,7 @@ export class ProductForm {
 
         price: product.productPrice,
 
-        shortName: product.productShortName,
+        shortDescription: product.productDescription,
 
         description: product.productDescription,
 
@@ -189,6 +197,8 @@ export class ProductForm {
         categoryId: String(product.categoryId),
 
         imageUrl: product.productImageUrl,
+
+        stockQuantity: product.stockQuantity,
       });
 
       this.initialized.set(true);

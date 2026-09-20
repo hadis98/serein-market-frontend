@@ -28,12 +28,7 @@
     @if (productStore.loading()) {
       <p class="p-8">Loading products...</p>
     } @else {
-      <div
-        class="product-table-scroll"
-        role="region"
-        aria-label="Product list"
-        tabindex="0"
-      >
+      <div class="product-table-scroll" role="region" aria-label="Product list" tabindex="0">
         <table class="w-full text-left">
           <thead class="border-b border-black/10 text-xs uppercase tracking-wider opacity-50">
             <tr>
@@ -79,7 +74,7 @@
                 </td>
 
                 <td class="px-6 py-5 text-sm">
-                  {{ product.productPrice | currency: 'INR' }}
+                  {{ product.productPrice | currency: 'USD' : 'symbol' : '1.0-2' }}
                 </td>
 
                 <td class="px-6 py-5 text-sm">
@@ -124,9 +119,7 @@
 
             <p class="mt-4 leading-7 opacity-65">
               You are about to delete
-              <strong>
-                {{ product.productName }} </strong
-              >. This action cannot be undone.
+              <strong> {{ product.productName }} </strong>. This action cannot be undone.
             </p>
 
             <div class="mt-8 flex gap-4">

@@ -1,11 +1,11 @@
 import { Component, effect, inject, signal } from '@angular/core';
-import { FormField, form, FormRoot, required } from '@angular/forms/signals';
+import { FormField, form, FormRoot, required, email } from '@angular/forms/signals';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 
 import { AuthStore } from '../../../core/auth/auth-store';
 
 interface LoginFormModel {
-  mobileNo: string;
+  email: string;
   password: string;
 }
 
@@ -22,15 +22,19 @@ export class Login {
 
   readonly errorMessage = signal('');
   readonly model = signal<LoginFormModel>({
-    mobileNo: this.route.snapshot.queryParamMap.get('mobileNo') ?? '',
+    email: this.route.snapshot.queryParamMap.get('email') ?? '',
     password: '',
   });
 
   readonly loginForm = form(
     this.model,
     (path) => {
-      required(path.mobileNo, {
-        message: 'Mobile number is required',
+      required(path.email, {
+        message: 'Email is required',
+      });
+
+      email(path.email, {
+        message: 'Enter a valid email address',
       });
 
       required(path.password, {
@@ -44,9 +48,9 @@ export class Login {
 
           try {
             await this.auth.login({
-              UserName: this.model().mobileNo,
+              email: this.model().email,
 
-              UserPassword: this.model().password,
+              password: this.model().password,
             });
 
             const returnUrl = this.route.snapshot.queryParamMap.get('returnUrl') ?? '/';

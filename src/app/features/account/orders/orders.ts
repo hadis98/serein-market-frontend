@@ -11,4 +11,8 @@ import { OrderStore } from '../../../core/state/order-store';
 })
 export class Orders {
   readonly orderStore = inject(OrderStore);
+
+  constructor() {
+    void this.orderStore.load();
+  }
 }

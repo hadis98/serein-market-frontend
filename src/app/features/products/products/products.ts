@@ -5,6 +5,7 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import { BigBasketApi } from '../../../core/api/big-basket-api';
 import { ProductCard } from '../product-card/product-card';
 import { SortOption } from '../../../core/models/product';
+import { ProductStore } from '../../../core/state/product-store';
 
 @Component({
   imports: [ProductCard],
@@ -13,20 +14,24 @@ import { SortOption } from '../../../core/models/product';
   templateUrl: './products.html',
 })
 export class Products {
-  private readonly api = inject(BigBasketApi);
+  private readonly productStore = inject(ProductStore);
   private readonly route = inject(ActivatedRoute);
-  
-  readonly skeletonItems = Array.from({length: 8});
+
+  readonly skeletonItems = Array.from({ length: 8 });
   readonly searchTerm = signal('');
   readonly sortBy = signal<SortOption>('default');
-  private readonly productsResponse = toSignal(this.api.getProducts(), { initialValue: null });
 
   private readonly queryParams = toSignal(this.route.queryParamMap, {
     initialValue: this.route.snapshot.queryParamMap,
   });
 
-  readonly products = computed(() => this.productsResponse()?.data ?? []);
+  readonly products = this.productStore.products;
+  readonly loading = this.productStore.loading;
 
+  constructor() {
+    void this.productStore.load();
+  }
+  
   readonly selectedCategoryId = computed(() => {
     const category = this.queryParams().get('category');
     return category ? Number(category) : null;
@@ -73,6 +78,4 @@ export class Products {
         return products;
     }
   });
-
-  readonly loading = computed(() => this.productsResponse() === null);
 }

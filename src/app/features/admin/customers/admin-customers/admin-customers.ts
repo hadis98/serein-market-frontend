@@ -1,31 +1,32 @@
 import { Component, computed, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { CustomerStore } from '../../../../core/state/customer-store';
+import { AdminCustomerStore } from '../../../../core/state/admin-customer-store';
+import { DatePipe } from '@angular/common';
 
 @Component({
-  imports: [RouterLink],
+  imports: [RouterLink, DatePipe],
   selector: 'app-admin-customers',
   styleUrl: './admin-customers.css',
   templateUrl: './admin-customers.html',
 })
 export class AdminCustomers {
-  readonly customerStore = inject(CustomerStore);
+  readonly customerStore = inject(AdminCustomerStore);
 
   readonly search = signal('');
 
-  readonly customers = computed(() => {
-    const search = this.search().trim().toLowerCase();
+  readonly filteredCustomers = computed(() => {
+    const query = this.search().trim().toLocaleLowerCase();
 
     const customers = this.customerStore.customers();
-    if (!search) {
+    if (!query) {
       return customers;
     }
 
     return customers.filter(
       (customer) =>
-        customer.name.toLowerCase().includes(search) ||
-        customer.mobileNo.toLowerCase().includes(search) ||
-        String(customer.custId).includes(search),
+        customer.name.toLowerCase().includes(query) ||
+        customer.email.toLowerCase().includes(query) ||
+        customer.phoneNumber.toLowerCase().includes(query),
     );
   });
 

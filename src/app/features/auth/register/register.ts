@@ -1,12 +1,13 @@
 import { Component, inject, signal } from '@angular/core';
 
-import { form, FormField, FormRoot, minLength, required } from '@angular/forms/signals';
+import { email, form, FormField, FormRoot, minLength, required } from '@angular/forms/signals';
 import { Router, RouterLink } from '@angular/router';
 import { AuthStore } from '../../../core/auth/auth-store';
 
 interface RegisterFormModel {
   name: string;
-  mobileNo: string;
+  email: string;
+  phoneNumber: string;
   password: string;
 }
 
@@ -23,7 +24,8 @@ export class Register {
   readonly errorMessage = signal('');
   readonly model = signal<RegisterFormModel>({
     name: '',
-    mobileNo: '',
+    email: '',
+    phoneNumber: '',
     password: '',
   });
 
@@ -34,11 +36,19 @@ export class Register {
         message: 'Name is required',
       });
 
-      required(path.mobileNo, {
+      required(path.email, {
+        message: 'Email is required',
+      });
+
+      email(path.email, {
+        message: 'Enter a valid email address',
+      });
+
+      required(path.phoneNumber, {
         message: 'Mobile number is required',
       });
 
-      minLength(path.mobileNo, 10, {
+      minLength(path.phoneNumber, 10, {
         message: 'Enter a valid mobile number',
       });
 
@@ -57,16 +67,12 @@ export class Register {
           const model = this.model();
           try {
             await this.auth.register({
-              CustId: 0,
-              Name: model.name,
-              MobileNo: model.mobileNo,
-              Password: model.password,
+              name: model.name,
+              email: model.email,
+              phoneNumber: model.phoneNumber,
+              password: model.password,
             });
-            await this.router.navigate(['/login'], {
-              queryParams: {
-                mobileNo: model.mobileNo,
-              },
-            });
+            await this.router.navigate(['/']);
           } catch (error) {
             this.errorMessage.set(error instanceof Error ? error.message : 'Registeration failed');
           }

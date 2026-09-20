@@ -39,19 +39,36 @@
           }
         </div>
 
-        <!-- MOBILE -->
+        <!-- EMAIL -->
+        <div>
+          <label class="mb-2 block text-sm"> Email address </label>
+
+          <input
+            type="email"
+            [formField]="registerForm.email"
+            class="w-full rounded-2xl border border-black/10 bg-white px-5 py-4 outline-none focus:border-serein-brand"
+          />
+
+          @if (registerForm.email().touched() && registerForm.email().invalid()) {
+            <p class="mt-2 text-sm text-red-700">
+              {{ registerForm.email().errors()[0].message }}
+            </p>
+          }
+        </div>
+
+        <!-- PHONE -->
         <div>
           <label class="mb-2 block text-sm"> Mobile number </label>
 
           <input
             type="tel"
-            [formField]="registerForm.mobileNo"
+            [formField]="registerForm.phoneNumber"
             class="w-full rounded-2xl border border-black/10 bg-white px-5 py-4 outline-none focus:border-serein-brand"
           />
 
-          @if (registerForm.mobileNo().touched() && registerForm.mobileNo().invalid()) {
+          @if (registerForm.phoneNumber().touched() && registerForm.phoneNumber().invalid()) {
             <p class="mt-2 text-sm text-red-700">
-              {{ registerForm.mobileNo().errors()[0].message }}
+              {{ registerForm.phoneNumber().errors()[0].message }}
             </p>
           }
         </div>

@@ -1,59 +1,118 @@
-import { computed, effect, Injectable, signal } from '@angular/core';
+import { computed, inject, Injectable, signal } from '@angular/core';
+
+import { HttpErrorResponse } from '@angular/common/http';
+
+import { firstValueFrom } from 'rxjs';
+
+import { WishlistApi } from '../api/wishlist-api';
+
+import type { WishlistResponse } from '../models/wishlist-item';
+
+import type { Product, ProductPreview } from '../models/product';
+
 @Injectable({
   providedIn: 'root',
 })
 export class WishlistStore {
-  private readonly storageKey = 'serein-wishlist';
+  private readonly api = inject(WishlistApi);
 
-  private readonly idsState = signal<number[]>(this.load());
-  readonly ids = this.idsState.asReadonly();
+  private readonly wishlistState = signal<WishlistResponse | null>(null);
 
-  readonly count = computed(() => this.idsState().length);
-  constructor() {
-    effect(() => {
-      localStorage.setItem(this.storageKey, JSON.stringify(this.idsState()));
-    });
-  }
+  private readonly loadingState = signal(false);
 
-  private load(): number[] {
-    const saved = localStorage.getItem(this.storageKey);
+  private readonly loadedState = signal(false);
 
-    if (!saved) {
-      return [];
-    }
+  readonly loading = this.loadingState.asReadonly();
 
-    try {
-      return JSON.parse(saved);
-    } catch {
-      return [];
-    }
-  }
+  readonly items = computed(() => this.wishlistState()?.items ?? []);
 
-  has(productId: number) {
-    return this.idsState().includes(productId);
-  }
+  readonly count = computed(() => this.items().length);
 
-  add(productId: number) {
-    if (this.has(productId)) {
+  readonly isEmpty = computed(() => this.items().length === 0);
+
+  async load(force = false): Promise<void> {
+    if (this.loadingState()) {
       return;
     }
 
-    this.idsState.update((ids) => [...ids, productId]);
-  }
+    if (this.loadedState() && !force) {
+      return;
+    }
 
-  remove(productId: number) {
-    this.idsState.update((ids) => ids.filter((id) => id !== productId));
-  }
+    this.loadingState.set(true);
 
-  toggle(productId: number) {
-    if (this.has(productId)) {
-      this.remove(productId);
-    } else {
-      this.add(productId);
+    try {
+      const wishlist = await firstValueFrom(this.api.get());
+
+      this.wishlistState.set(wishlist);
+
+      this.loadedState.set(true);
+    } finally {
+      this.loadingState.set(false);
     }
   }
 
-  clear() {
-    this.idsState.set([]);
+  isSaved(productId: number): boolean {
+    return this.items().some((item) => item.product.productId === productId);
+  }
+
+  async add(productId: number): Promise<void> {
+    try {
+      const wishlist = await firstValueFrom(
+        this.api.add({
+          productId: productId,
+        }),
+      );
+
+      this.wishlistState.set(wishlist);
+
+      this.loadedState.set(true);
+    } catch (error) {
+      throw new Error(this.getErrorMessage(error, 'Product could not be saved.'));
+    }
+  }
+
+  async remove(productId: number): Promise<void> {
+    const item = this.items().find((item) => item.product.productId === productId);
+
+    if (!item) {
+      return;
+    }
+
+    try {
+      const wishlist = await firstValueFrom(this.api.remove(item.wishlistItemId));
+
+      this.wishlistState.set(wishlist);
+    } catch (error) {
+      throw new Error(this.getErrorMessage(error, 'Product could not be removed from wishlist.'));
+    }
+  }
+
+  async toggle(productId: number): Promise<boolean> {
+    if (this.isSaved(productId)) {
+      await this.remove(productId);
+
+      return false;
+    }
+
+    await this.add(productId);
+
+    return true;
+  }
+
+  reset(): void {
+    this.wishlistState.set(null);
+
+    this.loadedState.set(false);
+  }
+
+  private getErrorMessage(error: unknown, fallback: string): string {
+    if (!(error instanceof HttpErrorResponse)) {
+      return fallback;
+    }
+
+    const message = error.error?.message;
+
+    return Array.isArray(message) ? message.join(', ') : (message ?? fallback);
   }
 }

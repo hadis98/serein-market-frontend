@@ -4,6 +4,7 @@ import { firstValueFrom } from 'rxjs';
 import { ProductApi } from '../api/product-api';
 import { Product } from '../models/product';
 import { ProductUpsertRequest } from '../models/product-request';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root',
@@ -22,7 +23,7 @@ export class ProductStore {
   readonly error = this.errorState.asReadonly();
   readonly count = computed(() => this.productsState().length);
 
-  async load(force = false) {
+  async load(force = false): Promise<void> {
     if (this.loadingState()) {
       return;
     }
@@ -35,15 +36,13 @@ export class ProductStore {
     this.errorState.set(null);
 
     try {
-      const response = await firstValueFrom(this.api.getAll());
+      const products = await firstValueFrom(this.api.getAll());
 
-      if (!response.result) {
-        throw new Error(response.message || 'Products could not be loaded.');
-      }
-      this.productsState.set(response.data ?? []);
+      this.productsState.set(products);
+
       this.loadedState.set(true);
     } catch (error) {
-      this.errorState.set(error instanceof Error ? error.message : 'Products could not be loaded.');
+      this.errorState.set(this.getErrorMessage(error, 'Products could not be loaded.'));
     } finally {
       this.loadingState.set(false);
     }
@@ -53,42 +52,40 @@ export class ProductStore {
     return this.productsState().find((product) => product.productId === id);
   }
 
-  async create(request: ProductUpsertRequest) {
-    const response = await firstValueFrom(this.api.create(request));
-
-    if (!response.result) {
-      throw new Error(response.message || 'Product could not be created.');
+  async create(request: ProductUpsertRequest): Promise<void> {
+    try {
+      await firstValueFrom(this.api.create(request));
+      await this.load(true);
+    } catch (error) {
+      throw new Error(this.getErrorMessage(error, 'Product could not be created.'));
     }
-    await this.load(true);
   }
 
-  async update(request: ProductUpsertRequest) {
-    const response = await firstValueFrom(this.api.update(request));
-
-    if (!response.result) {
-      throw new Error(response.message || 'Product could not be updated.');
+  async update(id: number, request: ProductUpsertRequest) {
+    try {
+      await firstValueFrom(this.api.update(id, request));
+      await this.load(true);
+    } catch (error) {
+      throw new Error(this.getErrorMessage(error, 'Product could not be updated.'));
     }
-
-    await this.load(true);
   }
 
-  async delete(id: number) {
-    const response = await firstValueFrom(this.api.delete(id));
-
-    if (!response.result) {
-      throw new Error(this.getDeleteErrorMessage(response.message));
+  async delete(id: number): Promise<void> {
+    try {
+      await firstValueFrom(this.api.delete(id));
+      await this.load(true);
+    } catch (error) {
+      throw new Error(this.getErrorMessage(error, 'Product could not be archived.'));
     }
-
-    await this.load(true);
   }
 
-  private getDeleteErrorMessage(message: string) {
-    if (message?.includes('FK_EcomCart_EcomProduct')) {
-      return (
-        'This product cannot be deleted because ' +
-        'it is currently used in one or more customer carts.'
-      );
+  private getErrorMessage(error: unknown, fallback: string): string {
+    if (!(error instanceof HttpErrorResponse)) {
+      return fallback;
     }
-    return message || 'Product could not be deleted.';
+
+    const message = error.error?.message;
+
+    return Array.isArray(message) ? message.join(', ') : (message ?? fallback);
   }
 }

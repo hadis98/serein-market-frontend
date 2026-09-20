@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, effect } from '@angular/core';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { CartStore } from '../../core/state/cart-store';
 import { AuthStore } from '../../core/auth/auth-store';
@@ -19,5 +19,17 @@ export class Header {
   async logout() {
     this.auth.logout();
     await this.router.navigate(['/']);
+  }
+
+  constructor() {
+    effect(() => {
+      if (this.auth.isLoggedIn()) {
+        void this.cart.load();
+        void this.wishlist.load();
+      } else {
+        this.cart.reset();
+        this.wishlist.reset();
+      }
+    });
   }
 }

@@ -1,59 +1,55 @@
-import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
-import { ApiResponse } from '../models/api-response';
-import { API_BASE_URL } from './api.config';
-import {
-  BackendOrderDetails,
-  BackendOrderItem,
-  BackendOrderSummary,
-  CreateOrderRequest,
-  OrderDetails,
-  OrderSummary,
-} from '../models/order';
+import { inject, Injectable } from '@angular/core';
+
 import { map } from 'rxjs';
+
+import { API_BASE_URL } from './api.config';
+
+import type { OrderStatus, PaymentMethod, PaymentStatus } from '../models/order';
+
+import type {
+  AdminOrderDetails,
+  AdminOrderSummary,
+  BackendAdminOrderDetails,
+  BackendAdminOrderSummary,
+  BackendUpdateOrderStatusResponse,
+} from '../models/admin-order';
 
 @Injectable({
   providedIn: 'root',
 })
-export class OrderApi {
+export class AdminOrderApi {
   private readonly http = inject(HttpClient);
 
-  private readonly baseUrl = `${API_BASE_URL}/orders`;
+  private readonly baseUrl = `${API_BASE_URL}/admin/orders`;
 
-  create(request: CreateOrderRequest) {
+  getAll() {
     return this.http
-      .post<BackendOrderDetails>(this.baseUrl, request)
-      .pipe(map((order) => this.toDetails(order)));
-  }
-
-  getMine() {
-    return this.http
-      .get<BackendOrderSummary[]>(`${this.baseUrl}/me`)
+      .get<BackendAdminOrderSummary[]>(this.baseUrl)
       .pipe(map((orders) => orders.map((order) => this.toSummary(order))));
   }
 
   getById(id: number) {
     return this.http
-      .get<BackendOrderDetails>(`${this.baseUrl}/${id}`)
+      .get<BackendAdminOrderDetails>(`${this.baseUrl}/${id}`)
       .pipe(map((order) => this.toDetails(order)));
   }
 
-  cancel(id: number) {
-    return this.http.patch(`${this.baseUrl}/${id}/cancel`, {});
+  updateStatus(id: number, status: OrderStatus) {
+    return this.http
+      .patch<BackendUpdateOrderStatusResponse>(`${this.baseUrl}/${id}/status`, {
+        status,
+      });
   }
 
-  private toSummary(order: BackendOrderSummary): OrderSummary {
+  private toSummary(order: BackendAdminOrderSummary): AdminOrderSummary {
     return {
       id: order.id,
 
       orderNumber: order.orderNumber,
 
       status: order.status,
-
-      subtotalAmount: Number(order.subtotalAmount),
-
-      discountAmount: Number(order.discountAmount),
 
       totalAmount: Number(order.totalAmount),
 
@@ -63,13 +59,21 @@ export class OrderApi {
 
       itemCount: order._count.items,
 
-      createdAt: order.createdAt,
+      customer: {
+        id: order.user.id,
 
-      updatedAt: order.updatedAt,
+        name: order.user.name,
+
+        email: order.user.email,
+
+        phoneNumber: order.user.phoneNumber,
+      },
+
+      createdAt: order.createdAt,
     };
   }
 
-  private toDetails(order: BackendOrderDetails): OrderDetails {
+  private toDetails(order: BackendAdminOrderDetails): AdminOrderDetails {
     return {
       id: order.id,
 
@@ -86,6 +90,16 @@ export class OrderApi {
       paymentMethod: order.paymentMethod,
 
       paymentStatus: order.paymentStatus,
+
+      customer: {
+        id: order.user.id,
+
+        name: order.user.name,
+
+        email: order.user.email,
+
+        phoneNumber: order.user.phoneNumber,
+      },
 
       delivery: {
         address1: order.deliveryAddressLine1,
@@ -99,7 +113,7 @@ export class OrderApi {
         landmark: order.deliveryLandmark ?? '',
       },
 
-      items: order.items.map((item: BackendOrderItem) => ({
+      items: order.items.map((item) => ({
         id: item.id,
 
         productId: item.productId,

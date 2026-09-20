@@ -11,4 +11,7 @@ import { CartStore } from '../../../core/state/cart-store';
 })
 export class Cart {
   readonly cart = inject(CartStore);
+  constructor() {
+    void this.cart.load();
+  }
 }

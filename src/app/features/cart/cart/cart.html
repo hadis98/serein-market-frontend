@@ -46,7 +46,7 @@
               <div class="flex flex-col justify-between gap-4 sm:flex-row">
                 <div>
                   <p class="text-xs uppercase tracking-widest text-serein-accent">
-                    {{ item.product.categoryName }}
+                    {{ item.product.productSku }}
                   </p>
 
                   <a [routerLink]="['/products', item.product.productId]">
@@ -58,7 +58,7 @@
 
                 <p class="font-semibold">
                   {{
-                    item.product.productPrice * item.quantity | currency: 'INR' : 'symbol' : '1.0-0'
+                    item.product.productPrice * item.quantity | currency:'USD':'symbol':'1.0-2'
                   }}
                 </p>
               </div>
@@ -126,7 +126,7 @@
           <span>Total</span>
 
           <strong>
-            {{ cart.subtotal() | currency: 'INR' : 'symbol' : '1.0-0' }}
+            {{ cart.subTotal() | currency:'USD':'symbol':'1.0-2' }}
           </strong>
         </div>
 
@@ -140,7 +140,7 @@
         <button
           type="button"
           class="mt-5 w-full text-center text-xs opacity-60"
-          (click)="cart.clear()"
+          (click)="cart.reset()"
         >
           Clear cart
         </button>

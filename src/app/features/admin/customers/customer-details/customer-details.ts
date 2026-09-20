@@ -1,61 +1,63 @@
-import { Component, effect, inject, signal } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
+
+import { CurrencyPipe, DatePipe } from '@angular/common';
+
 import { ActivatedRoute, RouterLink } from '@angular/router';
-import { CustomerApi } from '../../../../core/api/customer-api';
-import { toSignal } from '@angular/core/rxjs-interop';
-import { Customer } from '../../../../core/models/customer';
-import { firstValueFrom } from 'rxjs';
+
+import { AdminCustomerStore } from '../../../../core/state/admin-customer-store';
+
+import type { AdminCustomerDetails as AdminCustomerDetailsModel } from '../../../../core/models/admin-customer';
 
 @Component({
-  imports: [RouterLink],
-  selector: 'app-customer-details',
+  imports: [CurrencyPipe, DatePipe, RouterLink],
+
+  selector: 'app-admin-customer-details',
+
   styleUrl: './customer-details.css',
+
   templateUrl: './customer-details.html',
 })
-export class CustomerDetails {
-  private readonly currentRoute = inject(ActivatedRoute);
+export class CustomerDetails implements OnInit {
+  private readonly route = inject(ActivatedRoute);
 
-  private readonly api = inject(CustomerApi);
+  private readonly customerStore = inject(AdminCustomerStore);
 
-  private readonly params = toSignal(this.currentRoute.paramMap, {
-    initialValue: this.currentRoute.snapshot.paramMap,
-  });
+  readonly customer = signal<AdminCustomerDetailsModel | null>(null);
 
-  readonly customer = signal<Customer | null>(null);
-  readonly loading = signal(false);
+  readonly loading = signal(true);
 
   readonly error = signal<string | null>(null);
-  constructor() {
-    effect(() => {
-      const id = Number(this.params().get('id'));
-      if (!Number.isFinite(id)) {
-        return;
-      }
 
-      void this.loadCustomer(id);
-    });
+  ngOnInit(): void {
+    void this.load();
   }
 
-  private async loadCustomer(id: number) {
-    this.loading.set(true);
-    this.error.set(null);
+  private async load(): Promise<void> {
+    const idParam = this.route.snapshot.paramMap.get('id');
+
+    if (!idParam) {
+      this.error.set('Invalid customer.');
+
+      this.loading.set(false);
+
+      return;
+    }
+
+    const id = Number(idParam);
+
+    if (Number.isNaN(id)) {
+      this.error.set('Invalid customer.');
+
+      this.loading.set(false);
+
+      return;
+    }
 
     try {
-      const response = await firstValueFrom(this.api.getById(id));
+      const customer = await this.customerStore.loadById(id);
 
-      if (!response.result || !response.data) {
-        throw new Error(response.message || 'Customer not found.');
-      }
-
-      this.customer.set({
-        custId: response.data.custId,
-
-        name: response.data.name,
-
-        mobileNo: response.data.mobileNo,
-      });
+      this.customer.set(customer);
     } catch (error) {
-      this.customer.set(null);
-
       this.error.set(error instanceof Error ? error.message : 'Customer could not be loaded.');
     } finally {
       this.loading.set(false);

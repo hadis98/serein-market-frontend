@@ -23,12 +23,7 @@
     </div>
   } @else {
     <div class="overflow-hidden rounded-3xl bg-white">
-      <div
-        class="order-table-scroll"
-        role="region"
-        aria-label="Order list"
-        tabindex="0"
-      >
+      <div class="order-table-scroll" role="region" aria-label="Order list" tabindex="0">
         <div
           class="order-table-header grid grid-cols-[0.6fr_1.3fr_1fr_0.8fr_1fr_0.8fr_0.5fr] gap-6 border-b border-stone-200 px-8 py-5 text-xs font-semibold uppercase tracking-wider text-stone-400"
         >
@@ -41,48 +36,42 @@
           <span>Actions</span>
         </div>
 
-        @for (order of filteredOrders(); track order.saleId) {
+        @for (order of filteredOrders(); track order.id) {
           <div
             class="grid grid-cols-[0.6fr_1.3fr_1fr_0.8fr_1fr_0.8fr_0.5fr] items-center gap-6 border-b border-stone-100 px-8 py-6 last:border-b-0"
           >
-            <span class="font-medium text-serein-text"> #{{ order.saleId }} </span>
+            <span class="font-medium text-serein-text"> #{{ order.orderNumber }} </span>
 
             <div>
               <p class="font-medium text-serein-text">
-                {{ customerName(order.custId) }}
+                {{ order.customer.name }}
               </p>
 
-              <p class="mt-1 text-sm text-stone-400">Customer #{{ order.custId }}</p>
+              <p class="mt-1 text-sm text-stone-400">{{ order.customer.email }}</p>
             </div>
 
             <span class="text-sm text-stone-600">
-              {{ order.saleDate | date: 'mediumDate' }}
+              {{ order.createdAt | date: 'mediumDate' }}
             </span>
 
             <span class="font-medium text-serein-text">
-              {{ order.totalInvoiceAmount | number: '1.2-2' }}
+              {{ order.totalAmount | currency: 'USD' : 'symbol' : '1.0-2' }}
             </span>
 
             <span class="text-sm text-stone-600">
-              {{ order.paymentNaration }}
+              {{ order.paymentMethod }}
             </span>
 
             <div>
-              @if (order.isCanceled) {
-                <span class="rounded-full bg-red-50 px-3 py-1 text-xs font-medium text-red-700">
-                  Cancelled
-                </span>
-              } @else {
-                <span
-                  class="rounded-full bg-green-50 px-3 py-1 text-xs font-medium text-green-700"
-                >
-                  Active
-                </span>
-              }
+              <span
+                class="rounded-full bg-stone-100 px-3 py-1 text-xs font-medium text-serein-text"
+              >
+                {{ order.status }}
+              </span>
             </div>
 
             <a
-              [routerLink]="['/admin/orders', order.saleId]"
+              [routerLink]="['/admin/orders', order.id]"
               class="text-sm font-medium text-serein-brand"
             >
               View

@@ -1,24 +1,28 @@
-import { inject, Inject, Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
+
 import { HttpClient } from '@angular/common/http';
 
-import { ApiResponse } from '../models/api-response';
+import { API_BASE_URL } from '../api/api.config';
 
-import { LoginCustomerDto, LoginRequest, RegisterCustomerRequest , UpdateProfileRequest} from '../models/customer';
+import type { AuthResponse, AuthUser, LoginRequest, RegisterRequest } from '../models/auth.model';
 
-@Injectable({ providedIn: 'root' })
+@Injectable({
+  providedIn: 'root',
+})
 export class AuthApi {
   private readonly http = inject(HttpClient);
-  private readonly baseurl = 'https://freeapi.gerasim.in/api/BigBasket';
 
-  register(request: RegisterCustomerRequest) {
-    return this.http.post<ApiResponse<unknown>>(`${this.baseurl}/RegisterCustomer`, request);
+  private readonly baseUrl = `${API_BASE_URL}/auth`;
+
+  register(request: RegisterRequest) {
+    return this.http.post<AuthResponse>(`${this.baseUrl}/register`, request);
   }
 
   login(request: LoginRequest) {
-    return this.http.post<ApiResponse<LoginCustomerDto>>(`${this.baseurl}/Login`, request);
+    return this.http.post<AuthResponse>(`${this.baseUrl}/login`, request);
   }
 
-  updateProfile(request: UpdateProfileRequest){
-    return this.http.put<ApiResponse<string>>(`${this.baseurl}/UpdateProfile`, request);
+  me() {
+    return this.http.get<AuthUser>(`${this.baseUrl}/me`);
   }
 }

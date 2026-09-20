@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
 import { checkoutGuard } from './core/guards/checkout-guard';
 import { authGuard } from './core/guards/auth-guard';
+import { adminGuard } from './core/guards/admin-guard';
 
 export const routes: Routes = [
   {
@@ -55,11 +56,12 @@ export const routes: Routes = [
       },
       {
         path: 'cart',
+        canActivate: [authGuard],
         loadComponent: () => import('./features/cart/cart/cart').then((m) => m.Cart),
       },
       {
         path: 'checkout',
-        canActivate: [checkoutGuard, authGuard],
+        canActivate: [authGuard, checkoutGuard],
         loadComponent: () =>
           import('./features/checkout/checkout/checkout').then((m) => m.Checkout),
       },
@@ -72,6 +74,7 @@ export const routes: Routes = [
   },
   {
     path: 'admin',
+    canActivate: [adminGuard],
     loadComponent: () => import('./layout/admin-layout/admin-layout').then((m) => m.AdminLayout),
     children: [
       {
@@ -126,7 +129,7 @@ export const routes: Routes = [
           import('./features/admin/orders/admin-orders/admin-orders').then((m) => m.AdminOrders),
       },
       {
-        path: 'orders/:saleId',
+        path: 'orders/:id',
         loadComponent: () =>
           import('./features/admin/orders/admin-order-details/admin-order-details').then(
             (m) => m.AdminOrderDetails,

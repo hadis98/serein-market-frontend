@@ -22,16 +22,18 @@
       <form [formRoot]="loginForm" class="mt-10 space-y-6">
         <!-- MOBILE -->
         <div>
-          <label class="mb-2 block text-sm"> Mobile number </label>
+          <label class="mb-2 block text-sm"> Email address </label>
 
           <input
-            type="tel"
-            [formField]="loginForm.mobileNo"
+            type="email"
+            [formField]="loginForm.email"
             class="w-full rounded-2xl border border-black/10 bg-white px-5 py-4 outline-none focus:border-serein-brand"
           />
 
-          @if (loginForm.mobileNo().touched() && loginForm.mobileNo().invalid()) {
-            <p class="mt-2 text-sm text-red-700">Mobile number is required</p>
+          @if (loginForm.email().touched() && loginForm.email().invalid()) {
+            <p class="mt-2 text-sm text-red-700">
+              {{ loginForm.email().errors()[0].message }}
+            </p>
           }
         </div>
 

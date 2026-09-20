@@ -1,7 +1,7 @@
-import { Component, inject, input } from '@angular/core';
+import { Component, computed, inject, input } from '@angular/core';
 import { CurrencyPipe } from '@angular/common';
 
-import { Product } from '../../../core/models/product';
+import { Product, ProductPreview } from '../../../core/models/product';
 import { RouterLink } from '@angular/router';
 import { CartStore } from '../../../core/state/cart-store';
 import { WishlistStore } from '../../../core/state/wishlist-store';
@@ -14,24 +14,41 @@ import { ToastStore } from '../../../core/state/toast-store';
   templateUrl: './product-card.html',
 })
 export class ProductCard {
-  readonly product = input.required<Product>();
+  readonly product = input.required<ProductPreview>();
 
   readonly wishlist = inject(WishlistStore);
   private readonly toast = inject(ToastStore);
   readonly cart = inject(CartStore);
 
-  addToCart() {
-    const product = this.product();
-    this.cart.add(product);
+  readonly saved = computed(() => this.wishlist.isSaved(this.product().productId));
 
-    this.toast.show(`${product.productName} added to cart`);
+  async addToCart() {
+    const product = this.product();
+    try {
+      await this.cart.add(product.productId);
+
+      this.toast.show(`${product.productName} added to cart`);
+    } catch (error) {
+      this.toast.show(
+        error instanceof Error ? error.message : 'could not add product to cart',
+        'error',
+      );
+    }
   }
 
-  toggleWishlist() {
+  async toggleWishlist() {
     const product = this.product();
 
-    const wasSaved = this.wishlist.has(product.productId);
-    this.wishlist.toggle(product.productId);
-    this.toast.show(wasSaved ? 'Removed from wishlist.' : 'Added to wishlist');
+    try {
+      const saved = await this.wishlist.toggle(product.productId);
+      this.toast.show(
+        saved ? `${product.productName} saved.` : `${product.productName} removed from wishlist.`,
+      );
+    } catch (error) {
+      this.toast.show(
+        error instanceof Error ? error.message : 'wishlist could not be updated.',
+        'error',
+      );
+    }
   }
 }

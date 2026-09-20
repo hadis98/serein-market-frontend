@@ -5,6 +5,8 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import { BigBasketApi } from '../../../core/api/big-basket-api';
 import { CategoryCard } from '../../categories/category-card/category-card';
 import { ProductCard } from '../../products/product-card/product-card';
+import { ProductStore } from '../../../core/state/product-store';
+import { CategoryStore } from '../../../core/state/category-store';
 
 @Component({
   imports: [RouterLink, CategoryCard, ProductCard],
@@ -13,17 +15,17 @@ import { ProductCard } from '../../products/product-card/product-card';
   templateUrl: './home.html',
 })
 export class Home {
-  private readonly api = inject(BigBasketApi);
+  private readonly productStore = inject(ProductStore);
+  private readonly categoryStore = inject(CategoryStore);
 
-  private readonly productsResponse = toSignal(this.api.getProducts(), { initialValue: null });
+  readonly featuredProducts = computed(() => this.productStore.products().slice(0, 4));
 
-  private readonly categoriesResponse = toSignal(this.api.getCategories(), { initialValue: null });
+  readonly categories = this.categoryStore.categories;
 
-  readonly featuredProducts = computed(() => this.productsResponse()?.data.slice(0, 4) ?? []);
+  readonly loading = computed(() => this.productStore.loading() || this.categoryStore.loading());
 
-  readonly categories = computed(() => this.categoriesResponse()?.data ?? []);
-
-  readonly loading = computed(
-    () => this.productsResponse() === null || this.categoriesResponse() === null,
-  );
+  constructor() {
+    void this.productStore.load();
+    void this.categoryStore.load();
+  }
 }

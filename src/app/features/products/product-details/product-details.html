@@ -38,14 +38,14 @@
           {{ product.productName }}
         </h1>
 
-        @if (product.productShortName) {
+        @if (product.productShortDescription) {
           <p class="mt-3 text-lg opacity-60">
-            {{ product.productShortName }}
+            {{ product.productShortDescription }}
           </p>
         }
 
         <p class="mt-8 text-3xl font-semibold">
-          {{ product.productPrice | currency: 'INR' : 'symbol' : '1.0-0' }}
+          {{ product.productPrice | currency:'USD':'symbol':'1.0-2' }}
         </p>
 
         <p class="mt-7 max-w-xl leading-8 opacity-70">
@@ -73,7 +73,7 @@
             class="rounded-2xl border border-serein-brand px-6 py-4 transition hover:bg-serein-brand hover:text-white"
             (click)="toggleWishlist()"
           >
-            @if (wishlist.has(product.productId)) {
+            @if (wishlist.isSaved(product.productId)) {
               ♥ Saved
             } @else {
               ♡ Save

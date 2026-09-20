@@ -1,9 +1,9 @@
-import { Component, computed, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { WishlistStore } from '../../../core/state/wishlist-store';
-import { BigBasketApi } from '../../../core/api/big-basket-api';
-import { toSignal } from '@angular/core/rxjs-interop';
 import { ProductCard } from '../../products/product-card/product-card';
 import { RouterLink } from '@angular/router';
+import { CartStore } from '../../../core/state/cart-store';
+import { ToastStore } from '../../../core/state/toast-store';
 
 @Component({
   imports: [ProductCard, RouterLink],
@@ -11,17 +11,40 @@ import { RouterLink } from '@angular/router';
   styleUrl: './wishlist.css',
   templateUrl: './wishlist.html',
 })
-export class Wishlist {
+export class Wishlist implements OnInit {
   readonly wishlist = inject(WishlistStore);
-  private readonly api = inject(BigBasketApi);
-  private readonly productsResponse = toSignal(this.api.getProducts(), {
-    initialValue: null,
-  });
 
-  readonly loading = computed(() => this.productsResponse() === null);
-  readonly products = computed(() => {
-    const products = this.productsResponse()?.data ?? [];
+  private readonly cart = inject(CartStore);
 
-    return products.filter((product) => this.wishlist.has(product.productId));
-  });
+  private readonly toast = inject(ToastStore);
+
+  ngOnInit(): void {
+    void this.wishlist.load();
+  }
+
+  async remove(productId: number): Promise<void> {
+    try {
+      await this.wishlist.remove(productId);
+
+      this.toast.show('Removed from wishlist.');
+    } catch (error) {
+      this.toast.show(
+        error instanceof Error ? error.message : 'Could not remove product.',
+        'error',
+      );
+    }
+  }
+
+  async addToCart(productId: number, productName: string): Promise<void> {
+    try {
+      await this.cart.add(productId);
+
+      this.toast.show(`${productName} added to cart.`);
+    } catch (error) {
+      this.toast.show(
+        error instanceof Error ? error.message : 'Could not add product to cart.',
+        'error',
+      );
+    }
+  }
 }

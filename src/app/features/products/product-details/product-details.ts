@@ -39,26 +39,40 @@ export class ProductDetails {
     void this.productStore.load();
   }
 
-  addToCart() {
+  async addToCart() {
     const product = this.product();
-    
+
     if (!product) {
       return;
     }
-    this.cart.add(product);
-    this.toast.show(`${product.productName} added to cart.`);
+
+    try {
+      await this.cart.add(product.productId);
+      this.toast.show(`${product.productName} added to cart.`);
+    } catch (error) {
+      this.toast.show(
+        error instanceof Error ? error.message : 'Could not add product to cart.',
+        'error',
+      );
+    }
   }
 
-  toggleWishlist() {
+  async toggleWishlist() {
     const product = this.product();
-
     if (!product) {
       return;
     }
 
-    const wasSaved = this.wishlist.has(product.productId);
-    this.wishlist.toggle(product.productId);
-
-    this.toast.show(wasSaved ? 'Removed from wishlist.' : 'Added to wishlist.');
+    try {
+      const saved = await this.wishlist.toggle(product.productId);
+      this.toast.show(
+        saved ? `${product.productName} saved.` : `${product.productName} removed from wishlist.`,
+      );
+    } catch (error) {
+      this.toast.show(
+        error instanceof Error ? error.message : 'wishlist could not be updated.',
+        'error',
+      );
+    }
   }
 }

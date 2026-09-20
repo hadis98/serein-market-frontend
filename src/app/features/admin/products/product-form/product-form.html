@@ -60,11 +60,11 @@
 
         <!-- SHORT NAME -->
         <div>
-          <label class="mb-2 block text-sm"> Short name </label>
+          <label class="mb-2 block text-sm"> Short description </label>
 
           <input
             type="text"
-            [formField]="productForm.shortName"
+            [formField]="productForm.shortDescription"
             class="w-full rounded-2xl border border-black/10 px-5 py-4 outline-none focus:border-serein-brand"
           />
         </div>
@@ -82,6 +82,22 @@
           @if (productForm.price().touched() && productForm.price().invalid()) {
             <p class="mt-2 text-sm text-red-700">
               {{ productForm.price().errors()[0].message }}
+            </p>
+          }
+        </div>
+
+        <!-- STOCK QUANTITY -->
+        <div>
+          <label class="mb-2 block text-sm"> Stock quantity </label>
+          <input
+            type="number"
+            [formField]="productForm.stockQuantity"
+            class="w-full rounded-2xl border border-black/10 px-5 py-4 outline-none focus:border-serein-brand"
+          />
+
+          @if (productForm.stockQuantity().touched() && productForm.stockQuantity().invalid()) {
+            <p class="mt-2 text-sm text-red-700">
+              {{ productForm.stockQuantity().errors()[0].message }}
             </p>
           }
         </div>
@@ -155,6 +171,12 @@
             [formField]="productForm.description"
             class="w-full resize-none rounded-2xl border border-black/10 px-5 py-4 outline-none focus:border-serein-brand"
           ></textarea>
+
+          @if (productForm.description().touched() && productForm.description().invalid()) {
+            <p class="mt-2 text-sm text-red-700">
+              {{ productForm.description().errors()[0].message }}
+            </p>
+          }
         </div>
       </div>
 

@@ -1,161 +1,290 @@
 <section class="space-y-8">
-  <a routerLink="/admin/orders" class="inline-flex text-sm text-stone-500 hover:text-serein-brand">
+  <!-- Back -->
+  <a
+    routerLink="/admin/orders"
+    class="inline-flex text-sm text-stone-500 transition hover:text-serein-brand"
+  >
     ← Back to orders
   </a>
 
-  @if (orderStore.loading()) {
-    <p class="text-stone-500">Loading order...</p>
-  } @else if (order(); as order) {
-    <header class="flex items-start justify-between gap-6">
+  <!-- Loading -->
+  @if (loading()) {
+    <div class="rounded-3xl bg-white p-10">
+      <p class="text-stone-500">Loading order...</p>
+    </div>
+  }
+
+  <!-- Error -->
+  @else if (error()) {
+    <div class="rounded-3xl bg-white p-10">
+      <p class="font-medium text-red-700">
+        {{ error() }}
+      </p>
+    </div>
+  }
+
+  <!-- Order -->
+  @else if (order(); as order) {
+    <!-- Header -->
+    <header class="flex flex-col gap-6 sm:flex-row sm:items-start sm:justify-between">
       <div>
         <p class="mb-3 text-xs uppercase tracking-[0.35em] text-serein-brand">Order</p>
 
-        <h1 class="font-display text-5xl text-serein-text">#{{ order.saleId }}</h1>
+        <h1 class="font-display text-4xl text-serein-text sm:text-5xl">#{{ order.orderNumber }}</h1>
 
         <p class="mt-3 text-stone-500">
-          {{ order.saleDate | date: 'medium' }}
+          {{ order.createdAt | date: 'medium' }}
         </p>
       </div>
 
-      @if (order.isCanceled) {
-        <span class="rounded-full bg-red-50 px-4 py-2 text-sm font-medium text-red-700">
-          Cancelled
+      <!-- Current status -->
+      <div class="flex flex-wrap items-center gap-3">
+        <span class="rounded-full bg-stone-100 px-4 py-2 text-sm font-medium text-serein-text">
+          Order Status: {{ order.status }}
         </span>
-      } @else {
-        <span class="rounded-full bg-green-50 px-4 py-2 text-sm font-medium text-green-700">
-          Active
+
+        <span class="rounded-full bg-stone-100 px-4 py-2 text-sm text-stone-600">
+          Payment Status: {{ order.paymentStatus }}
         </span>
-      }
+      </div>
     </header>
 
+    <!-- Status actions -->
+    @if (allowedStatuses(order.status); as statuses) {
+      @if (statuses.length > 0) {
+        <section class="rounded-3xl bg-white p-7">
+          <div class="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
+            <div>
+              <h2 class="font-display text-2xl text-serein-text">Update order status</h2>
+
+              <p class="mt-2 text-sm text-stone-500">Choose the next valid step for this order.</p>
+            </div>
+
+            <div class="flex flex-wrap gap-3">
+              @for (status of statuses; track status) {
+                <button
+                  type="button"
+                  [disabled]="updating()"
+                  class="rounded-xl bg-serein-text px-5 py-3 text-sm font-medium text-white transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50"
+                  (click)="updateStatus(status)"
+                >
+                  @switch (status) {
+                    @case ('CONFIRMED') {
+                      Confirm order
+                    }
+
+                    @case ('CANCELLED') {
+                      Cancel order
+                    }
+
+                    @case ('SHIPPED') {
+                      Mark as shipped
+                    }
+
+                    @case ('DELIVERED') {
+                      Mark as delivered
+                    }
+                  }
+                </button>
+              }
+            </div>
+          </div>
+        </section>
+      }
+    }
+
+    <!-- Customer + Summary -->
     <div class="grid gap-6 lg:grid-cols-3">
+      <!-- Customer -->
       <div class="rounded-3xl bg-white p-7 lg:col-span-2">
         <h2 class="font-display text-2xl text-serein-text">Customer</h2>
 
         <div class="mt-5 space-y-2 text-stone-600">
-          <p>
-            {{ customer()?.name ?? 'Unknown customer' }}
+          <p class="font-medium text-serein-text">
+            {{ order.customer.name }}
           </p>
 
-          <p>Customer #{{ order.custId }}</p>
+          <p>
+            {{ order.customer.email }}
+          </p>
 
-          @if (customer()?.mobileNo) {
-            <p>
-              {{ customer()?.mobileNo }}
-            </p>
-          }
+          <p>
+            {{ order.customer.phoneNumber }}
+          </p>
+
+          <p class="pt-2 text-sm text-stone-400">Customer #{{ order.customer.id }}</p>
         </div>
       </div>
 
+      <!-- Summary -->
       <div class="rounded-3xl bg-white p-7">
         <h2 class="font-display text-2xl text-serein-text">Summary</h2>
 
         <div class="mt-5 space-y-3">
-          <div class="flex justify-between">
-            <span class="text-stone-500"> Total </span>
+          <div class="flex justify-between gap-5">
+            <span class="text-stone-500"> Subtotal </span>
 
-            <strong>
-              {{ order.totalInvoiceAmount | number: '1.2-2' }}
-            </strong>
-          </div>
-
-          <div class="flex justify-between">
-            <span class="text-stone-500"> Discount </span>
-
-            <span>
-              {{ order.discount | number: '1.2-2' }}
+            <span class="font-medium text-serein-text">
+              {{ order.subtotalAmount | currency: 'EUR' : 'symbol' : '1.2-2' }}
             </span>
           </div>
 
           <div class="flex justify-between gap-5">
+            <span class="text-stone-500"> Discount </span>
+
+            <span>
+              {{ order.discountAmount | currency: 'EUR' : 'symbol' : '1.2-2' }}
+            </span>
+          </div>
+
+          <div class="border-t border-stone-100 pt-3">
+            <div class="flex justify-between gap-5">
+              <span class="font-medium text-serein-text"> Total </span>
+
+              <strong class="text-serein-text">
+                {{ order.totalAmount | currency: 'EUR' : 'symbol' : '1.2-2' }}
+              </strong>
+            </div>
+          </div>
+
+          <div class="flex justify-between gap-5 pt-2">
             <span class="text-stone-500"> Payment </span>
 
-            <span class="text-right">
-              {{ order.paymentNaration }}
+            <span class="text-right text-sm text-serein-text">
+              @switch (order.paymentMethod) {
+                @case ('CASH_ON_DELIVERY') {
+                  Cash on delivery
+                }
+
+                @case ('CARD') {
+                  Card
+                }
+              }
             </span>
           </div>
         </div>
       </div>
     </div>
 
-    <div class="rounded-3xl bg-white p-7">
+    <!-- Delivery -->
+    <section class="rounded-3xl bg-white p-7">
       <h2 class="font-display text-2xl text-serein-text">Delivery</h2>
 
       <div class="mt-5 space-y-1 text-stone-600">
         <p>
-          {{ order.deliveryAddress1 }}
+          {{ order.delivery.address1 }}
         </p>
 
-        @if (order.deliveryAddress2) {
+        @if (order.delivery.address2) {
           <p>
-            {{ order.deliveryAddress2 }}
+            {{ order.delivery.address2 }}
           </p>
         }
 
         <p>
-          {{ order.deliveryCity }}
-          {{ order.deliveryPinCode }}
+          {{ order.delivery.city }},
+          {{ order.delivery.postalCode }}
         </p>
 
-        @if (order.deliveryLandMark) {
-          <p>
-            Landmark:
-            {{ order.deliveryLandMark }}
+        @if (order.delivery.landmark) {
+          <p class="pt-2">
+            <span class="text-stone-400"> Landmark: </span>
+
+            {{ order.delivery.landmark }}
           </p>
         }
       </div>
-    </div>
+    </section>
 
+    <!-- Order items -->
     <section class="rounded-3xl bg-white p-7">
-      <h2 class="font-display text-3xl text-serein-text">Order items</h2>
+      <div class="flex items-center justify-between gap-5">
+        <h2 class="font-display text-3xl text-serein-text">Order items</h2>
 
-      @if (itemsLoading()) {
-        <p class="mt-6 text-stone-500">Loading products...</p>
-      } @else if (itemsError()) {
-        <p class="mt-6 text-red-700">
-          {{ itemsError() }}
-        </p>
-      } @else {
-        <div class="mt-6 divide-y divide-stone-100">
-          @for (item of items(); track item.saleItemId) {
-            <div class="flex items-center gap-5 py-5">
-              <img
-                [src]="item.productImageUrl"
-                [alt]="item.productName"
-                class="h-20 w-20 rounded-2xl object-cover"
-              />
+        <span class="text-sm text-stone-400">
+          {{ order.items.length }}
+          {{ order.items.length === 1 ? 'item' : 'items' }}
+        </span>
+      </div>
 
-              <div class="min-w-0 flex-1">
-                <p class="font-medium text-serein-text">
-                  {{ item.productName }}
-                </p>
+      <div class="mt-6 divide-y divide-stone-100">
+        @for (item of order.items; track item.id) {
+          <div class="flex flex-col gap-5 py-5 sm:flex-row sm:items-center">
+            <!-- Product image -->
+            <img
+              [src]="item.imageUrl"
+              [alt]="item.name"
+              class="h-24 w-24 shrink-0 rounded-2xl object-cover"
+            />
 
-                <p class="mt-1 text-sm text-stone-400">
-                  {{ item.categoryName }}
-                </p>
-              </div>
+            <!-- Product info -->
+            <div class="min-w-0 flex-1">
+              <p class="font-medium text-serein-text">
+                {{ item.name }}
+              </p>
 
-              <div class="text-right">
-                <p class="text-sm text-stone-500">Qty {{ item.quantity }}</p>
-
-                <p class="mt-1 font-medium text-serein-text">
-                  {{ item.productPrice | number: '1.2-2' }}
-                </p>
-              </div>
-            </div>
-          } @empty {
-            <div class="mt-6 rounded-2xl bg-stone-50 px-6 py-8 text-center">
-              <p class="font-medium text-serein-text">No line items were stored for this order.</p>
+              <p class="mt-1 text-sm text-stone-400">SKU: {{ item.sku }}</p>
 
               <p class="mt-2 text-sm text-stone-500">
-                The backend contains the order header, but no SaleItem records.
+                {{ item.price | currency: 'EUR' : 'symbol' : '1.2-2' }}
+                each
               </p>
             </div>
-          }
-        </div>
-      }
+
+            <!-- Quantity / total -->
+            <div class="flex items-center justify-between gap-8 sm:block sm:text-right">
+              <p class="text-sm text-stone-500">Qty {{ item.quantity }}</p>
+
+              <p class="mt-1 font-medium text-serein-text">
+                {{ item.lineTotal | currency: 'EUR' : 'symbol' : '1.2-2' }}
+              </p>
+            </div>
+          </div>
+        } @empty {
+          <div class="rounded-2xl bg-stone-50 px-6 py-8 text-center">
+            <p class="font-medium text-serein-text">No items found.</p>
+
+            <p class="mt-2 text-sm text-stone-500">This order does not contain any line items.</p>
+          </div>
+        }
+      </div>
     </section>
-  } @else if (orderStore.loaded()) {
-    <div class="rounded-3xl bg-white p-10">Order not found.</div>
+
+    <!-- Metadata -->
+    <section class="rounded-3xl bg-white p-7">
+      <h2 class="font-display text-2xl text-serein-text">Order information</h2>
+
+      <div class="mt-5 grid gap-5 text-sm sm:grid-cols-2">
+        <div>
+          <p class="text-stone-400">Created</p>
+
+          <p class="mt-1 text-serein-text">
+            {{ order.createdAt | date: 'medium' }}
+          </p>
+        </div>
+
+        <div>
+          <p class="text-stone-400">Last updated</p>
+
+          <p class="mt-1 text-serein-text">
+            {{ order.updatedAt | date: 'medium' }}
+          </p>
+        </div>
+      </div>
+    </section>
+  }
+
+  <!-- Fallback -->
+  @else {
+    <div class="rounded-3xl bg-white p-10">
+      <p class="font-medium text-serein-text">Order not found.</p>
+
+      <a
+        routerLink="/admin/orders"
+        class="mt-4 inline-block text-sm text-serein-brand hover:underline"
+      >
+        Return to orders
+      </a>
+    </div>
   }
 </section>

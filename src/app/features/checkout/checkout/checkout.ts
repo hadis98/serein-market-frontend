@@ -18,44 +18,20 @@ import { AuthStore } from '../../../core/auth/auth-store';
 export class Checkout {
   readonly cart = inject(CartStore);
   private readonly orders = inject(OrderStore);
-  private readonly auth = inject(AuthStore);
   private readonly toast = inject(ToastStore);
   private readonly router = inject(Router);
 
   readonly checkoutModel = signal<CheckoutDetails>({
-    fullName: '',
-    email: '',
-    phone: '',
     address: '',
     city: '',
     postalCode: '',
-    paymentMethod: 'cod',
+    paymentMethod: 'CARD',
   });
 
   readonly checkoutForm = form(
     this.checkoutModel,
 
     (path) => {
-      required(path.fullName, {
-        message: 'Full name is required',
-      });
-
-      required(path.email, {
-        message: 'Email is required',
-      });
-
-      email(path.email, {
-        message: 'Enter a valid email address',
-      });
-
-      required(path.phone, {
-        message: 'Phone number is required',
-      });
-
-      minLength(path.phone, 10, {
-        message: 'Enter a valid phone number',
-      });
-
       required(path.address, {
         message: 'Address is required',
       });
@@ -72,51 +48,25 @@ export class Checkout {
     {
       submission: {
         action: async () => {
-          const customer = this.auth.customer();
-
-          if (!customer) {
-            return;
-          }
-
           const form = this.checkoutModel();
 
           try {
-            await this.cart.syncToBackend(customer.custId);
-
             const order = await this.orders.placeOrder({
-              SaleId: 0,
+              paymentMethod: form.paymentMethod,
 
-              CustId: customer.custId,
+              deliveryAddressLine1: form.address,
 
-              SaleDate: new Date().toISOString(),
+              deliveryCity: form.city,
 
-              TotalInvoiceAmount: this.cart.subtotal(),
-
-              Discount: 0,
-
-              PaymentNaration: form.paymentMethod === 'cod' ? 'Cash on delivery' : 'Card',
-
-              DeliveryAddress1: form.address,
-
-              DeliveryAddress2: '',
-
-              DeliveryCity: form.city,
-
-              DeliveryPinCode: form.postalCode,
-
-              DeliveryLandMark: '',
-
-              IsCancelled: false,
+              deliveryPostalCode: form.postalCode,
             });
 
-            const total = order.total;
-
-            this.cart.clear();
+            await this.cart.load(true);
 
             await this.router.navigate(['/order-success'], {
               state: {
-                total,
-                orderId: order.localId,
+                total: order.totalAmount,
+                orderId: order.id,
               },
             });
           } catch (error) {

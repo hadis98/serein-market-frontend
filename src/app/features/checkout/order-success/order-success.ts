@@ -10,5 +10,5 @@ import { RouterLink } from '@angular/router';
 })
 export class OrderSuccess {
   readonly total = Number(history.state?.total ?? 0);
-  readonly orderId = history.state?.orderId as string | undefined;
+  readonly orderId = history.state?.orderId as number | undefined;
 }

@@ -1,152 +1,135 @@
 import { computed, effect, inject, Injectable, signal } from '@angular/core';
 
 import { Product } from '../models/product';
-import { CartItem } from '../models/cart-item';
+import { CartItem, CartResponse } from '../models/cart-item';
 import { CartApi } from '../api/cart-api';
 import { firstValueFrom } from 'rxjs';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root',
 })
 export class CartStore {
-  private readonly storageKey = 'serein-cart';
-  private readonly itemsState = signal<CartItem[]>(this.loadCart());
-  private readonly cartApi = inject(CartApi);
+  private readonly api = inject(CartApi);
 
-  readonly items = this.itemsState.asReadonly();
-  readonly itemCount = computed(() =>
-    this.itemsState().reduce((total, item) => total + item.quantity, 0),
-  );
+  private readonly cartState = signal<CartResponse | null>(null);
 
-  readonly subtotal = computed(() =>
-    this.itemsState().reduce((total, item) => total + item.product.productPrice * item.quantity, 0),
-  );
+  private readonly loadingState = signal(false);
+  private readonly loadedState = signal(false);
 
-  readonly isEmpty = computed(() => this.itemsState().length === 0);
+  readonly loading = this.loadingState.asReadonly();
 
-  private loadCart(): CartItem[] {
-    const savedCart = localStorage.getItem(this.storageKey);
-    if (!savedCart) {
-      return [];
-    }
-    try {
-      return JSON.parse(savedCart);
-    } catch {
-      return [];
-    }
-  }
+  readonly items = computed(() => this.cartState()?.items ?? []);
 
-  constructor() {
-    effect(() => localStorage.setItem(this.storageKey, JSON.stringify(this.itemsState())));
-  }
+  readonly itemCount = computed(() => this.cartState()?.summary.totalQuantity ?? 0);
 
-  add(product: Product) {
-    const existingItem = this.itemsState().find(
-      (item) => item.product.productId === product.productId,
-    );
+  readonly subTotal = computed(() => this.cartState()?.summary.subtotal ?? 0);
 
-    if (existingItem) {
-      this.itemsState.update((items) =>
-        items.map((item) =>
-          item.product.productId === product.productId
-            ? { ...item, quantity: item.quantity + 1 }
-            : item,
-        ),
-      );
+  readonly isEmpty = computed(() => this.items().length === 0);
+
+  async load(force = false): Promise<void> {
+    if (this.loadingState()) {
       return;
     }
-    this.itemsState.update((items) => [...items, { product, quantity: 1 }]);
-  }
 
-  increase(productId: number) {
-    this.itemsState.update((items) =>
-      items.map((item) =>
-        item.product.productId === productId ? { ...item, quantity: item.quantity + 1 } : item,
-      ),
-    );
-  }
-
-  decrease(productId: number) {
-    this.itemsState.update((items) =>
-      items
-        .map((item) =>
-          item.product.productId === productId ? { ...item, quantity: item.quantity - 1 } : item,
-        )
-        .filter((item) => item.quantity > 0),
-    );
-  }
-
-  remove(productId: number) {
-    this.itemsState.update((items) => items.filter((item) => item.product.productId !== productId));
-  }
-
-  clear() {
-    this.itemsState.set([]);
-  }
-
-  async syncToBackend(customerId: number) {
-    await this.clearBackendCart(customerId);
-    await this.addLocalItemsToBackend(customerId);
-    await this.verifyBackendCart(customerId);
-  }
-
-  private async clearBackendCart(customerId: number): Promise<void> {
-    const response = await firstValueFrom(this.cartApi.getByCustomerId(customerId));
-
-    if (!response.result) {
-      throw new Error(response.message || 'Could not load your server cart.');
+    if (this.loadedState() && !force) {
+      return;
     }
 
-    for (const item of response.data ?? []) {
-      const deleteResponse = await firstValueFrom(this.cartApi.delete(item.cartId));
+    this.loadingState.set(true);
 
-      if (!deleteResponse.result) {
-        throw new Error('Could not prepare your cart for checkout.');
-      }
+    try {
+      const cart = await firstValueFrom(this.api.get());
+      this.cartState.set(cart);
+      this.loadedState.set(true);
+    } finally {
+      this.loadingState.set(false);
     }
   }
 
-  private async addLocalItemsToBackend(customerId: number): Promise<void> {
-    for (const item of this.items()) {
-      const response = await firstValueFrom(
-        this.cartApi.add({
-          CartId: 0,
-          CustId: customerId,
-          ProductId: item.product.productId,
-          Quantity: item.quantity,
-          AddedDate: new Date().toISOString(),
+  async add(productId: number): Promise<void> {
+    try {
+      const cart = await firstValueFrom(
+        this.api.add({
+          productId: productId,
+          quantity: 1,
         }),
       );
 
-      if (!response.result) {
-        throw new Error(`Could not add ${item.product.productName} to the server cart.`);
-      }
+      this.cartState.set(cart);
+      this.loadedState.set(true);
+    } catch (error) {
+      throw new Error(this.getErrorMessage(error, 'Product could not be added to cart.'));
     }
   }
-  private async verifyBackendCart(customerId: number): Promise<void> {
-    const response = await firstValueFrom(this.cartApi.getByCustomerId(customerId));
 
-    if (!response.result) {
-      throw new Error('Could not verify your cart before checkout.');
+  async increase(productId: number): Promise<void> {
+    const item = this.items().find((item) => item.product.productId === productId);
+
+    if (!item) {
+      return;
     }
 
-    const backendItems = response.data ?? [];
-    const localItems = this.items();
+    await this.updateQuantity(item.cartItemId, item.quantity + 1);
+  }
 
-    if (backendItems.length !== localItems.length) {
-      throw new Error('Your cart could not be synchronized. Please try again.');
+  async decrease(productId: number) {
+    const item = this.items().find((item) => item.product.productId === productId);
+
+    if (!item) {
+      return;
     }
 
-    const matches = localItems.every((localItem) => {
-      const backendItem = backendItems.find(
-        (item) => item.productId === localItem.product.productId,
+    if (item.quantity === 1) {
+      await this.remove(productId);
+
+      return;
+    }
+
+    await this.updateQuantity(item.cartItemId, item.quantity - 1);
+  }
+
+  async remove(productId: number): Promise<void> {
+    const item = this.items().find((item) => item.product.productId === productId);
+    if (!item) {
+      return;
+    }
+
+    try {
+      const cart = await firstValueFrom(this.api.remove(item.cartItemId));
+
+      this.cartState.set(cart);
+    } catch (error) {
+      throw new Error(this.getErrorMessage(error, 'Product could not be removed from cart.'));
+    }
+  }
+
+  reset(): void {
+    this.cartState.set(null);
+    this.loadedState.set(false);
+  }
+
+  private async updateQuantity(itemId: number, quantity: number) {
+    try {
+      const cart = await firstValueFrom(
+        this.api.update(itemId, {
+          quantity,
+        }),
       );
 
-      return backendItem !== undefined && backendItem.quantity === localItem.quantity;
-    });
-
-    if (!matches) {
-      throw new Error('Your cart could not be synchronized. Please try again.');
+      this.cartState.set(cart);
+    } catch (error) {
+      throw new Error(this.getErrorMessage(error, 'Cart quantity could not be updated.'));
     }
+  }
+
+  private getErrorMessage(error: unknown, fallback: string): string {
+    if (!(error instanceof HttpErrorResponse)) {
+      return fallback;
+    }
+
+    const message = error.error?.message;
+
+    return Array.isArray(message) ? message.join(', ') : (message ?? fallback);
   }
 }

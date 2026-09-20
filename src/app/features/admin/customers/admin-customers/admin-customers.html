@@ -1,11 +1,16 @@
-<section>
-  <div>
-    <p class="text-xs uppercase tracking-[0.3em] text-serein-brand">People</p>
+<section class="space-y-8">
+  <header class="flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
+    <div>
+      <p class="text-xs uppercase tracking-[0.35em] text-serein-brand">Customers</p>
 
-    <h1 class="mt-2 font-display text-4xl">Customers</h1>
+      <h1 class="mt-2 font-display text-5xl text-serein-text">Customers</h1>
 
-    <p class="mt-3 opacity-60">View registered Serein customers.</p>
-  </div>
+      <p class="mt-3 text-stone-500">
+        {{ customerStore.count() }}
+        registered customers
+      </p>
+    </div>
+  </header>
 
   <div class="mt-10">
     <input
@@ -17,77 +22,70 @@
     />
   </div>
 
-  <div class="mt-6 overflow-hidden rounded-3xl bg-white">
-    @if (customerStore.loading()) {
-      <p class="p-8">Loading customers...</p>
-    } @else if (customerStore.error(); as error) {
-      <div class="p-8">
-        <p class="text-red-700">
-          {{ error }}
-        </p>
-      </div>
-    } @else if (customers().length === 0) {
-      <div class="p-12 text-center">
-        <h2 class="font-display text-2xl">No customers found</h2>
+  @if (customerStore.loading()) {
+    <div class="rounded-3xl bg-white p-10">
+      <p class="text-stone-500">Loading customers...</p>
+    </div>
 
-        <p class="mt-2 opacity-60">Try another search.</p>
-      </div>
-    } @else {
-      <div
-        class="customer-table-scroll"
-        role="region"
-        aria-label="Customer list"
-        tabindex="0"
-      >
-        <table class="w-full text-left">
-          <thead class="border-b border-black/10 text-xs uppercase tracking-wider opacity-50">
-            <tr>
-              <th class="px-6 py-5">Customer</th>
+  } @else if (customerStore.error()) {
+    <div class="rounded-3xl bg-white p-10">
+      <p class="text-red-700">
+        {{ customerStore.error() }}
+      </p>
+    </div>
 
-              <th class="px-6 py-5">Customer ID</th>
+  } @else {
+    <div class="overflow-hidden rounded-3xl bg-white">
+      @for (customer of filteredCustomers(); track customer.id) {
+        <div
+          class="grid gap-5 border-b border-stone-100 px-7 py-6 last:border-b-0 md:grid-cols-[2fr_2fr_1fr_1fr_auto] md:items-center"
+        >
+          <div>
+            <p class="font-medium text-serein-text">
+              {{ customer.name }}
+            </p>
 
-              <th class="px-6 py-5">Mobile</th>
+            <p class="mt-1 text-sm text-stone-400">Customer #{{ customer.id }}</p>
+          </div>
 
-              <th class="px-6 py-5">Actions</th>
-            </tr>
-          </thead>
+          <div>
+            <p class="text-sm text-stone-600">
+              {{ customer.email }}
+            </p>
 
-          <tbody class="divide-y divide-black/5">
-            @for (customer of customers(); track customer.custId) {
-              <tr>
-                <td class="px-6 py-5">
-                  <div class="flex items-center gap-4">
-                    <div
-                      class="flex h-11 w-11 items-center justify-center rounded-full bg-serein-bg font-display text-lg"
-                    >
-                      {{ customer.name.charAt(0).toUpperCase() }}
-                    </div>
+            <p class="mt-1 text-sm text-stone-400">
+              {{ customer.phoneNumber }}
+            </p>
+          </div>
 
-                    <p class="font-medium">
-                      {{ customer.name }}
-                    </p>
-                  </div>
-                </td>
+          <div>
+            <p class="text-xs uppercase tracking-wider text-stone-400">Orders</p>
 
-                <td class="px-6 py-5 text-sm opacity-60">#{{ customer.custId }}</td>
+            <p class="mt-1 font-medium text-serein-text">
+              {{ customer.orderCount }}
+            </p>
+          </div>
 
-                <td class="px-6 py-5 text-sm">
-                  {{ customer.mobileNo }}
-                </td>
+          <div>
+            <p class="text-xs uppercase tracking-wider text-stone-400">Joined</p>
 
-                <td class="px-6 py-5">
-                  <a
-                    [routerLink]="['/admin/customers', customer.custId]"
-                    class="text-sm text-serein-brand"
-                  >
-                    View
-                  </a>
-                </td>
-              </tr>
-            }
-          </tbody>
-        </table>
-      </div>
-    }
-  </div>
+            <p class="mt-1 text-sm text-serein-text">
+              {{ customer.createdAt | date: 'mediumDate' }}
+            </p>
+          </div>
+
+          <a
+            [routerLink]="['/admin/customers', customer.id]"
+            class="text-sm font-medium text-serein-brand"
+          >
+            View
+          </a>
+        </div>
+      } @empty {
+        <div class="p-10 text-center">
+          <p class="font-medium text-serein-text">No customers found.</p>
+        </div>
+      }
+    </div>
+  }
 </section>

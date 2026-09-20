@@ -12,72 +12,6 @@
       [formRoot]="checkoutForm"
       class="rounded-[2.5rem] bg-serein-surface p-7 md:p-10"
     >
-      <!-- Contact -->
-      <div>
-        <p class="text-xs uppercase tracking-[0.25em] text-serein-brand">Contact</p>
-
-        <h2 class="mt-2 font-display text-3xl">Your details</h2>
-      </div>
-
-      <div class="mt-8 grid gap-6 md:grid-cols-2">
-        <!-- NAME -->
-        <div class="md:col-span-2">
-          <label for="fullName" class="mb-2 block text-sm"> Full name </label>
-
-          <input
-            id="fullName"
-            type="text"
-            placeholder="Your full name"
-            [formField]="checkoutForm.fullName"
-            class="w-full rounded-2xl border border-black/10 bg-white px-5 py-4 outline-none transition focus:border-serein-brand"
-          />
-
-          @if (checkoutForm.fullName().touched() && checkoutForm.fullName().invalid()) {
-            <p class="mt-2 text-sm text-red-700">
-              {{ checkoutForm.fullName().errors()[0].message }}
-            </p>
-          }
-        </div>
-
-        <!-- EMAIL -->
-        <div>
-          <label for="email" class="mb-2 block text-sm"> Email </label>
-
-          <input
-            id="email"
-            type="email"
-            placeholder="you@example.com"
-            [formField]="checkoutForm.email"
-            class="w-full rounded-2xl border border-black/10 bg-white px-5 py-4 outline-none transition focus:border-serein-brand"
-          />
-
-          @if (checkoutForm.email().touched() && checkoutForm.email().invalid()) {
-            <p class="mt-2 text-sm text-red-700">
-              {{ checkoutForm.email().errors()[0].message }}
-            </p>
-          }
-        </div>
-
-        <!-- PHONE -->
-        <div>
-          <label for="phone" class="mb-2 block text-sm"> Phone </label>
-
-          <input
-            id="phone"
-            type="tel"
-            placeholder="Phone number"
-            [formField]="checkoutForm.phone"
-            class="w-full rounded-2xl border border-black/10 bg-white px-5 py-4 outline-none transition focus:border-serein-brand"
-          />
-
-          @if (checkoutForm.phone().touched() && checkoutForm.phone().invalid()) {
-            <p class="mt-2 text-sm text-red-700">
-              {{ checkoutForm.phone().errors()[0].message }}
-            </p>
-          }
-        </div>
-      </div>
-
       <!-- DELIVERY ADDRESS -->
       <div class="mt-12 border-t border-black/10 pt-10">
         <p class="text-xs uppercase tracking-[0.25em] text-serein-brand">Delivery</p>
@@ -150,7 +84,7 @@
           <label
             class="flex cursor-pointer items-center gap-4 rounded-2xl border border-black/10 p-5"
           >
-            <input type="radio" value="cod" [formField]="checkoutForm.paymentMethod" />
+            <input type="radio" value="CASH_ON_DELIVERY" [formField]="checkoutForm.paymentMethod" />
 
             <div>
               <p class="font-medium">Cash on delivery</p>
@@ -162,7 +96,7 @@
           <label
             class="flex cursor-pointer items-center gap-4 rounded-2xl border border-black/10 p-5"
           >
-            <input type="radio" value="card" [formField]="checkoutForm.paymentMethod" />
+            <input type="radio" value="CARD" [formField]="checkoutForm.paymentMethod" />
 
             <div>
               <p class="font-medium">Card payment</p>
@@ -216,7 +150,7 @@
             </div>
 
             <p class="shrink-0 text-sm">
-              {{ item.product.productPrice * item.quantity | currency: 'INR' : 'symbol' : '1.0-0' }}
+              {{ item.product.productPrice * item.quantity | currency: 'USD' : 'symbol' : '1.0-2' }}
             </p>
           </div>
         }
@@ -227,7 +161,7 @@
           <span class="opacity-70"> Subtotal </span>
 
           <span>
-            {{ cart.subtotal() | currency: 'INR' : 'symbol' : '1.0-0' }}
+            {{ cart.subTotal() | currency: 'USD' : 'symbol' : '1.0-2' }}
           </span>
         </div>
 
@@ -241,7 +175,7 @@
           <span>Total</span>
 
           <strong>
-            {{ cart.subtotal() | currency: 'INR' : 'symbol' : '1.0-0' }}
+            {{ cart.subTotal() | currency: 'USD' : 'symbol' : '1.0-2' }}
           </strong>
         </div>
       </div>

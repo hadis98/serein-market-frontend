@@ -13,24 +13,16 @@
             <div>
               <p class="text-xs uppercase tracking-[0.3em] text-serein-brand">Order details</p>
 
-              <h1 class="mt-3 font-display text-4xl md:text-5xl">
-                Order #{{ order.localId.slice(0, 8) }}
-              </h1>
+              <h1 class="mt-3 font-display text-4xl md:text-5xl">Order #{{ order.orderNumber }}</h1>
 
               <p class="mt-3 text-sm opacity-60">
-                {{ order.saleDate | date: 'medium' }}
+                {{ order.createdAt | date: 'medium' }}
               </p>
             </div>
 
-            @if (order.isCancelled) {
-              <span class="w-fit rounded-full bg-red-50 px-4 py-2 text-sm text-red-700">
-                Cancelled
-              </span>
-            } @else {
-              <span class="w-fit rounded-full bg-green-50 px-4 py-2 text-sm text-green-700">
-                Confirmed
-              </span>
-            }
+            <span class="w-fit rounded-full bg-black/5 px-4 py-2 text-sm">
+              {{ order.status }}
+            </span>
           </div>
         </section>
 
@@ -67,14 +59,14 @@
                     </a>
 
                     <p class="mt-2 text-sm opacity-60">
-                      {{ item.price | currency: 'INR' : 'symbol' : '1.0-0' }}
+                      {{ item.price | currency: 'USD' : 'symbol' : '1.0-2' }}
                       ×
                       {{ item.quantity }}
                     </p>
                   </div>
 
                   <p class="font-semibold">
-                    {{ item.price * item.quantity | currency: 'INR' : 'symbol' : '1.0-0' }}
+                    {{ item.price * item.quantity | currency: 'USD' : 'symbol' : '1.0-2' }}
                   </p>
                 </div>
               </div>
@@ -94,11 +86,11 @@
               <p class="text-xs uppercase tracking-widest opacity-50">Customer</p>
 
               <p class="mt-3 text-lg">
-                {{ order.customer.name }}
+                {{ auth.user()?.name }}
               </p>
 
               <p class="mt-1 text-sm opacity-60">
-                {{ order.customer.mobileNo }}
+                {{ auth.user()?.phoneNumber }}
               </p>
             </div>
 
@@ -156,7 +148,7 @@
             <span class="opacity-70"> Discount </span>
 
             <span>
-              {{ order.discount | currency: 'INR' : 'symbol' : '1.0-0' }}
+              {{ order.discountAmount | currency: 'USD' : 'symbol' : '1.0-2' }}
             </span>
           </div>
 
@@ -173,14 +165,15 @@
           <span>Total</span>
 
           <strong>
-            {{ order.total | currency: 'INR' : 'symbol' : '1.0-0' }}
+            {{ order.totalAmount | currency: 'USD' : 'symbol' : '1.0-2' }}
           </strong>
         </div>
 
-        @if (order.saleId !== null && !order.isCancelled) {
+        @if (order.status === 'PENDING') {
           <button
             type="button"
             class="w-full rounded-2xl bg-serein-surface px-6 py-4 text-sm font-medium text-serein-text"
+            (click)="cancelOrder()"
           >
             Cancel order
           </button>

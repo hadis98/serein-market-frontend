@@ -3,112 +3,79 @@ import { computed, inject, Injectable, signal } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
 
 import { OrderApi } from '../api/order-api';
-import { AuthStore } from '../auth/auth-store';
-import { CartStore } from './cart-store';
-
-import { Order, PlaceOrderRequest } from '../models/order';
+import { OrderSummary, OrderDetails, CreateOrderRequest } from '../models/order';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root',
 })
 export class OrderStore {
   private readonly api = inject(OrderApi);
-  private readonly auth = inject(AuthStore);
-  private readonly cart = inject(CartStore);
+  private readonly ordersState = signal<OrderSummary[]>([]);
+  private readonly loadingState = signal(false);
+  private readonly loadedState = signal(false);
 
-  private readonly ordersState = signal<Order[]>(this.load());
+  readonly orders = this.ordersState.asReadonly();
+  readonly loading = this.loadingState.asReadonly();
 
-  private load(): Order[] {
-    const saved = localStorage.getItem('serein-orders');
-
-    if (!saved) {
-      return [];
+  async load(force = false): Promise<void> {
+    if (this.loadingState()) {
+      return;
     }
+
+    if (this.loadedState() && !force) {
+      return;
+    }
+
+    this.loadingState.set(true);
 
     try {
-      return JSON.parse(saved);
-    } catch {
-      return [];
+      const orders = await firstValueFrom(this.api.getMine());
+
+      this.ordersState.set(orders);
+      this.loadedState.set(true);
+    } finally {
+      this.loadingState.set(true);
     }
   }
 
-  readonly orders = computed(() => {
-    const customerId = this.auth.customer()?.custId;
-
-    if (!customerId) {
-      return [];
+  async loadById(id: number): Promise<OrderDetails> {
+    try {
+      return await firstValueFrom(this.api.getById(id));
+    } catch (error) {
+      throw new Error(this.getErrorMessage(error, 'Order could not be loaded.'));
     }
-
-    return this.ordersState()
-      .filter((order) => order.customerId === customerId)
-      .sort((a, b) => new Date(b.saleDate).getTime() - new Date(a.saleDate).getTime());
-  });
-
-  getById(id: string) {
-    return this.orders().find((order) => order.localId === id);
   }
 
-  private save() {
-    localStorage.setItem('serein-orders', JSON.stringify(this.ordersState()));
+  async placeOrder(request: CreateOrderRequest): Promise<OrderDetails> {
+    try {
+      const order = await firstValueFrom(this.api.create(request));
+
+      await this.load(true);
+
+      return order;
+    } catch (error) {
+      throw new Error(this.getErrorMessage(error, 'Order could not be placed.'));
+    }
   }
 
-  async placeOrder(request: PlaceOrderRequest) {
-    const customer = this.auth.customer();
+  async cancelOrder(id: number): Promise<void> {
+    try {
+      await firstValueFrom(this.api.cancel(id));
 
-    if (!customer) {
-      throw new Error('You must be logged in.');
+      await this.load(true);
+    } catch (error) {
+      throw new Error(this.getErrorMessage(error, 'Order could not be cancelled.'));
+    }
+  }
+
+  private getErrorMessage(error: unknown, fallback: string): string {
+    if (!(error instanceof HttpErrorResponse)) {
+      return fallback;
     }
 
-    const response = await firstValueFrom(this.api.placeOrder(request));
+    const message = error.error?.message;
 
-    if (!response.result) {
-      throw new Error(response.message || 'Order could not be placed.');
-    }
-
-    const order: Order = {
-      localId: crypto.randomUUID(),
-
-      // PlaceOrder does not return the created sale ID.
-      saleId: null,
-
-      customerId: customer.custId,
-
-      customer: {
-        name: customer.name,
-        mobileNo: customer.mobileNo,
-      },
-
-      saleDate: request.SaleDate,
-
-      total: request.TotalInvoiceAmount,
-
-      discount: request.Discount,
-
-      paymentMethod: request.PaymentNaration,
-
-      delivery: {
-        address1: request.DeliveryAddress1,
-        address2: request.DeliveryAddress2,
-        city: request.DeliveryCity,
-        postalCode: request.DeliveryPinCode,
-        landmark: request.DeliveryLandMark,
-      },
-
-      items: this.cart.items().map((item) => ({
-        productId: item.product.productId,
-        name: item.product.productName,
-        imageUrl: item.product.productImageUrl,
-        price: item.product.productPrice,
-        quantity: item.quantity,
-      })),
-
-      isCancelled: false,
-    };
-
-    this.ordersState.update((orders) => [order, ...orders]);
-
-    this.save();
-
-    return order;
+    return Array.isArray(message) ? message.join(', ') : (message ?? fallback);
   }
 }
