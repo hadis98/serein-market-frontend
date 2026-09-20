@@ -1,5 +1,5 @@
 <article
-  class="group overflow-hidden rounded-3xl bg-serein-surface transition duration-300 hover:-translate-y-1 hover:shadow-lg"
+  class="group flex h-full flex-col overflow-hidden rounded-3xl bg-serein-surface transition duration-300 hover:-translate-y-1 hover:shadow-lg"
 >
   <div class="relative aspect-square overflow-hidden bg-white">
     <a [routerLink]="['/products', product().productId]">
@@ -26,7 +26,7 @@
     </button>
   </div>
 
-  <div class="p-5">
+  <div class="flex flex-1 flex-col p-5">
     <p class="mb-2 text-xs uppercase tracking-widest text-serein-accent">
       {{ product().categoryName }}
     </p>
@@ -41,17 +41,48 @@
       {{ product().productDescription }}
     </p> -->
 
-    <div class="mt-5 flex items-center justify-between">
-      <span class="text-lg font-semibold">
-        {{ product().productPrice | currency:'USD':'symbol':'1.0-2'  }}
-      </span>
+    <div class="mt-auto pt-5">
+      <p class="text-lg font-semibold">
+        {{ product().productPrice | currency: 'USD' : 'symbol' : '1.0-2' }}
+      </p>
+
+      <p
+        class="mt-2 flex items-center gap-2 text-sm"
+        [class.text-serein-text]="isInStock()"
+        [class.text-serein-accent]="!isInStock()"
+        role="status"
+      >
+        <span
+          class="h-2.5 w-2.5 shrink-0 rounded-full"
+          [class.bg-emerald-600]="isInStock()"
+          [class.bg-serein-accent]="!isInStock()"
+          aria-hidden="true"
+        ></span>
+        {{ isInStock() ? 'In stock' : 'Out of stock' }}
+      </p>
 
       <button
         type="button"
-        class="rounded-full bg-serein-brand px-5 py-2 text-sm text-white transition hover:opacity-90"
+        class="mt-4 flex w-full items-center justify-center gap-2 rounded-full bg-serein-brand px-5 py-2.5 text-sm font-medium text-white transition hover:opacity-90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-serein-brand disabled:cursor-not-allowed disabled:bg-black/10 disabled:text-serein-text/45 disabled:opacity-100"
+        [disabled]="!isInStock()"
+        [attr.aria-label]="isInStock() ? 'Add ' + product().productName + ' to cart' : null"
         (click)="addToCart()"
       >
-        Add to cart
+        <svg
+          class="h-4 w-4"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.8"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+        >
+          <circle cx="9" cy="20" r="1"></circle>
+          <circle cx="19" cy="20" r="1"></circle>
+          <path d="M3 4h2l2.4 10.4a2 2 0 0 0 2 1.6h7.7a2 2 0 0 0 2-1.6L21 7H6"></path>
+        </svg>
+        {{ isInStock() ? 'Add to cart' : 'Out of stock' }}
       </button>
     </div>
   </div>

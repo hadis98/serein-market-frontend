@@ -21,9 +21,15 @@ export class ProductCard {
   readonly cart = inject(CartStore);
 
   readonly saved = computed(() => this.wishlist.isSaved(this.product().productId));
+  readonly isInStock = computed(() => this.product().stockQuantity > 0);
 
-  async addToCart() {
+  async addToCart(): Promise<void> {
     const product = this.product();
+
+    if (product.stockQuantity <= 0) {
+      return;
+    }
+
     try {
       await this.cart.add(product.productId);
 
@@ -36,7 +42,7 @@ export class ProductCard {
     }
   }
 
-  async toggleWishlist() {
+  async toggleWishlist(): Promise<void> {
     const product = this.product();
 
     try {
