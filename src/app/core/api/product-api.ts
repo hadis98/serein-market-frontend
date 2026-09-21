@@ -1,7 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
-import { ApiResponse } from '../models/api-response';
 import { Product, ProductStatus } from '../models/product';
 import { ProductUpsertRequest } from '../models/product-request';
 import { API_BASE_URL } from './api.config';

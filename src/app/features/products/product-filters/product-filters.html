@@ -1,0 +1,155 @@
+<aside
+  class="rounded-3xl bg-serein-surface px-5 py-6 shadow-[0_12px_35px_rgba(51,43,39,0.04)]"
+  aria-labelledby="filters-heading"
+>
+  <div class="flex items-center justify-between gap-4">
+    <h2 id="filters-heading" class="font-display text-2xl">Filters</h2>
+    <button
+      type="button"
+      class="text-sm text-serein-brand transition hover:opacity-70 disabled:cursor-default disabled:opacity-35"
+      [disabled]="!hasActiveFilters()"
+      (click)="clearAll()"
+    >
+      Clear all
+    </button>
+  </div>
+
+  <details open class="group mt-5 border-b border-black/10 pb-5">
+    <summary
+      class="flex cursor-pointer list-none items-center justify-between text-sm font-semibold [&::-webkit-details-marker]:hidden"
+    >
+      Category
+      <svg
+        viewBox="0 0 20 20"
+        class="h-4 w-4 transition group-open:rotate-180"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.7"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        aria-hidden="true"
+      >
+        <path d="m6 8 4 4 4-4"></path>
+      </svg>
+    </summary>
+
+    <div class="mt-4 space-y-2.5">
+      @for (category of categories(); track category.categoryId) {
+        <label
+          class="flex cursor-pointer items-center gap-2.5 text-sm text-serein-text/75 transition hover:text-serein-text"
+        >
+          <input
+            type="checkbox"
+            class="h-4 w-4 rounded border-black/20 bg-white accent-serein-brand"
+            [checked]="isCategorySelected(category.categoryId)"
+            (change)="toggleCategory(category.categoryId, $event)"
+          />
+          <span>
+            {{ category.categoryName }}
+            <span class="text-serein-text/45">({{ category.productCount }})</span>
+          </span>
+        </label>
+      } @empty {
+        <p class="text-sm text-serein-text/45">No categories available.</p>
+      }
+    </div>
+  </details>
+
+  <details open class="group border-b border-black/10 py-5">
+    <summary
+      class="flex cursor-pointer list-none items-center justify-between text-sm font-semibold [&::-webkit-details-marker]:hidden"
+    >
+      Price range
+      <svg
+        viewBox="0 0 20 20"
+        class="h-4 w-4 transition group-open:rotate-180"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.7"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        aria-hidden="true"
+      >
+        <path d="m6 8 4 4 4-4"></path>
+      </svg>
+    </summary>
+
+    <div class="mt-4">
+      <div class="mb-3 flex items-center justify-between text-sm text-serein-text/65">
+        <span>${{ value().minimumPrice }}</span>
+        <span>{{ maximumPriceLabel() }}</span>
+      </div>
+      <div class="relative h-5">
+        <div
+          class="absolute left-0 right-0 top-1/2 h-1 -translate-y-1/2 rounded-full bg-serein-brand/20"
+          aria-hidden="true"
+        ></div>
+        <div
+          class="absolute top-1/2 h-1 -translate-y-1/2 rounded-full bg-serein-brand"
+          [style.left.%]="minimumPricePosition()"
+          [style.right.%]="100 - maximumPricePosition()"
+          aria-hidden="true"
+        ></div>
+
+        <label for="minimum-product-price" class="sr-only">Minimum product price</label>
+        <input
+          id="minimum-product-price"
+          type="range"
+          min="0"
+          step="1"
+          class="price-slider"
+          [max]="priceLimit()"
+          [value]="value().minimumPrice"
+          [style.z-index]="value().minimumPrice > priceLimit() - 10 ? 4 : 2"
+          (input)="updateMinimumPrice($event)"
+        />
+
+        <label for="maximum-product-price" class="sr-only">Maximum product price</label>
+        <input
+          id="maximum-product-price"
+          type="range"
+          min="0"
+          step="1"
+          class="price-slider z-[3]"
+          [max]="priceLimit()"
+          [value]="value().maximumPrice"
+          (input)="updateMaximumPrice($event)"
+        />
+      </div>
+    </div>
+  </details>
+
+  <details open class="group pt-5">
+    <summary
+      class="flex cursor-pointer list-none items-center justify-between text-sm font-semibold [&::-webkit-details-marker]:hidden"
+    >
+      Availability
+      <svg
+        viewBox="0 0 20 20"
+        class="h-4 w-4 transition group-open:rotate-180"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.7"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        aria-hidden="true"
+      >
+        <path d="m6 8 4 4 4-4"></path>
+      </svg>
+    </summary>
+
+    <label class="mt-4 flex w-fit cursor-pointer items-center gap-3 text-sm text-serein-text/70">
+      <input
+        type="checkbox"
+        class="peer sr-only"
+        [checked]="value().inStockOnly"
+        (change)="updateAvailability($event)"
+      />
+      <span
+        class="relative h-6 w-11 rounded-full bg-black/15 transition peer-checked:bg-serein-brand peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-serein-brand after:absolute after:left-1 after:top-1 after:h-4 after:w-4 after:rounded-full after:bg-white after:shadow-sm after:transition-transform peer-checked:after:translate-x-5"
+        aria-hidden="true"
+      ></span>
+      In stock only
+    </label>
+  </details>
+</aside>
