@@ -125,7 +125,7 @@
             <span class="text-stone-500"> Subtotal </span>
 
             <span class="font-medium text-serein-text">
-              {{ order.subtotalAmount | currency: 'EUR' : 'symbol' : '1.2-2' }}
+              {{ order.subtotalAmount | currency: 'USD' : 'symbol' : '1.2-2' }}
             </span>
           </div>
 
@@ -133,7 +133,7 @@
             <span class="text-stone-500"> Discount </span>
 
             <span>
-              {{ order.discountAmount | currency: 'EUR' : 'symbol' : '1.2-2' }}
+              {{ order.discountAmount | currency: 'USD' : 'symbol' : '1.2-2' }}
             </span>
           </div>
 
@@ -142,7 +142,7 @@
               <span class="font-medium text-serein-text"> Total </span>
 
               <strong class="text-serein-text">
-                {{ order.totalAmount | currency: 'EUR' : 'symbol' : '1.2-2' }}
+                {{ order.totalAmount | currency: 'USD' : 'symbol' : '1.2-2' }}
               </strong>
             </div>
           </div>
@@ -226,7 +226,7 @@
               <p class="mt-1 text-sm text-stone-400">SKU: {{ item.sku }}</p>
 
               <p class="mt-2 text-sm text-stone-500">
-                {{ item.price | currency: 'EUR' : 'symbol' : '1.2-2' }}
+                {{ item.price | currency: 'USD' : 'symbol' : '1.2-2' }}
                 each
               </p>
             </div>
@@ -236,7 +236,7 @@
               <p class="text-sm text-stone-500">Qty {{ item.quantity }}</p>
 
               <p class="mt-1 font-medium text-serein-text">
-                {{ item.lineTotal | currency: 'EUR' : 'symbol' : '1.2-2' }}
+                {{ item.lineTotal | currency: 'USD' : 'symbol' : '1.2-2' }}
               </p>
             </div>
           </div>
