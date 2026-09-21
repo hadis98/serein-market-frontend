@@ -53,9 +53,7 @@ export class Login {
               password: this.model().password,
             });
 
-            const returnUrl = this.route.snapshot.queryParamMap.get('returnUrl') ?? '/';
-
-            await this.router.navigateByUrl(returnUrl);
+            await this.router.navigateByUrl(this.getPostLoginUrl());
           } catch (error) {
             this.errorMessage.set(error instanceof Error ? error.message : 'Login failed');
           }
@@ -63,4 +61,14 @@ export class Login {
       },
     },
   );
+
+  private getPostLoginUrl(): string {
+    const returnUrl = this.route.snapshot.queryParamMap.get('returnUrl');
+
+    if (returnUrl?.startsWith('/') && !returnUrl.startsWith('//')) {
+      return returnUrl;
+    }
+
+    return this.auth.isAdmin() ? '/admin' : '/';
+  }
 }
