@@ -6,13 +6,13 @@ import { map } from 'rxjs';
 
 import { API_BASE_URL } from './api.config';
 
-import type { ProductStatus } from '../models/product';
+import type { ProductStatus } from '../models/product.model';
 
 import type {
   AddWishlistItemRequest,
   BackendWishlistResponse,
   WishlistResponse,
-} from '../models/wishlist-item';
+} from '../models/wishlist.model';
 
 @Injectable({
   providedIn: 'root',

@@ -3,7 +3,7 @@ import { computed, inject, Injectable, signal } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
 
 import { OrderApi } from '../api/order-api';
-import { OrderSummary, OrderDetails, CreateOrderRequest } from '../models/order';
+import { OrderSummary, OrderDetails, CreateOrderRequest } from '../models/order.model';
 import { HttpErrorResponse } from '@angular/common/http';
 
 @Injectable({

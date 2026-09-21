@@ -1,7 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
-import { ApiResponse } from '../models/api-response';
 import { API_BASE_URL } from './api.config';
 import {
   BackendOrderDetails,
@@ -10,7 +9,7 @@ import {
   CreateOrderRequest,
   OrderDetails,
   OrderSummary,
-} from '../models/order';
+} from '../models/order.model';
 import { map } from 'rxjs';
 
 @Injectable({

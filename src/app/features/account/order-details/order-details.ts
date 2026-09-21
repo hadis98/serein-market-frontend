@@ -10,7 +10,7 @@ import { AuthStore } from '../../../core/auth/auth-store';
 
 import { ToastStore } from '../../../core/state/toast-store';
 
-import type { OrderDetails as OrderDetailsModel } from '../../../core/models/order';
+import type { OrderDetails as OrderDetailsModel } from '../../../core/models/order.model';
 
 @Component({
   imports: [CurrencyPipe, DatePipe, RouterLink],

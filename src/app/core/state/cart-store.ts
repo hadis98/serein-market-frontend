@@ -1,7 +1,7 @@
 import { computed, effect, inject, Injectable, signal } from '@angular/core';
 
-import { Product } from '../models/product';
-import { CartItem, CartResponse } from '../models/cart-item';
+import { Product } from '../models/product.model';
+import { CartItem, CartResponse } from '../models/cart.model';
 import { CartApi } from '../api/cart-api';
 import { firstValueFrom } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';

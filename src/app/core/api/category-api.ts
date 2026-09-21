@@ -1,19 +1,10 @@
 import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
-import { ApiResponse } from '../models/api-response';
-import { Category } from '../models/category';
-import { CreateCategoryRequest } from '../models/create-category-request';
+import { BackendCategory, CreateCategoryRequest } from '../models/category.model';
 import { API_BASE_URL } from './api.config';
 import { map } from 'rxjs';
 
-interface BackendCategory {
-  id: number;
-  name: string;
-  slug: string;
-
-  parentId: number | null;
-}
 @Injectable({
   providedIn: 'root',
 })
@@ -29,6 +20,7 @@ export class CategoryApi {
           categoryId: category.id,
           categoryName: category.name,
           categorySlug: category.slug,
+          categoryImageUrl: category.imageUrl,
           parentCategoryId: category.parentId,
         })),
       ),

@@ -6,7 +6,7 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 
 import { AdminCustomerStore } from '../../../../core/state/admin-customer-store';
 
-import type { AdminCustomerDetails as AdminCustomerDetailsModel } from '../../../../core/models/admin-customer';
+import type { AdminCustomerDetails as AdminCustomerDetailsModel } from '../../../../core/models/admin-customer.model';
 
 @Component({
   imports: [CurrencyPipe, DatePipe, RouterLink],

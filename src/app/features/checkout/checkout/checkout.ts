@@ -4,7 +4,7 @@ import { email, form, FormField, FormRoot, minLength, required } from '@angular/
 import { Router } from '@angular/router';
 
 import { CartStore } from '../../../core/state/cart-store';
-import { CheckoutDetails } from '../../../core/models/checkout-details';
+import { CheckoutDetails } from '../../../core/models/checkout.model';
 import { OrderStore } from '../../../core/state/order-store';
 import { ToastStore } from '../../../core/state/toast-store';
 import { AuthStore } from '../../../core/auth/auth-store';

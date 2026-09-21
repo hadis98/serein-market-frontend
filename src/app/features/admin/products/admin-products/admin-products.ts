@@ -3,7 +3,7 @@ import { CurrencyPipe } from '@angular/common';
 
 import { ProductStore } from '../../../../core/state/product-store';
 import { ToastStore } from '../../../../core/state/toast-store';
-import { Product } from '../../../../core/models/product';
+import { Product } from '../../../../core/models/product.model';
 import { RouterLink } from "@angular/router";
 
 @Component({

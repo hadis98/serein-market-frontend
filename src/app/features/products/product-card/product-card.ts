@@ -1,7 +1,7 @@
 import { Component, computed, inject, input } from '@angular/core';
 import { CurrencyPipe } from '@angular/common';
 
-import { Product, ProductPreview } from '../../../core/models/product';
+import { Product, ProductPreview } from '../../../core/models/product.model';
 import { RouterLink } from '@angular/router';
 import { CartStore } from '../../../core/state/cart-store';
 import { WishlistStore } from '../../../core/state/wishlist-store';

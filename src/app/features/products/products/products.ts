@@ -9,7 +9,7 @@ import {
   type CategoryFilterOption,
   type ProductFilterValue,
 } from '../product-filters/product-filters';
-import { SortOption } from '../../../core/models/product';
+import { SortOption } from '../../../core/models/product.model';
 import { ProductStore } from '../../../core/state/product-store';
 import { CategoryStore } from '../../../core/state/category-store';
 

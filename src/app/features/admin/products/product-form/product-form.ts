@@ -6,8 +6,8 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import { ProductStore } from '../../../../core/state/product-store';
 import { ToastStore } from '../../../../core/state/toast-store';
 
-import { ProductUpsertRequest } from '../../../../core/models/product-request';
 import { CategoryStore } from '../../../../core/state/category-store';
+import { ProductUpsertRequest } from '../../../../core/models/product.model';
 
 interface ProductFormModel {
   sku: string;

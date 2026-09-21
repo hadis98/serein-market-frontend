@@ -123,6 +123,34 @@
             </p>
           }
 
+          <label class="mb-2 mt-6 block text-sm"> Image URL </label>
+
+          <input
+            type="url"
+            placeholder="https://..."
+            [formField]="categoryForm.imageUrl"
+            class="w-full rounded-2xl border border-black/10 bg-white px-5 py-4 outline-none focus:border-serein-brand"
+          />
+
+          @if (categoryForm.imageUrl().touched() && categoryForm.imageUrl().invalid()) {
+            <p class="mt-2 text-sm text-red-700">
+              {{ categoryForm.imageUrl().errors()[0].message }}
+            </p>
+          }
+
+          @if (model().imageUrl) {
+            <div class="mt-5 flex items-center gap-4 rounded-2xl bg-white p-4">
+              <div class="h-20 w-20 overflow-hidden rounded-full bg-serein-bg">
+                <img
+                  [src]="model().imageUrl"
+                  [alt]="model().name || 'Category image preview'"
+                  class="h-full w-full object-cover"
+                />
+              </div>
+              <p class="text-sm opacity-60">Image preview</p>
+            </div>
+          }
+
           <div class="mt-8 flex gap-4">
             <button
               type="submit"
@@ -170,9 +198,7 @@
 
         <p class="mt-4 leading-7 opacity-65">
           You are about to delete
-          <strong>
-            {{ category.categoryName }} </strong
-          >.
+          <strong> {{ category.categoryName }} </strong>.
         </p>
 
         @if ((productCounts().get(category.categoryId) ?? 0) > 0) {

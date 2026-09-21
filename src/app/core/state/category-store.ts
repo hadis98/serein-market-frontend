@@ -6,9 +6,9 @@ import { firstValueFrom } from 'rxjs';
 
 import { CategoryApi } from '../api/category-api';
 
-import type { Category } from '../models/category';
+import type { Category } from '../models/category.model';
 
-import type { CreateCategoryRequest } from '../models/create-category-request';
+import type { CreateCategoryRequest } from '../models/category.model';
 
 @Injectable({
   providedIn: 'root',

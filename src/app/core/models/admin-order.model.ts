@@ -4,7 +4,7 @@ import type {
   OrderStatus,
   PaymentMethod,
   PaymentStatus,
-} from './order';
+} from './order.model';
 
 export interface AdminOrderCustomer {
   id: number;

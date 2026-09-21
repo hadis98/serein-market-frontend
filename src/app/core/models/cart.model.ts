@@ -1,4 +1,4 @@
-import { ProductStatus } from './product';
+import { ProductStatus } from './product.model';
 
 export interface CartProduct {
   productId: number;

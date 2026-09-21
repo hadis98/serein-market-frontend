@@ -3,10 +3,11 @@ import { form, FormField, FormRoot, minLength, required } from '@angular/forms/s
 import { CategoryStore } from '../../../../core/state/category-store';
 import { ProductStore } from '../../../../core/state/product-store';
 import { ToastStore } from '../../../../core/state/toast-store';
-import { Category } from '../../../../core/models/category';
+import { Category } from '../../../../core/models/category.model';
 
 interface CategoryFormModel {
   name: string;
+  imageUrl: string;
 }
 
 @Component({
@@ -24,7 +25,7 @@ export class AdminCategories {
   readonly pendingDelete = signal<Category | null>(null);
   readonly deleting = signal(false);
 
-  readonly model = signal<CategoryFormModel>({ name: '' });
+  readonly model = signal<CategoryFormModel>({ name: '', imageUrl: '' });
 
   readonly productCounts = computed(() => {
     const counts = new Map<number, number>();
@@ -47,6 +48,10 @@ export class AdminCategories {
       minLength(path.name, 2, {
         message: 'Category name must contain at least 2 characters',
       });
+
+      required(path.imageUrl, {
+        message: 'Image URL is required',
+      });
     },
     {
       submission: {
@@ -55,6 +60,7 @@ export class AdminCategories {
           try {
             await this.categoryStore.create({
               name: value.name.trim(),
+              imageUrl: value.imageUrl.trim(),
             });
             this.toast.show('Category created successfully.');
             this.closeCreateDialog();
@@ -82,6 +88,7 @@ export class AdminCategories {
   openCreateDialog() {
     this.model.set({
       name: '',
+      imageUrl: '',
     });
 
     this.showCreateDialog.set(true);

@@ -1,4 +1,4 @@
-import type { OrderStatus, PaymentMethod, PaymentStatus } from './order';
+import type { OrderStatus, PaymentMethod, PaymentStatus } from './order.model';
 
 export interface AdminCustomerSummary {
   id: number;

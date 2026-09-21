@@ -6,7 +6,7 @@ import { map } from 'rxjs';
 
 import { API_BASE_URL } from './api.config';
 
-import type { OrderStatus, PaymentMethod, PaymentStatus } from '../models/order';
+import type { OrderStatus, PaymentMethod, PaymentStatus } from '../models/order.model';
 
 import type {
   AdminOrderDetails,
@@ -14,7 +14,7 @@ import type {
   BackendAdminOrderDetails,
   BackendAdminOrderSummary,
   BackendUpdateOrderStatusResponse,
-} from '../models/admin-order';
+} from '../models/admin-order.model';
 
 @Injectable({
   providedIn: 'root',

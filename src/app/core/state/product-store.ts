@@ -2,8 +2,8 @@ import { computed, inject, Injectable, signal } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
 
 import { ProductApi } from '../api/product-api';
-import { Product } from '../models/product';
-import { ProductUpsertRequest } from '../models/product-request';
+import { Product } from '../models/product.model';
+import { ProductUpsertRequest } from '../models/product.model';
 import { HttpErrorResponse } from '@angular/common/http';
 
 @Injectable({

@@ -6,9 +6,9 @@ import { firstValueFrom } from 'rxjs';
 
 import { AdminOrderApi } from '../api/admin-order-api';
 
-import type { AdminOrderDetails, AdminOrderSummary } from '../models/admin-order';
+import type { AdminOrderDetails, AdminOrderSummary } from '../models/admin-order.model';
 
-import type { OrderStatus } from '../models/order';
+import type { OrderStatus } from '../models/order.model';
 
 @Injectable({
   providedIn: 'root',

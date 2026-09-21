@@ -6,7 +6,7 @@ import { firstValueFrom } from 'rxjs';
 
 import { AdminCustomerApi } from '../api/admin-customer-api';
 
-import type { AdminCustomerDetails, AdminCustomerSummary } from '../models/admin-customer';
+import type { AdminCustomerDetails, AdminCustomerSummary } from '../models/admin-customer.model';
 
 @Injectable({
   providedIn: 'root',

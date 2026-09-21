@@ -1,13 +1,12 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 
-import { ApiResponse } from '../models/api-response';
 import {
   AddCartItemRequest,
   BackendCartResponse,
   CartResponse,
   UpdateCartItemRequest,
-} from '../models/cart-item';
+} from '../models/cart.model';
 import { API_BASE_URL } from './api.config';
 import { map } from 'rxjs';
 

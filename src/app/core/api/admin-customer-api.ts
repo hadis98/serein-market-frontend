@@ -6,14 +6,14 @@ import { map } from 'rxjs';
 
 import { API_BASE_URL } from './api.config';
 
-import type { OrderStatus, PaymentMethod, PaymentStatus } from '../models/order';
+import type { OrderStatus, PaymentMethod, PaymentStatus } from '../models/order.model';
 
 import type {
   AdminCustomerDetails,
   AdminCustomerSummary,
   BackendAdminCustomerDetails,
   BackendAdminCustomerSummary,
-} from '../models/admin-customer';
+} from '../models/admin-customer.model';
 
 @Injectable({
   providedIn: 'root',

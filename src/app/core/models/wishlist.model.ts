@@ -1,4 +1,4 @@
-import type { ProductPreview, ProductStatus } from './product';
+import type { ProductPreview, ProductStatus } from './product.model';
 
 // export interface WishlistProduct {
 //   productId: number;

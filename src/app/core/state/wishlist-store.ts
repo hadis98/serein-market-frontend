@@ -6,9 +6,9 @@ import { firstValueFrom } from 'rxjs';
 
 import { WishlistApi } from '../api/wishlist-api';
 
-import type { WishlistResponse } from '../models/wishlist-item';
+import type { WishlistResponse } from '../models/wishlist.model';
 
-import type { Product, ProductPreview } from '../models/product';
+import type { Product, ProductPreview } from '../models/product.model';
 
 @Injectable({
   providedIn: 'root',

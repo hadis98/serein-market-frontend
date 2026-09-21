@@ -8,9 +8,9 @@ import { AdminOrderStore } from '../../../../core/state/admin-order-store';
 
 import { ToastStore } from '../../../../core/state/toast-store';
 
-import type { AdminOrderDetails as AdminOrderDetailsModel } from '../../../../core/models/admin-order';
+import type { AdminOrderDetails as AdminOrderDetailsModel } from '../../../../core/models/admin-order.model';
 
-import type { OrderStatus } from '../../../../core/models/order';
+import type { OrderStatus } from '../../../../core/models/order.model';
 
 @Component({
   imports: [CurrencyPipe, DatePipe, RouterLink],
