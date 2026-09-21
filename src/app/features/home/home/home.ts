@@ -41,6 +41,7 @@ export class Home {
 
   readonly featuredProducts = computed(() => this.productStore.products().slice(0, 6));
   readonly bestSellerProducts = computed(() => this.productStore.products().slice(6, 12));
+  readonly featuredCategories = computed(() => this.categories().slice(0, 6));
 
   readonly categories = this.categoryStore.categories;
   readonly productsLoading = this.productStore.loading;
@@ -48,7 +49,7 @@ export class Home {
   readonly productError = this.productStore.error;
   readonly categoryError = this.categoryStore.error;
 
-  readonly categorySkeletons = Array.from({ length: 8 });
+  readonly categorySkeletons = Array.from({ length: 6 });
   readonly productSkeletons = Array.from({ length: 6 });
 
   readonly benefits: readonly Benefit[] = [

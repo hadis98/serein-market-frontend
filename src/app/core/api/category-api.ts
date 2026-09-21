@@ -31,6 +31,10 @@ export class CategoryApi {
     return this.http.post<BackendCategory>(this.baseUrl, request);
   }
 
+  update(id: number, request: Partial<CreateCategoryRequest>) {
+    return this.http.patch<BackendCategory>(`${this.baseUrl}/${id}`, request);
+  }
+
   delete(id: number) {
     return this.http.delete(`${this.baseUrl}/${id}`);
   }

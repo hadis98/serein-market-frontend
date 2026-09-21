@@ -22,6 +22,7 @@ export class AdminCategories {
   private readonly toast = inject(ToastStore);
 
   readonly showCreateDialog = signal(false);
+  readonly editingCategory = signal<Category | null>(null);
   readonly pendingDelete = signal<Category | null>(null);
   readonly deleting = signal(false);
 
@@ -58,11 +59,20 @@ export class AdminCategories {
         action: async (field) => {
           const value = field().value();
           try {
-            await this.categoryStore.create({
+            const request = {
               name: value.name.trim(),
               imageUrl: value.imageUrl.trim(),
-            });
-            this.toast.show('Category created successfully.');
+            };
+            const editing = this.editingCategory();
+
+            if (editing) {
+              await this.categoryStore.update(editing.categoryId, request);
+              this.toast.show('Category updated successfully');
+            } else {
+              await this.categoryStore.create(request);
+              this.toast.show('Category created successfully.');
+            }
+
             this.closeCreateDialog();
             return;
           } catch (error) {
@@ -86,7 +96,9 @@ export class AdminCategories {
   }
 
   openCreateDialog() {
-    this.model.set({
+    this.editingCategory.set(null);
+
+    this.categoryForm().reset({
       name: '',
       imageUrl: '',
     });
@@ -94,8 +106,22 @@ export class AdminCategories {
     this.showCreateDialog.set(true);
   }
 
+  openEditDialog(category: Category) {
+    this.editingCategory.set(category);
+
+    this.categoryForm().reset({
+      name: category.categoryName,
+      imageUrl: category.categoryImageUrl ?? '',
+    });
+
+    this.showCreateDialog.set(true);
+  }
+
   closeCreateDialog() {
     this.showCreateDialog.set(false);
+    this.editingCategory.set(null);
+
+    this.categoryForm().reset();
   }
 
   askToDelete(category: Category) {

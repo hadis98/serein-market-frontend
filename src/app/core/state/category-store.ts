@@ -79,6 +79,15 @@ export class CategoryStore {
     }
   }
 
+  async update(id: number, request: Partial<CreateCategoryRequest>) {
+    try {
+      await firstValueFrom(this.api.update(id, request));
+      await this.load(true);
+    } catch (error) {
+      this.getErrorMessage(error, 'Category could not be updated.');
+    }
+  }
+
   private getErrorMessage(error: unknown, fallback: string): string {
     if (!(error instanceof HttpErrorResponse)) {
       return fallback;
