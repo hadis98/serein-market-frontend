@@ -32,34 +32,6 @@
       </a>
     </nav>
 
-    <form
-      role="search"
-      class="mx-auto hidden max-w-md flex-1 items-center rounded-full bg-black/[0.045] px-4 md:flex"
-      (submit)="submitSearch($event)"
-    >
-      <svg
-        viewBox="0 0 24 24"
-        class="h-4 w-4 shrink-0 text-serein-text/65"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="1.8"
-        stroke-linecap="round"
-        aria-hidden="true"
-      >
-        <circle cx="11" cy="11" r="7"></circle>
-        <path d="m20 20-4-4"></path>
-      </svg>
-      <label for="site-search" class="sr-only">Search products and categories</label>
-      <input
-        id="site-search"
-        type="search"
-        placeholder="Search for products, categories..."
-        class="w-full bg-transparent px-3 py-2.5 text-xs outline-none placeholder:text-serein-text/45"
-        [value]="searchTerm()"
-        (input)="updateSearchTerm($event)"
-      />
-    </form>
-
     <div class="ml-auto flex shrink-0 items-center gap-1 sm:gap-2">
       <a
         routerLink="/wishlist"

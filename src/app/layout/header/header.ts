@@ -15,22 +15,6 @@ export class Header {
   readonly auth = inject(AuthStore);
   private readonly router = inject(Router);
   readonly wishlist = inject(WishlistStore);
-  readonly searchTerm = signal('');
-
-  updateSearchTerm(event: Event): void {
-    this.searchTerm.set((event.target as HTMLInputElement).value);
-  }
-
-  async submitSearch(event: SubmitEvent): Promise<void> {
-    event.preventDefault();
-    const search = this.searchTerm().trim();
-
-    if (!search) {
-      return;
-    }
-
-    await this.router.navigate(['/products'], { queryParams: { search } });
-  }
 
   async logout(): Promise<void> {
     this.auth.logout();
