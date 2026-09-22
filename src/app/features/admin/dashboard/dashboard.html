@@ -6,34 +6,395 @@
 
     <p class="mt-3 opacity-60">Manage your Serein marketplace.</p>
   </div>
-
   <div class="mt-10 grid gap-5 sm:grid-cols-2 xl:grid-cols-4">
-    <article class="rounded-3xl bg-white p-7">
-      <p class="text-xs uppercase tracking-widest opacity-50">Products</p>
+    <!-- PRODUCTS -->
+    <a
+      routerLink="/admin/products"
+      class="group relative overflow-hidden rounded-3xl border border-black/5 bg-white p-7 transition duration-300 hover:-translate-y-1 hover:shadow-[0_18px_45px_rgba(51,43,39,0.08)] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-serein-brand"
+    >
+      <div class="flex items-start justify-between gap-5">
+        <div>
+          <p class="text-xs font-medium uppercase tracking-[0.18em] text-stone-400">Products</p>
 
-      <p class="mt-4 font-display text-5xl">
-        {{ productCount() }}
-      </p>
-    </article>
+          <p class="mt-5 font-display text-5xl leading-none text-serein-text">
+            {{ productStore.count() }}
+          </p>
 
-    <article class="rounded-3xl bg-white p-7">
-      <p class="text-xs uppercase tracking-widest opacity-50">Categories</p>
+          <p class="mt-3 text-sm text-stone-400">Products in catalogue</p>
+        </div>
 
-      <p class="mt-4 font-display text-5xl">
-        {{ categoryCount() }}
-      </p>
-    </article>
+        <div
+          class="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-[#f3ece6] text-serein-brand transition duration-300 group-hover:bg-serein-brand group-hover:text-white"
+        >
+          <svg
+            viewBox="0 0 24 24"
+            class="h-6 w-6"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.6"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <path
+              d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"
+            ></path>
+            <path d="m3.3 7 8.7 5 8.7-5"></path>
+            <path d="M12 22V12"></path>
+          </svg>
+        </div>
+      </div>
 
-    <article class="rounded-3xl bg-white p-7">
-      <p class="text-xs uppercase tracking-widest opacity-50">Customers</p>
+      <div class="mt-7 flex items-center gap-2 text-sm font-medium text-serein-brand">
+        Manage products
 
-      <p class="mt-4 font-display text-5xl">{{ customerStore.count() }}</p>
-    </article>
+        <span
+          class="transition-transform duration-300 group-hover:translate-x-1"
+          aria-hidden="true"
+        >
+          →
+        </span>
+      </div>
+    </a>
 
-    <article class="rounded-3xl bg-white p-7">
-      <p class="text-xs uppercase tracking-widest opacity-50">Orders</p>
+    <!-- CATEGORIES -->
+    <a
+      routerLink="/admin/categories"
+      class="group relative overflow-hidden rounded-3xl border border-black/5 bg-white p-7 transition duration-300 hover:-translate-y-1 hover:shadow-[0_18px_45px_rgba(51,43,39,0.08)] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-serein-brand"
+    >
+      <div class="flex items-start justify-between gap-5">
+        <div>
+          <p class="text-xs font-medium uppercase tracking-[0.18em] text-stone-400">Categories</p>
 
-      <p class="mt-4 font-display text-5xl">{{ orderStore.count() }}</p>
-    </article>
+          <p class="mt-5 font-display text-5xl leading-none text-serein-text">
+            {{ categoryStore.count() }}
+          </p>
+
+          <p class="mt-3 text-sm text-stone-400">Catalogue departments</p>
+        </div>
+
+        <div
+          class="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-[#f3ece6] text-serein-brand transition duration-300 group-hover:bg-serein-brand group-hover:text-white"
+        >
+          <svg
+            viewBox="0 0 24 24"
+            class="h-6 w-6"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.6"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <rect x="3" y="3" width="7" height="7" rx="1"></rect>
+            <rect x="14" y="3" width="7" height="7" rx="1"></rect>
+            <rect x="3" y="14" width="7" height="7" rx="1"></rect>
+            <rect x="14" y="14" width="7" height="7" rx="1"></rect>
+          </svg>
+        </div>
+      </div>
+
+      <div class="mt-7 flex items-center gap-2 text-sm font-medium text-serein-brand">
+        Manage categories
+
+        <span
+          class="transition-transform duration-300 group-hover:translate-x-1"
+          aria-hidden="true"
+        >
+          →
+        </span>
+      </div>
+    </a>
+
+    <!-- CUSTOMERS -->
+    <a
+      routerLink="/admin/customers"
+      class="group relative overflow-hidden rounded-3xl border border-black/5 bg-white p-7 transition duration-300 hover:-translate-y-1 hover:shadow-[0_18px_45px_rgba(51,43,39,0.08)] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-serein-brand"
+    >
+      <div class="flex items-start justify-between gap-5">
+        <div>
+          <p class="text-xs font-medium uppercase tracking-[0.18em] text-stone-400">Customers</p>
+
+          <p class="mt-5 font-display text-5xl leading-none text-serein-text">
+            {{ customerStore.count() }}
+          </p>
+
+          <p class="mt-3 text-sm text-stone-400">Registered shoppers</p>
+        </div>
+
+        <div
+          class="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-[#f3ece6] text-serein-brand transition duration-300 group-hover:bg-serein-brand group-hover:text-white"
+        >
+          <svg
+            viewBox="0 0 24 24"
+            class="h-6 w-6"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.6"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+            <circle cx="9" cy="7" r="4"></circle>
+            <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
+            <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+          </svg>
+        </div>
+      </div>
+
+      <div class="mt-7 flex items-center gap-2 text-sm font-medium text-serein-brand">
+        View customers
+
+        <span
+          class="transition-transform duration-300 group-hover:translate-x-1"
+          aria-hidden="true"
+        >
+          →
+        </span>
+      </div>
+    </a>
+
+    <!-- ORDERS -->
+    <a
+      routerLink="/admin/orders"
+      class="group relative overflow-hidden rounded-3xl border border-black/5 bg-white p-7 transition duration-300 hover:-translate-y-1 hover:shadow-[0_18px_45px_rgba(51,43,39,0.08)] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-serein-brand"
+    >
+      <div class="flex items-start justify-between gap-5">
+        <div>
+          <p class="text-xs font-medium uppercase tracking-[0.18em] text-stone-400">Orders</p>
+
+          <p class="mt-5 font-display text-5xl leading-none text-serein-text">
+            {{ orderStore.count() }}
+          </p>
+
+          <p class="mt-3 text-sm text-stone-400">Orders placed</p>
+        </div>
+
+        <div
+          class="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-[#f3ece6] text-serein-brand transition duration-300 group-hover:bg-serein-brand group-hover:text-white"
+        >
+          <svg
+            viewBox="0 0 24 24"
+            class="h-6 w-6"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.6"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <path d="M6 2h12l1 20H5L6 2Z"></path>
+            <path d="M9 6a3 3 0 0 0 6 0"></path>
+          </svg>
+        </div>
+      </div>
+
+      <div class="mt-7 flex items-center gap-2 text-sm font-medium text-serein-brand">
+        Manage orders
+
+        <span
+          class="transition-transform duration-300 group-hover:translate-x-1"
+          aria-hidden="true"
+        >
+          →
+        </span>
+      </div>
+    </a>
   </div>
+</section>
+<section class="mt-8 grid gap-5 xl:grid-cols-[1.5fr_1fr]">
+  <article class="rounded-3xl bg-white p-7">
+    <div class="flex items-center justify-between">
+      <div>
+        <p class="text-xs uppercase tracking-[0.2em] text-serein-brand">Orders</p>
+
+        <h2 class="mt-2 font-display text-2xl">Order status</h2>
+      </div>
+
+      <a routerLink="/admin/orders" class="text-sm text-serein-brand"> View all → </a>
+    </div>
+
+    <div class="mt-8 space-y-6">
+      @for (status of orderStatusCounts(); track status.label) {
+        <div>
+          <div class="mb-2 flex items-center justify-between text-sm">
+            <span>
+              {{ status.label }}
+            </span>
+
+            <span class="font-medium">
+              {{ status.value }}
+            </span>
+          </div>
+
+          <div class="h-2 overflow-hidden rounded-full bg-stone-100">
+            <div
+              class="h-full rounded-full bg-serein-brand transition-all"
+              [style.width.%]="(status.value / maxOrderStatusCount()) * 100"
+            ></div>
+          </div>
+        </div>
+      }
+    </div>
+  </article>
+  <article class="rounded-3xl bg-white p-7">
+    <p class="text-xs uppercase tracking-[0.2em] text-serein-brand">Inventory</p>
+
+    <h2 class="mt-2 font-display text-2xl">Stock health</h2>
+
+    <div class="mt-8 space-y-4">
+      <div class="flex items-center justify-between rounded-2xl bg-[#f8f5f1] p-5">
+        <div>
+          <p class="text-sm text-stone-500">Low stock</p>
+
+          <p class="mt-1 font-display text-3xl">
+            {{ lowStockProducts().length }}
+          </p>
+        </div>
+
+        <span class="rounded-full bg-amber-100 px-3 py-1 text-xs text-amber-800"> ≤ 5 items </span>
+      </div>
+
+      <div class="flex items-center justify-between rounded-2xl bg-[#f8f5f1] p-5">
+        <div>
+          <p class="text-sm text-stone-500">Out of stock</p>
+
+          <p class="mt-1 font-display text-3xl">
+            {{ outOfStockProducts().length }}
+          </p>
+        </div>
+
+        <span class="rounded-full bg-red-100 px-3 py-1 text-xs text-red-700">
+          Needs attention
+        </span>
+      </div>
+    </div>
+
+    <a routerLink="/admin/products" class="mt-6 inline-block text-sm font-medium text-serein-brand">
+      Manage inventory →
+    </a>
+  </article>
+</section>
+<section class="mt-8">
+  <article class="overflow-hidden rounded-3xl bg-white">
+    <header class="flex items-center justify-between border-b border-stone-100 px-7 py-6">
+      <div>
+        <p class="text-xs uppercase tracking-[0.2em] text-serein-brand">Activity</p>
+
+        <h2 class="mt-2 font-display text-2xl">Recent orders</h2>
+      </div>
+
+      <a routerLink="/admin/orders" class="text-sm text-serein-brand"> View all → </a>
+    </header>
+
+    <div>
+      @for (order of recentOrders(); track order.id) {
+        <a
+          [routerLink]="['/admin/orders', order.id]"
+          class="grid gap-4 border-b border-stone-100 px-7 py-5 transition last:border-0 hover:bg-stone-50 md:grid-cols-[0.8fr_1.4fr_1fr_0.8fr_auto] md:items-center"
+        >
+          <div>
+            <p class="font-medium">#{{ order.orderNumber }}</p>
+
+            <p class="mt-1 text-xs text-stone-400">
+              {{ order.itemCount }}
+              {{ order.itemCount === 1 ? 'item' : 'items' }}
+            </p>
+          </div>
+
+          <div>
+            <p class="font-medium">
+              {{ order.customer.name }}
+            </p>
+
+            <p class="mt-1 text-xs text-stone-400">
+              {{ order.customer.email }}
+            </p>
+          </div>
+
+          <span class="text-sm text-stone-500">
+            {{ order.createdAt | date: 'mediumDate' }}
+          </span>
+
+          <span class="font-medium">
+            {{ order.totalAmount | currency: 'USD' : 'symbol' : '1.0-2' }}
+          </span>
+
+          <span class="w-fit rounded-full bg-stone-100 px-3 py-1 text-xs">
+            {{ order.status }}
+          </span>
+        </a>
+      } @empty {
+        <p class="px-7 py-10 text-center text-stone-400">No orders yet.</p>
+      }
+    </div>
+  </article>
+</section>
+<section class="mt-8 grid gap-5 xl:grid-cols-2">
+  <article class="rounded-3xl bg-white p-7">
+    <div class="flex items-center justify-between">
+      <h2 class="font-display text-2xl">Low-stock products</h2>
+
+      <a routerLink="/admin/products" class="text-sm text-serein-brand"> View products → </a>
+    </div>
+
+    <div class="mt-6 space-y-3">
+      @for (product of lowStockProducts().slice(0, 5); track product.productId) {
+        <a
+          [routerLink]="['/admin/products', product.productId, 'edit']"
+          class="flex items-center justify-between rounded-2xl bg-[#f8f5f1] px-5 py-4 transition hover:bg-[#f2ece6]"
+        >
+          <div>
+            <p class="font-medium">
+              {{ product.productName }}
+            </p>
+
+            <p class="mt-1 text-xs text-stone-400">
+              {{ product.categoryName }}
+            </p>
+          </div>
+
+          <span class="rounded-full bg-amber-100 px-3 py-1 text-xs font-medium text-amber-800">
+            {{ product.stockQuantity }} left
+          </span>
+        </a>
+      } @empty {
+        <p class="py-6 text-sm text-stone-400">No low-stock products.</p>
+      }
+    </div>
+  </article>
+  <article class="rounded-3xl bg-white p-7">
+    <div class="flex items-center justify-between">
+      <h2 class="font-display text-2xl">Recent customers</h2>
+
+      <a routerLink="/admin/customers" class="text-sm text-serein-brand"> View customers → </a>
+    </div>
+
+    <div class="mt-6 space-y-3">
+      @for (customer of recentCustomers(); track customer.id) {
+        <a
+          [routerLink]="['/admin/customers', customer.id]"
+          class="flex items-center justify-between rounded-2xl bg-[#f8f5f1] px-5 py-4 transition hover:bg-[#f2ece6]"
+        >
+          <div>
+            <p class="font-medium">
+              {{ customer.name }}
+            </p>
+
+            <p class="mt-1 text-xs text-stone-400">
+              {{ customer.email }}
+            </p>
+          </div>
+
+          <span class="text-sm text-stone-500">
+            {{ customer.orderCount }}
+            {{ customer.orderCount === 1 ? 'order' : 'orders' }}
+          </span>
+        </a>
+      } @empty {
+        <p class="py-6 text-sm text-stone-400">No customers yet.</p>
+      }
+    </div>
+  </article>
 </section>
