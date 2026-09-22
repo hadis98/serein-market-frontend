@@ -60,6 +60,10 @@ export const routes: Routes = [
           import('./features/categories/categories/categories').then((m) => m.Categories),
       },
       {
+        path: 'about',
+        loadComponent: () => import('./features/about/about').then((m) => m.About),
+      },
+      {
         path: 'cart',
         canActivate: [authGuard],
         loadComponent: () => import('./features/cart/cart/cart').then((m) => m.Cart),

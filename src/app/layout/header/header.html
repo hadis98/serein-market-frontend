@@ -5,7 +5,7 @@
     <nav class="hidden items-center gap-7 lg:flex" aria-label="Primary navigation">
       <a
         routerLink="/"
-        routerLinkActive="border-serein-text"
+        routerLinkActive="!border-serein-text"
         [routerLinkActiveOptions]="{ exact: true }"
         class="border-b border-transparent py-2 text-sm transition hover:border-serein-text"
       >
@@ -13,20 +13,21 @@
       </a>
       <a
         routerLink="/products"
-        routerLinkActive="border-serein-text"
+        routerLinkActive="!border-serein-text"
         class="border-b border-transparent py-2 text-sm transition hover:border-serein-text"
       >
         Shop
       </a>
       <a
         routerLink="/categories"
-        routerLinkActive="border-serein-text"
+        routerLinkActive="!border-serein-text"
         class="border-b border-transparent py-2 text-sm transition hover:border-serein-text"
       >
         Categories
       </a>
       <a
-        routerLink="/"
+        routerLink="/about"
+        routerLinkActive="!border-serein-text"
         class="border-b border-transparent py-2 text-sm transition hover:border-serein-text"
       >
         About
