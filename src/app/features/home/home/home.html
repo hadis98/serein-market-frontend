@@ -182,7 +182,7 @@
         {{ productError() }}
       </p>
     } @else {
-      <div class="grid grid-cols-1 gap-4 md:grid-cols-3 xl:grid-cols-6">
+      <div class="grid grid-cols-1 min-[500px]:grid-cols-2 gap-4 md:grid-cols-3 xl:grid-cols-6">
         @for (product of featuredProducts(); track product.productId) {
           <app-product-card [product]="product" />
         }
@@ -247,7 +247,7 @@
           }
         </div>
       } @else {
-        <div class="grid grid-cols-2 gap-4 md:grid-cols-3 xl:grid-cols-6">
+        <div class="grid grid-cols-1 min-[500px]:grid-cols-2 gap-4 md:grid-cols-3 xl:grid-cols-6">
           @for (product of bestSellerProducts(); track product.productId) {
             <app-product-card [product]="product" />
           }

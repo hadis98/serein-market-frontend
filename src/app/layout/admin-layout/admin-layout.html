@@ -1,8 +1,54 @@
 <div class="min-h-screen bg-[#f5f2ee]">
-  <div class="grid min-h-screen lg:grid-cols-[260px_1fr]">
-    <!-- SIDEBAR -->
+  <!-- =========================
+       MOBILE HEADER
+       ========================= -->
+
+  <header
+    class="sticky top-0 z-30 flex h-20 items-center justify-between border-b border-black/5 bg-[#f5f2ee]/95 px-4 backdrop-blur lg:hidden"
+  >
+    <div class="flex items-center gap-3">
+      <button
+        type="button"
+        class="flex h-11 w-11 items-center justify-center rounded-2xl border border-black/10 bg-white"
+        aria-label="Open administration navigation"
+        (click)="openMobileNav()"
+      >
+        <svg
+          viewBox="0 0 24 24"
+          class="h-5 w-5"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.7"
+          stroke-linecap="round"
+          aria-hidden="true"
+        >
+          <path d="M4 7h16"></path>
+          <path d="M4 12h16"></path>
+          <path d="M4 17h16"></path>
+        </svg>
+      </button>
+
+      <div>
+        <a routerLink="/admin" class="font-display text-2xl leading-none"> Serein </a>
+
+        <p class="mt-1 text-[0.6rem] uppercase tracking-[0.22em] opacity-45">Administration</p>
+      </div>
+    </div>
+
+    <span class="rounded-full bg-white px-4 py-2 text-xs font-medium text-serein-brand">
+      Admin
+    </span>
+  </header>
+
+  <!-- =========================
+       PAGE + DESKTOP SIDEBAR
+       ========================= -->
+
+  <div class="min-h-[calc(100vh-5rem)] lg:grid lg:min-h-screen lg:grid-cols-[260px_minmax(0,1fr)]">
+    <!-- DESKTOP SIDEBAR -->
+
     <aside
-      class="border-r border-black/10 bg-serein-text p-6 text-white lg:sticky lg:top-0 lg:h-screen lg:self-start lg:overflow-y-auto"
+      class="hidden border-r border-black/10 bg-serein-text p-6 text-white lg:sticky lg:top-0 lg:block lg:h-screen lg:self-start lg:overflow-y-auto"
     >
       <a routerLink="/admin" class="font-display text-3xl"> Serein </a>
 
@@ -54,13 +100,258 @@
       </nav>
 
       <div class="mt-12 border-t border-white/10 pt-6">
-        <a routerLink="/" class="text-sm opacity-60 hover:opacity-100"> ← Back to store </a>
+        <a routerLink="/" class="text-sm opacity-60 transition hover:opacity-100">
+          ← Back to store
+        </a>
       </div>
     </aside>
 
     <!-- ADMIN PAGE -->
-    <main class="p-6 md:p-10">
+
+    <main class="min-w-0 p-4 sm:p-6 md:p-8 lg:p-10">
       <router-outlet />
     </main>
   </div>
+
+  <!-- =========================
+       MOBILE BACKDROP
+       ========================= -->
+
+  @if (mobileNavOpen()) {
+    <button
+      type="button"
+      class="fixed inset-0 z-40 bg-black/35 backdrop-blur-[2px] lg:hidden"
+      aria-label="Close administration navigation"
+      (click)="closeMobileNav()"
+    ></button>
+
+    <!-- =========================
+         MOBILE DRAWER
+         ========================= -->
+
+    <aside
+      class="fixed inset-y-0 left-0 z-50 flex w-[min(84vw,320px)] flex-col rounded-r-[2rem] bg-serein-text px-5 py-7 text-white shadow-2xl lg:hidden"
+    >
+      <!-- Drawer heading -->
+
+      <div class="flex items-start justify-between gap-5">
+        <div>
+          <a routerLink="/admin" class="font-display text-4xl" (click)="closeMobileNav()">
+            Serein
+          </a>
+
+          <p class="mt-2 text-xs uppercase tracking-[0.28em] opacity-45">Administration</p>
+        </div>
+
+        <button
+          type="button"
+          class="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-white/10 transition hover:bg-white/15"
+          aria-label="Close administration navigation"
+          (click)="closeMobileNav()"
+        >
+          <svg
+            viewBox="0 0 24 24"
+            class="h-5 w-5"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.8"
+            stroke-linecap="round"
+            aria-hidden="true"
+          >
+            <path d="m6 6 12 12"></path>
+            <path d="m18 6-12 12"></path>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Navigation -->
+
+      <nav class="mt-12 space-y-2">
+        <!-- DASHBOARD -->
+
+        <a
+          routerLink="/admin"
+          routerLinkActive="bg-white/10"
+          [routerLinkActiveOptions]="{
+            exact: true,
+          }"
+          class="flex items-center gap-4 rounded-2xl px-4 py-3.5 text-sm transition hover:bg-white/10"
+          (click)="closeMobileNav()"
+        >
+          <svg
+            viewBox="0 0 24 24"
+            class="h-5 w-5 opacity-70"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.6"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <rect x="3" y="3" width="7" height="7" rx="1"></rect>
+            <rect x="14" y="3" width="7" height="7" rx="1"></rect>
+            <rect x="3" y="14" width="7" height="7" rx="1"></rect>
+            <rect x="14" y="14" width="7" height="7" rx="1"></rect>
+          </svg>
+
+          Dashboard
+        </a>
+
+        <!-- PRODUCTS -->
+
+        <a
+          routerLink="/admin/products"
+          routerLinkActive="bg-white/10"
+          class="flex items-center gap-4 rounded-2xl px-4 py-3.5 text-sm transition hover:bg-white/10"
+          (click)="closeMobileNav()"
+        >
+          <svg
+            viewBox="0 0 24 24"
+            class="h-5 w-5 opacity-70"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.6"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <path
+              d="
+                M21 16V8
+                a2 2 0 0 0-1-1.73
+                l-7-4
+                a2 2 0 0 0-2 0
+                l-7 4
+                A2 2 0 0 0 3 8
+                v8
+                a2 2 0 0 0 1 1.73
+                l7 4
+                a2 2 0 0 0 2 0
+                l7-4
+                A2 2 0 0 0 21 16Z
+              "
+            ></path>
+
+            <path d="m3.3 7 8.7 5 8.7-5"></path>
+            <path d="M12 22V12"></path>
+          </svg>
+
+          Products
+        </a>
+
+        <!-- CATEGORIES -->
+
+        <a
+          routerLink="/admin/categories"
+          routerLinkActive="bg-white/10"
+          class="flex items-center gap-4 rounded-2xl px-4 py-3.5 text-sm transition hover:bg-white/10"
+          (click)="closeMobileNav()"
+        >
+          <svg
+            viewBox="0 0 24 24"
+            class="h-5 w-5 opacity-70"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.6"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <path
+              d="
+                M20.59 13.41
+                11 3.83V3H4v7h.83
+                l9.58 9.59
+                a2 2 0 0 0 2.82 0
+                l3.36-3.36
+                a2 2 0 0 0 0-2.82Z
+              "
+            ></path>
+
+            <circle cx="7.5" cy="6.5" r="1"></circle>
+          </svg>
+
+          Categories
+        </a>
+
+        <!-- CUSTOMERS -->
+
+        <a
+          routerLink="/admin/customers"
+          routerLinkActive="bg-white/10"
+          class="flex items-center gap-4 rounded-2xl px-4 py-3.5 text-sm transition hover:bg-white/10"
+          (click)="closeMobileNav()"
+        >
+          <svg
+            viewBox="0 0 24 24"
+            class="h-5 w-5 opacity-70"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.6"
+            stroke-linecap="round"
+            aria-hidden="true"
+          >
+            <circle cx="9" cy="7" r="4"></circle>
+            <path
+              d="
+                M3 21v-2
+                a6 6 0 0 1 12 0v2
+              "
+            ></path>
+            <path
+              d="
+                M16 3.2
+                a4 4 0 0 1 0 7.6
+              "
+            ></path>
+            <path
+              d="
+                M21 21v-2
+                a5 5 0 0 0-3-4.6
+              "
+            ></path>
+          </svg>
+
+          Customers
+        </a>
+
+        <!-- ORDERS -->
+
+        <a
+          routerLink="/admin/orders"
+          routerLinkActive="bg-white/10"
+          class="flex items-center gap-4 rounded-2xl px-4 py-3.5 text-sm transition hover:bg-white/10"
+          (click)="closeMobileNav()"
+        >
+          <svg
+            viewBox="0 0 24 24"
+            class="h-5 w-5 opacity-70"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.6"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <path d="M6 2h12l1 20H5L6 2Z"></path>
+            <path d="M9 6a3 3 0 0 0 6 0"></path>
+          </svg>
+
+          Orders
+        </a>
+      </nav>
+
+      <!-- Back to store -->
+
+      <div class="mt-auto border-t border-white/10 pt-6">
+        <a
+          routerLink="/"
+          class="flex items-center gap-3 text-sm opacity-60 transition hover:opacity-100"
+          (click)="closeMobileNav()"
+        >
+          <span aria-hidden="true">←</span>
+
+          Back to store
+        </a>
+      </div>
+    </aside>
+  }
 </div>

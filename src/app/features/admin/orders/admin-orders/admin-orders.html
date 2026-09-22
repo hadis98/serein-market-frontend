@@ -2,14 +2,16 @@
   <header>
     <p class="mb-3 text-xs uppercase tracking-[0.35em] text-serein-brand">Commerce</p>
 
-    <h1 class="font-display text-5xl text-serein-text">Orders</h1>
+    <h1 class="font-display text-4xl text-serein-text sm:text-5xl">Orders</h1>
 
-    <p class="mt-3 text-lg text-stone-500">View customer orders and purchase activity.</p>
+    <p class="mt-3 text-base text-stone-500 sm:text-lg">
+      View customer orders and purchase activity.
+    </p>
   </header>
 
   <input
     type="search"
-    placeholder="Search by order, customer or city..."
+    placeholder="Search by order, customer or email..."
     class="w-full max-w-xl rounded-2xl border border-stone-200 bg-white px-6 py-4 outline-none focus:border-serein-brand"
     [value]="search()"
     (input)="updateSearch($event)"
@@ -22,8 +24,112 @@
       {{ orderStore.error() }}
     </div>
   } @else {
-    <div class="overflow-hidden rounded-3xl bg-white">
+    <!-- =================================
+       MOBILE ORDERS
+       ================================= -->
+
+    <div class="space-y-3 md:hidden">
+      @for (order of filteredOrders(); track order.id) {
+        <article
+          class="rounded-3xl border border-black/5 bg-white p-5 shadow-[0_8px_30px_rgba(51,43,39,0.035)]"
+        >
+          <!-- Header -->
+
+          <div class="flex items-start justify-between gap-4">
+            <div class="min-w-0">
+              <p class="text-[0.65rem] uppercase tracking-[0.18em] text-stone-400">Order</p>
+
+              <p
+                class="mt-1 truncate text-sm font-medium text-serein-text"
+                [title]="order.orderNumber"
+              >
+                #{{ order.orderNumber }}
+              </p>
+            </div>
+
+            <span
+              class="shrink-0 rounded-full bg-serein-bg px-3 py-1.5 text-xs font-medium text-serein-text"
+            >
+              {{ order.status }}
+            </span>
+          </div>
+
+          <!-- Customer -->
+
+          <div class="mt-5">
+            <p class="text-xs uppercase tracking-wider text-stone-400">Customer</p>
+
+            <p class="mt-1 font-medium text-serein-text">
+              {{ order.customer.name }}
+            </p>
+
+            <p class="mt-1 truncate text-sm text-stone-400">
+              {{ order.customer.email }}
+            </p>
+          </div>
+
+          <!-- Order metadata -->
+
+          <div class="mt-5 grid grid-cols-2 gap-3">
+            <div class="rounded-2xl bg-serein-bg px-4 py-3">
+              <p class="text-[0.65rem] uppercase tracking-wider text-stone-400">Date</p>
+
+              <p class="mt-1 text-sm font-medium">
+                {{ order.createdAt | date: 'mediumDate' }}
+              </p>
+            </div>
+
+            <div class="rounded-2xl bg-serein-bg px-4 py-3">
+              <p class="text-[0.65rem] uppercase tracking-wider text-stone-400">Total</p>
+
+              <p class="mt-1 font-medium">
+                {{ order.totalAmount | currency: 'USD' : 'symbol' : '1.0-2' }}
+              </p>
+            </div>
+
+            <div class="rounded-2xl bg-serein-bg px-4 py-3">
+              <p class="text-[0.65rem] uppercase tracking-wider text-stone-400">Payment</p>
+
+              <p class="mt-1 break-words text-sm font-medium">
+                {{ order.paymentMethod }}
+              </p>
+            </div>
+
+            <div class="rounded-2xl bg-serein-bg px-4 py-3">
+              <p class="text-[0.65rem] uppercase tracking-wider text-stone-400">Items</p>
+
+              <p class="mt-1 text-sm font-medium">
+                {{ order.itemCount }}
+              </p>
+            </div>
+          </div>
+
+          <!-- Action -->
+
+          <div class="mt-5 border-t border-black/5 pt-4">
+            <a
+              [routerLink]="['/admin/orders', order.id]"
+              class="flex w-full items-center justify-center rounded-2xl bg-serein-brand px-5 py-3 text-sm text-white"
+            >
+              View order
+
+              <span aria-hidden="true"> → </span>
+            </a>
+          </div>
+        </article>
+      } @empty {
+        <div class="rounded-3xl bg-white p-10 text-center text-stone-500">No orders found.</div>
+      }
+    </div>
+
+    <!-- =================================
+       DESKTOP ORDERS
+       ================================= -->
+
+    <div class="hidden overflow-hidden rounded-3xl bg-white md:block">
       <div class="order-table-scroll" role="region" aria-label="Order list" tabindex="0">
+        <!-- KEEP YOUR EXISTING DESKTOP HEADER -->
+
         <div
           class="order-table-header grid grid-cols-[0.6fr_1.3fr_1fr_0.8fr_1fr_0.8fr_0.5fr] gap-6 border-b border-stone-200 px-8 py-5 text-xs font-semibold uppercase tracking-wider text-stone-400"
         >
@@ -37,24 +143,28 @@
         </div>
 
         @for (order of filteredOrders(); track order.id) {
+          <!-- KEEP YOUR EXISTING DESKTOP ROW -->
+
           <div
             class="grid grid-cols-[0.6fr_1.3fr_1fr_0.8fr_1fr_0.8fr_0.5fr] items-center gap-6 border-b border-stone-100 px-8 py-6 last:border-b-0"
           >
             <span class="font-medium text-serein-text"> #{{ order.orderNumber }} </span>
 
             <div>
-              <p class="font-medium text-serein-text">
+              <p class="font-medium">
                 {{ order.customer.name }}
               </p>
 
-              <p class="mt-1 text-sm text-stone-400">{{ order.customer.email }}</p>
+              <p class="mt-1 text-sm text-stone-400">
+                {{ order.customer.email }}
+              </p>
             </div>
 
             <span class="text-sm text-stone-600">
               {{ order.createdAt | date: 'mediumDate' }}
             </span>
 
-            <span class="font-medium text-serein-text">
+            <span class="font-medium">
               {{ order.totalAmount | currency: 'USD' : 'symbol' : '1.0-2' }}
             </span>
 
@@ -62,13 +172,9 @@
               {{ order.paymentMethod }}
             </span>
 
-            <div>
-              <span
-                class="rounded-full bg-stone-100 px-3 py-1 text-xs font-medium text-serein-text"
-              >
-                {{ order.status }}
-              </span>
-            </div>
+            <span class="w-fit rounded-full bg-stone-100 px-3 py-1 text-xs font-medium">
+              {{ order.status }}
+            </span>
 
             <a
               [routerLink]="['/admin/orders', order.id]"

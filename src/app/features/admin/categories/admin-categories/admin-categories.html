@@ -12,7 +12,7 @@
 
     <button
       type="button"
-      class="rounded-2xl bg-serein-brand px-6 py-3 text-sm text-white"
+      class="w-full sm:w-auto rounded-2xl bg-serein-brand px-6 py-3 text-sm text-white"
       (click)="openCreateDialog()"
     >
       + Add category
@@ -21,17 +21,108 @@
 
   <!-- CONTENT -->
 
-  <div class="mt-10 overflow-hidden rounded-3xl bg-white">
+  <div class="mt-8 sm:mt-10">
     @if (categoryStore.loading()) {
-      <p class="p-8">Loading categories...</p>
+      <div class="rounded-3xl bg-white p-8">Loading categories...</div>
     } @else if (categoryStore.categories().length === 0) {
-      <div class="p-12 text-center">
+      <div class="rounded-3xl bg-white p-12 text-center">
         <h2 class="font-display text-2xl">No categories</h2>
 
         <p class="mt-2 opacity-60">Add your first category.</p>
       </div>
     } @else {
-      <div class="overflow-x-auto">
+      <!-- ==================================
+         MOBILE CATEGORY CARDS
+         ================================== -->
+
+      <div class="space-y-3 md:hidden">
+        @for (category of categoryStore.categories(); track category.categoryId) {
+          <article
+            class="rounded-3xl border border-black/5 bg-white p-4 shadow-[0_8px_30px_rgba(51,43,39,0.035)]"
+          >
+            <!-- Category identity -->
+
+            <div class="flex items-center gap-4">
+              <div class="h-16 w-16 shrink-0 overflow-hidden rounded-2xl bg-serein-bg">
+                @if (category.categoryImageUrl) {
+                  <img
+                    [src]="category.categoryImageUrl"
+                    [alt]="category.categoryName"
+                    loading="lazy"
+                    decoding="async"
+                    class="h-full w-full object-cover"
+                  />
+                } @else {
+                  <div
+                    class="flex h-full w-full items-center justify-center font-display text-2xl text-serein-text/35"
+                    aria-hidden="true"
+                  >
+                    {{ category.categoryName.charAt(0).toUpperCase() }}
+                  </div>
+                }
+              </div>
+
+              <div class="min-w-0 flex-1">
+                <h2 class="truncate font-medium text-serein-text">
+                  {{ category.categoryName }}
+                </h2>
+
+                <p class="mt-1 text-xs text-stone-400">Catalogue category</p>
+              </div>
+            </div>
+
+            <!-- Category information -->
+
+            <div class="mt-4 grid grid-cols-2 gap-3">
+              <div class="rounded-2xl bg-serein-bg px-4 py-3">
+                <p class="text-[0.65rem] uppercase tracking-wider text-stone-400">Products</p>
+
+                <p class="mt-1 font-medium">
+                  {{ productCounts().get(category.categoryId) ?? 0 }}
+                </p>
+              </div>
+
+              <div class="rounded-2xl bg-serein-bg px-4 py-3">
+                <p class="text-[0.65rem] uppercase tracking-wider text-stone-400">Parent</p>
+
+                <p class="mt-1 font-medium">
+                  @if (category.parentCategoryId === null) {
+                    Root
+                  } @else {
+                    #{{ category.parentCategoryId }}
+                  }
+                </p>
+              </div>
+            </div>
+
+            <!-- Actions -->
+
+            <div class="mt-4 flex items-center justify-end gap-2 border-t border-black/5 pt-4">
+              <button
+                type="button"
+                class="rounded-xl bg-serein-bg px-4 py-2 text-sm text-serein-brand"
+                (click)="openEditDialog(category)"
+              >
+                Edit
+              </button>
+
+              <button
+                type="button"
+                class="rounded-xl bg-red-50 px-4 py-2 text-sm text-red-700"
+                (click)="askToDelete(category)"
+              >
+                Delete
+              </button>
+            </div>
+          </article>
+        }
+      </div>
+
+      <!-- ==================================
+         DESKTOP CATEGORY TABLE
+         ================================== -->
+
+      <div class="hidden overflow-hidden rounded-3xl bg-white md:block">
         <table class="w-full text-left">
           <thead class="border-b border-black/10 text-xs uppercase tracking-wider opacity-50">
             <tr>
@@ -62,18 +153,15 @@
                       } @else {
                         <div
                           class="flex h-full w-full items-center justify-center font-display text-xl text-serein-text/35"
-                          aria-hidden="true"
                         >
                           {{ category.categoryName.charAt(0) }}
                         </div>
                       }
                     </div>
 
-                    <div class="min-w-0">
-                      <p class="font-medium text-serein-text">
-                        {{ category.categoryName }}
-                      </p>
-                    </div>
+                    <p class="font-medium">
+                      {{ category.categoryName }}
+                    </p>
                   </div>
                 </td>
 
@@ -117,7 +205,6 @@
       </div>
     }
   </div>
-
   <!-- CREATE CATEGORY DIALOG -->
 
   @if (showCreateDialog()) {
