@@ -1,6 +1,34 @@
 <header class="sticky top-0 z-50 border-b border-black/5 bg-serein-bg/95 backdrop-blur">
-  <div class="mx-auto flex max-w-7xl items-center gap-5 px-4 py-4 sm:px-6">
-    <a routerLink="/" class="shrink-0 font-display text-3xl tracking-tight">Serein</a>
+  <div class="mx-auto flex max-w-7xl items-center gap-3 px-4 py-4 sm:px-6 lg:gap-5">
+    <button
+      type="button"
+      class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full transition hover:bg-black/5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-serein-brand lg:hidden"
+      aria-label="Open navigation menu"
+      aria-controls="mobile-navigation"
+      [attr.aria-expanded]="mobileMenuOpen()"
+      (click)="openMobileMenu()"
+    >
+      <svg
+        viewBox="0 0 24 24"
+        class="h-6 w-6"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.8"
+        stroke-linecap="round"
+        aria-hidden="true"
+      >
+        <path d="M4 7h16"></path>
+        <path d="M4 12h16"></path>
+        <path d="M4 17h16"></path>
+      </svg>
+    </button>
+
+    <a
+      routerLink="/"
+      class="shrink-0 font-display text-2xl tracking-tight sm:text-3xl"
+      (click)="closeMobileMenu()"
+      >Serein</a
+    >
 
     <nav class="hidden items-center gap-7 lg:flex" aria-label="Primary navigation">
       <a
@@ -8,30 +36,26 @@
         routerLinkActive="!border-serein-text"
         [routerLinkActiveOptions]="{ exact: true }"
         class="border-b border-transparent py-2 text-sm transition hover:border-serein-text"
+        >Home</a
       >
-        Home
-      </a>
       <a
         routerLink="/products"
         routerLinkActive="!border-serein-text"
         class="border-b border-transparent py-2 text-sm transition hover:border-serein-text"
+        >Shop</a
       >
-        Shop
-      </a>
       <a
         routerLink="/categories"
         routerLinkActive="!border-serein-text"
         class="border-b border-transparent py-2 text-sm transition hover:border-serein-text"
+        >Categories</a
       >
-        Categories
-      </a>
       <a
         routerLink="/about"
         routerLinkActive="!border-serein-text"
         class="border-b border-transparent py-2 text-sm transition hover:border-serein-text"
+        >About</a
       >
-        About
-      </a>
     </nav>
 
     <div class="ml-auto flex shrink-0 items-center gap-1 sm:gap-2">
@@ -57,9 +81,8 @@
         @if (wishlist.count() > 0) {
           <span
             class="absolute -right-0.5 -top-0.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-serein-brand px-1 text-[0.6rem] leading-none text-white"
+            >{{ wishlist.count() }}</span
           >
-            {{ wishlist.count() }}
-          </span>
         }
       </a>
 
@@ -85,17 +108,58 @@
         @if (cart.itemCount() > 0) {
           <span
             class="absolute -right-0.5 -top-0.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-serein-brand px-1 text-[0.6rem] leading-none text-white"
+            >{{ cart.itemCount() }}</span
           >
-            {{ cart.itemCount() }}
-          </span>
         }
       </a>
 
+      @if (auth.isLoggedIn()) {
+        <a
+          routerLink="/profile"
+          class="ml-1 flex h-10 w-10 items-center justify-center rounded-full bg-black/[0.05] transition hover:bg-black/[0.09] focus-visible:outline-2 focus-visible:outline-serein-brand lg:hidden"
+          aria-label="Open profile"
+        >
+          <svg
+            viewBox="0 0 24 24"
+            class="h-6 w-6"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.7"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <circle cx="12" cy="8" r="4"></circle>
+            <path d="M4 21a8 8 0 0 1 16 0"></path>
+          </svg>
+        </a>
+      } @else {
+        <a
+          routerLink="/login"
+          class="ml-1 flex h-10 w-10 items-center justify-center rounded-full bg-black/[0.05] transition hover:bg-black/[0.09] focus-visible:outline-2 focus-visible:outline-serein-brand lg:hidden"
+          aria-label="Sign in"
+        >
+          <svg
+            viewBox="0 0 24 24"
+            class="h-6 w-6"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.7"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <circle cx="12" cy="8" r="4"></circle>
+            <path d="M4 21a8 8 0 0 1 16 0"></path>
+          </svg>
+        </a>
+      }
+
       @if (auth.isAdmin()) {
-        <div class="ml-1 border-l border-black/10 pl-3">
+        <div class="ml-1 hidden border-l border-black/10 pl-3 lg:block">
           <a
             routerLink="/admin"
-            class="inline-flex h-10 items-center justify-center gap-2 rounded-2xl bg-black/[0.045] px-3 text-sm font-semibold transition hover:bg-black/[0.08] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-serein-brand sm:px-4"
+            class="inline-flex h-10 items-center justify-center gap-2 rounded-2xl bg-black/[0.045] px-3 text-sm font-semibold transition hover:bg-black/[0.08] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-serein-brand xl:px-4"
             aria-label="Open admin panel"
           >
             <svg
@@ -117,7 +181,7 @@
       }
 
       @if (auth.isLoggedIn()) {
-        <details class="group relative hidden sm:block">
+        <details class="group relative hidden lg:block">
           <summary
             class="flex cursor-pointer list-none items-center gap-1 rounded-full px-2 py-2 text-sm transition hover:bg-black/5"
           >
@@ -136,9 +200,9 @@
           <div
             class="absolute right-0 top-full mt-2 w-36 rounded-2xl border border-black/5 bg-serein-surface p-2 shadow-lg"
           >
-            <a routerLink="/profile" class="block rounded-xl px-3 py-2 text-sm hover:bg-black/5">
-              Profile
-            </a>
+            <a routerLink="/profile" class="block rounded-xl px-3 py-2 text-sm hover:bg-black/5"
+              >Profile</a
+            >
             <button
               type="button"
               class="block w-full rounded-xl px-3 py-2 text-left text-sm text-serein-brand hover:bg-black/5"
@@ -151,11 +215,415 @@
       } @else {
         <a
           routerLink="/login"
-          class="hidden rounded-full px-3 py-2 text-sm transition hover:bg-black/5 sm:block"
+          class="hidden rounded-full px-3 py-2 text-sm transition hover:bg-black/5 lg:block"
+          >Sign in</a
         >
-          Sign in
-        </a>
       }
     </div>
   </div>
 </header>
+
+@if (mobileMenuOpen()) {
+  <button
+    type="button"
+    class="mobile-menu-backdrop fixed inset-0 z-[60] bg-[#201915]/35 backdrop-blur-[1px] lg:hidden"
+    aria-label="Close navigation menu"
+    (click)="closeMobileMenu()"
+  ></button>
+
+  <aside
+    id="mobile-navigation"
+    class="mobile-menu-panel fixed inset-y-0 left-0 z-[70] flex w-full flex-col overflow-x-hidden overflow-y-auto rounded-tr-[1.7rem] bg-[#fbf7f1] text-[#27211e] shadow-[18px_0_55px_rgba(39,29,24,0.18)] sm:w-[min(92vw,390px)] sm:rounded-l-none sm:rounded-r-[1.7rem] lg:hidden"
+    aria-label="Mobile navigation"
+    aria-modal="true"
+    role="dialog"
+  >
+    <div class="relative h-[124px] shrink-0 overflow-hidden px-[19px] pt-[28px]">
+      <a
+        routerLink="/"
+        class="relative z-10 block w-fit font-display text-[34px] leading-none tracking-[-0.045em]"
+        (click)="closeMobileMenu()"
+        >Serein</a
+      >
+      <p
+        class="relative z-10 mt-[7px] w-[185px] text-[9.5px] uppercase leading-[17px] tracking-[0.225em] text-[#8f6959]"
+      >
+        Fresh groceries,<br />thoughtfully chosen
+      </p>
+
+      <svg
+        viewBox="0 0 120 90"
+        class="pointer-events-none absolute -right-[9px] bottom-[-6px] h-[78px] w-[105px] text-[#71805b]"
+        fill="none"
+        aria-hidden="true"
+      >
+        <path d="M122 72C91 65 61 50 31 22" stroke="currentColor" stroke-width="2.1"></path>
+        <path
+          d="M89 60C81 44 80 33 82 22M69 49C62 36 54 28 43 21M104 67C105 50 111 40 119 31"
+          stroke="currentColor"
+          stroke-width="1.3"
+        ></path>
+        <ellipse
+          cx="83"
+          cy="29"
+          rx="7"
+          ry="13"
+          fill="#87966f"
+          transform="rotate(8 83 29)"
+        ></ellipse>
+        <ellipse
+          cx="91"
+          cy="49"
+          rx="7"
+          ry="14"
+          fill="#60724e"
+          transform="rotate(-48 91 49)"
+        ></ellipse>
+        <ellipse
+          cx="65"
+          cy="38"
+          rx="6.5"
+          ry="13"
+          fill="#829268"
+          transform="rotate(-43 65 38)"
+        ></ellipse>
+        <ellipse
+          cx="51"
+          cy="28"
+          rx="6"
+          ry="12"
+          fill="#61764f"
+          transform="rotate(-45 51 28)"
+        ></ellipse>
+        <ellipse
+          cx="105"
+          cy="50"
+          rx="7"
+          ry="14"
+          fill="#91a178"
+          transform="rotate(38 105 50)"
+        ></ellipse>
+        <ellipse
+          cx="116"
+          cy="36"
+          rx="6.5"
+          ry="13"
+          fill="#657852"
+          transform="rotate(38 116 36)"
+        ></ellipse>
+        <ellipse
+          cx="42"
+          cy="24"
+          rx="5.5"
+          ry="11"
+          fill="#93a17b"
+          transform="rotate(132 42 24)"
+        ></ellipse>
+        <ellipse
+          cx="72"
+          cy="50"
+          rx="6"
+          ry="12"
+          fill="#526a45"
+          transform="rotate(130 72 50)"
+        ></ellipse>
+      </svg>
+
+      <button
+        type="button"
+        class="absolute right-[15px] top-[9px] z-20 flex h-[39px] w-[39px] items-center justify-center rounded-full bg-[#f0ece6] text-[#2e2926] transition hover:bg-[#e8e1da] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#895943]"
+        aria-label="Close navigation menu"
+        (click)="closeMobileMenu()"
+      >
+        <svg
+          viewBox="0 0 24 24"
+          class="h-[18px] w-[18px]"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.7"
+          stroke-linecap="round"
+          aria-hidden="true"
+        >
+          <path d="m6 6 12 12"></path>
+          <path d="m18 6-12 12"></path>
+        </svg>
+      </button>
+    </div>
+
+    <div class="flex flex-1 flex-col px-[18px] pb-5 pt-[13px]">
+      <nav aria-label="Mobile primary navigation">
+        <a
+          routerLink="/"
+          routerLinkActive="!bg-[#895943] !text-white shadow-[0_8px_20px_rgba(103,67,51,0.15)]"
+          [routerLinkActiveOptions]="{ exact: true }"
+          class="group flex h-[47px] items-center rounded-[11px] px-[14px] text-[14px] transition hover:bg-black/[0.035]"
+          (click)="closeMobileMenu()"
+        >
+          <svg
+            viewBox="0 0 24 24"
+            class="mr-[22px] h-[20px] w-[20px] shrink-0"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.65"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <path d="m3 11 9-8 9 8"></path>
+            <path d="M5 10v11h14V10"></path>
+            <path d="M9 21v-6h6v6"></path>
+          </svg>
+          <span class="font-medium">Home</span>
+          <svg
+            viewBox="0 0 20 20"
+            class="ml-auto h-4 w-4 opacity-80"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.4"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <path d="m8 5 5 5-5 5"></path>
+          </svg>
+        </a>
+        <a
+          routerLink="/products"
+          routerLinkActive="!bg-[#895943] !text-white shadow-[0_8px_20px_rgba(103,67,51,0.15)]"
+          class="group flex h-[47px] items-center rounded-[11px] px-[14px] text-[14px] transition hover:bg-black/[0.035]"
+          (click)="closeMobileMenu()"
+        >
+          <svg
+            viewBox="0 0 24 24"
+            class="mr-[22px] h-[20px] w-[20px] shrink-0"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.65"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <path d="M6 8h12l1 13H5L6 8Z"></path>
+            <path d="M9 9V6a3 3 0 0 1 6 0v3"></path>
+          </svg>
+          <span class="font-medium">Shop</span>
+          <svg
+            viewBox="0 0 20 20"
+            class="ml-auto h-4 w-4 opacity-80"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.4"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <path d="m8 5 5 5-5 5"></path>
+          </svg>
+        </a>
+        <a
+          routerLink="/categories"
+          routerLinkActive="!bg-[#895943] !text-white shadow-[0_8px_20px_rgba(103,67,51,0.15)]"
+          class="group flex h-[47px] items-center rounded-[11px] px-[14px] text-[14px] transition hover:bg-black/[0.035]"
+          (click)="closeMobileMenu()"
+        >
+          <svg
+            viewBox="0 0 24 24"
+            class="mr-[22px] h-[20px] w-[20px] shrink-0"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.65"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <rect x="3.5" y="3.5" width="6.5" height="6.5" rx="1"></rect>
+            <rect x="14" y="3.5" width="6.5" height="6.5" rx="1"></rect>
+            <rect x="3.5" y="14" width="6.5" height="6.5" rx="1"></rect>
+            <rect x="14" y="14" width="6.5" height="6.5" rx="1"></rect>
+          </svg>
+          <span class="font-medium">Categories</span>
+          <svg
+            viewBox="0 0 20 20"
+            class="ml-auto h-4 w-4 opacity-80"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.4"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <path d="m8 5 5 5-5 5"></path>
+          </svg>
+        </a>
+        <a
+          routerLink="/about"
+          routerLinkActive="!bg-[#895943] !text-white shadow-[0_8px_20px_rgba(103,67,51,0.15)]"
+          class="group flex h-[47px] items-center rounded-[11px] px-[14px] text-[14px] transition hover:bg-black/[0.035]"
+          (click)="closeMobileMenu()"
+        >
+          <svg
+            viewBox="0 0 24 24"
+            class="mr-[22px] h-[20px] w-[20px] shrink-0"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.65"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <circle cx="12" cy="12" r="9"></circle>
+            <path d="M12 11v6"></path>
+            <path d="M12 7h.01"></path>
+          </svg>
+          <span class="font-medium">About</span>
+          <svg
+            viewBox="0 0 20 20"
+            class="ml-auto h-4 w-4 opacity-80"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.4"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <path d="m8 5 5 5-5 5"></path>
+          </svg>
+        </a>
+      </nav>
+
+      <div class="mt-[20px] border-t border-[#ded7d0] pt-[17px]">
+        <p class="px-[1px] text-[9px] uppercase tracking-[0.24em] text-[#9a928d]">Account</p>
+        @if (auth.isLoggedIn()) {
+          <div class="mt-[9px] space-y-[6px]">
+            <a
+              routerLink="/profile"
+              class="flex h-[55px] items-center rounded-[9px] bg-[#f1eeea] px-[13px] transition hover:bg-[#ebe7e2]"
+              (click)="closeMobileMenu()"
+            >
+              <svg
+                viewBox="0 0 24 24"
+                class="mr-[21px] h-[21px] w-[21px] shrink-0"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.65"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+              >
+                <circle cx="12" cy="8" r="4"></circle>
+                <path d="M4 21a8 8 0 0 1 16 0"></path>
+              </svg>
+              <div class="min-w-0 flex-1 leading-none">
+                <p class="truncate text-[13px] font-medium">Hi, {{ auth.firstName() }}</p>
+                <p class="mt-[7px] truncate text-[10px] text-[#807975]">Manage your account</p>
+              </div>
+              <svg
+                viewBox="0 0 20 20"
+                class="ml-2 h-4 w-4 opacity-55"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.35"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+              >
+                <path d="m8 5 5 5-5 5"></path>
+              </svg>
+            </a>
+            @if (auth.isAdmin()) {
+              <a
+                routerLink="/admin"
+                class="flex h-[57px] items-center rounded-[9px] bg-[#f1eeea] px-[13px] transition hover:bg-[#ebe7e2]"
+                (click)="closeMobileMenu()"
+              >
+                <svg
+                  viewBox="0 0 24 24"
+                  class="mr-[21px] h-[21px] w-[21px] shrink-0"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.65"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  aria-hidden="true"
+                >
+                  <path d="M12 3 4 6v6c0 5 3.4 8 8 10 4.6-2 8-5 8-10V6l-8-3Z"></path>
+                  <path d="m9 12 2 2 4-4"></path>
+                </svg>
+                <div class="min-w-0 flex-1 leading-none">
+                  <p class="truncate text-[13px] font-medium">Admin panel</p>
+                  <p class="mt-[7px] truncate text-[10px] text-[#807975]">Manage your store</p>
+                </div>
+                <svg
+                  viewBox="0 0 20 20"
+                  class="ml-2 h-4 w-4 opacity-55"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.35"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  aria-hidden="true"
+                >
+                  <path d="m8 5 5 5-5 5"></path>
+                </svg>
+              </a>
+            }
+            <button
+              type="button"
+              class="flex h-[52px] w-full items-center rounded-[9px] px-[13px] text-left text-[13px] text-[#8a5140] transition hover:bg-[#f6ebe6]"
+              (click)="logout()"
+            >
+              <svg
+                viewBox="0 0 24 24"
+                class="mr-[21px] h-[20px] w-[20px] shrink-0"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.55"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+              >
+                <path d="M10 8V5a2 2 0 0 1 2-2h7v18h-7a2 2 0 0 1-2-2v-3"></path>
+                <path d="M15 12H3"></path>
+                <path d="m7 8-4 4 4 4"></path>
+              </svg>
+              Sign out
+            </button>
+          </div>
+        } @else {
+          <a
+            routerLink="/login"
+            class="mt-[9px] flex h-[55px] w-full items-center rounded-[9px] bg-[#f1eeea] px-[13px] text-[13px] font-medium transition hover:bg-[#ebe7e2]"
+            (click)="closeMobileMenu()"
+          >
+            <svg
+              viewBox="0 0 24 24"
+              class="mr-[21px] h-[21px] w-[21px]"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.65"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <circle cx="12" cy="8" r="4"></circle>
+              <path d="M4 21a8 8 0 0 1 16 0"></path>
+            </svg>
+            <span>Sign in</span>
+            <svg
+              viewBox="0 0 20 20"
+              class="ml-auto h-4 w-4 opacity-55"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.35"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <path d="m8 5 5 5-5 5"></path>
+            </svg>
+          </a>
+        }
+      </div>
+    </div>
+  </aside>
+}

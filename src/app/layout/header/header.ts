@@ -1,4 +1,4 @@
-import { Component, effect, inject, signal } from '@angular/core';
+import { Component, effect, HostListener, inject, signal } from '@angular/core';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { CartStore } from '../../core/state/cart-store';
 import { AuthStore } from '../../core/auth/auth-store';
@@ -16,8 +16,28 @@ export class Header {
   private readonly router = inject(Router);
   readonly wishlist = inject(WishlistStore);
 
+  readonly mobileMenuOpen = signal(false);
+
+  openMobileMenu(): void {
+    this.mobileMenuOpen.set(true);
+  }
+
+  closeMobileMenu(): void {
+    this.mobileMenuOpen.set(false);
+  }
+
+  toggleMobileMenu(): void {
+    this.mobileMenuOpen.update((open) => !open);
+  }
+
+  @HostListener('document:keydown.escape')
+  closeMobileMenuOnEscape(): void {
+    this.closeMobileMenu();
+  }
+
   async logout(): Promise<void> {
     this.auth.logout();
+    this.closeMobileMenu();
     await this.router.navigate(['/']);
   }
 
