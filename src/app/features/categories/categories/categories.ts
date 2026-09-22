@@ -1,9 +1,15 @@
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, computed, HostListener, inject, signal } from '@angular/core';
 import { CategoryStore } from '../../../core/state/category-store';
 import { RouterLink } from '@angular/router';
 import { CategoryPageCard } from '../category-page-card/category-page-card';
 import { ProductStore } from '../../../core/state/product-store';
 import { CategorySortOption } from '../../../core/models/category.model';
+
+type CategorySortMenuOption = {
+  readonly value: CategorySortOption;
+  readonly label: string;
+  readonly description: string;
+};
 
 @Component({
   imports: [RouterLink, CategoryPageCard],
@@ -26,6 +32,33 @@ export class Categories {
   readonly categorySkeletons = Array.from({ length: 8 });
   readonly searchTerm = signal('');
   readonly sortBy = signal<CategorySortOption>('name-asc');
+  readonly sortMenuOpen = signal(false);
+  readonly sortOptions: readonly CategorySortMenuOption[] = [
+    {
+      value: 'name-asc',
+      label: 'Name: A to Z',
+      description: 'Alphabetical order',
+    },
+    {
+      value: 'name-desc',
+      label: 'Name: Z to A',
+      description: 'Reverse alphabetical',
+    },
+    {
+      value: 'products-high',
+      label: 'Most products',
+      description: 'Largest departments first',
+    },
+    {
+      value: 'products-low',
+      label: 'Fewest products',
+      description: 'Smallest departments first',
+    },
+  ];
+  readonly selectedSortLabel = computed(
+    () =>
+      this.sortOptions.find((option) => option.value === this.sortBy())?.label ?? 'Name: A to Z',
+  );
 
   constructor() {
     void this.categoryStore.load();
@@ -82,5 +115,28 @@ export class Categories {
   updateSort(event: Event): void {
     const select = event.target as HTMLSelectElement;
     this.sortBy.set(select.value as CategorySortOption);
+  }
+
+  toggleSortMenu(): void {
+    this.sortMenuOpen.update((open) => !open);
+  }
+
+  selectSort(value: CategorySortOption): void {
+    this.sortBy.set(value);
+    this.sortMenuOpen.set(false);
+  }
+
+  @HostListener('document:click', ['$event'])
+  closeSortMenuOnOutsideClick(event: MouseEvent): void {
+    const target = event.target;
+
+    if (target instanceof Element && !target.closest('[data-category-sort]')) {
+      this.sortMenuOpen.set(false);
+    }
+  }
+
+  @HostListener('document:keydown.escape')
+  closeSortMenuOnEscape(): void {
+    this.sortMenuOpen.set(false);
   }
 }

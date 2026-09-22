@@ -1,5 +1,13 @@
 import { ViewportScroller } from '@angular/common';
-import { Component, computed, effect, inject, linkedSignal, signal } from '@angular/core';
+import {
+  Component,
+  computed,
+  effect,
+  HostListener,
+  inject,
+  linkedSignal,
+  signal,
+} from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { toSignal } from '@angular/core/rxjs-interop';
 
@@ -15,6 +23,11 @@ import { CategoryStore } from '../../../core/state/category-store';
 
 const PAGE_SIZE = 8;
 type PaginationItem = number | 'ellipsis-start' | 'ellipsis-end';
+type SortMenuOption = {
+  readonly value: SortOption;
+  readonly label: string;
+  readonly description: string;
+};
 
 @Component({
   imports: [ProductCard, ProductFilters],
@@ -36,6 +49,33 @@ export class Products {
   readonly skeletonItems = Array.from({ length: PAGE_SIZE });
   readonly searchTerm = linkedSignal(() => this.queryParams().get('search') ?? '');
   readonly sortBy = signal<SortOption>('default');
+  readonly sortMenuOpen = signal(false);
+  readonly sortOptions: readonly SortMenuOption[] = [
+    {
+      value: 'default',
+      label: 'Featured',
+      description: 'Our recommended order',
+    },
+    {
+      value: 'price-low',
+      label: 'Price: Low to high',
+      description: 'Lowest price first',
+    },
+    {
+      value: 'price-high',
+      label: 'Price: High to low',
+      description: 'Highest price first',
+    },
+    {
+      value: 'name',
+      label: 'Name: A to Z',
+      description: 'Alphabetical order',
+    },
+  ];
+  
+  readonly selectedSortLabel = computed(
+    () => this.sortOptions.find((option) => option.value === this.sortBy())?.label ?? 'Featured',
+  );
 
   readonly products = this.productStore.products;
   readonly loading = this.productStore.loading;
@@ -199,9 +239,28 @@ export class Products {
     this.resetPage();
   }
 
-  updateSort(event: Event): void {
-    this.sortBy.set((event.target as HTMLSelectElement).value as SortOption);
+  toggleSortMenu(): void {
+    this.sortMenuOpen.update((open) => !open);
+  }
+
+  selectSort(value: SortOption): void {
+    this.sortBy.set(value);
+    this.sortMenuOpen.set(false);
     this.resetPage();
+  }
+
+  @HostListener('document:click', ['$event'])
+  closeSortMenuOnOutsideClick(event: MouseEvent): void {
+    const target = event.target;
+
+    if (target instanceof Element && !target.closest('[data-product-sort]')) {
+      this.sortMenuOpen.set(false);
+    }
+  }
+
+  @HostListener('document:keydown.escape')
+  closeSortMenuOnEscape(): void {
+    this.sortMenuOpen.set(false);
   }
 
   updateFilters(value: ProductFilterValue): void {

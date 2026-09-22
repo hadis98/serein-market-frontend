@@ -75,7 +75,180 @@
         <h2 class="mt-2 font-display text-3xl sm:text-4xl">All categories</h2>
       </div>
 
-      <div class="flex items-center gap-3">
+      <div class="relative self-start sm:self-auto" data-category-sort>
+        <button
+          type="button"
+          id="category-sort-trigger"
+          class="group flex h-14 min-w-[210px] items-center gap-3 rounded-2xl border border-black/10 bg-serein-surface px-3.5 text-left shadow-[0_3px_12px_rgba(51,43,39,0.035)] transition hover:border-serein-brand/40 hover:shadow-[0_6px_18px_rgba(51,43,39,0.07)] focus-visible:border-serein-brand focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-serein-brand/10"
+          aria-haspopup="listbox"
+          aria-controls="category-sort-options"
+          [attr.aria-expanded]="sortMenuOpen()"
+          (click)="toggleSortMenu()"
+        >
+          <span
+            class="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-serein-bg text-serein-brand transition group-hover:bg-[#efe4dc]"
+            aria-hidden="true"
+          >
+            <svg
+              viewBox="0 0 24 24"
+              class="h-[18px] w-[18px]"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.6"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="M4 7h11"></path>
+              <path d="M4 12h8"></path>
+              <path d="M4 17h5"></path>
+              <path d="m16 14 3 3 3-3"></path>
+              <path d="M19 5v12"></path>
+            </svg>
+          </span>
+
+          <span class="min-w-0 flex-1">
+            <span
+              class="block text-[9px] font-medium uppercase leading-none tracking-[0.2em] text-serein-text/40"
+              >Sort by</span
+            >
+            <span class="mt-1.5 block truncate text-[13px] font-medium leading-none">{{
+              selectedSortLabel()
+            }}</span>
+          </span>
+
+          <svg
+            viewBox="0 0 20 20"
+            class="h-4 w-4 shrink-0 text-serein-text/45 transition-transform duration-200"
+            [class.rotate-180]="sortMenuOpen()"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <path d="m5 8 5 5 5-5"></path>
+          </svg>
+        </button>
+
+        @if (sortMenuOpen()) {
+          <div
+            id="category-sort-options"
+            class="category-sort-menu absolute left-0 top-full z-40 mt-2 w-[min(17rem,calc(100vw-2rem))] overflow-hidden rounded-2xl border border-black/[0.07] bg-serein-surface p-2 shadow-[0_20px_55px_rgba(51,43,39,0.16)] sm:left-auto sm:right-0"
+            role="listbox"
+            aria-label="Sort categories"
+            [attr.aria-activedescendant]="'category-sort-' + sortBy()"
+          >
+            <div class="px-3 pb-2 pt-1.5">
+              <p class="text-[10px] font-medium uppercase tracking-[0.2em] text-serein-text/40">
+                Sort categories
+              </p>
+            </div>
+
+            @for (option of sortOptions; track option.value) {
+              <button
+                type="button"
+                [id]="'category-sort-' + option.value"
+                class="group/option flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left transition hover:bg-serein-bg focus-visible:bg-serein-bg focus-visible:outline-none"
+                role="option"
+                [attr.aria-selected]="sortBy() === option.value"
+                [class.bg-serein-bg]="sortBy() === option.value"
+                (click)="selectSort(option.value)"
+              >
+                <span
+                  class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-black/[0.06] bg-white/70 text-serein-text/55 transition group-hover/option:border-serein-brand/20 group-hover/option:text-serein-brand"
+                  [class.!border-serein-brand/20]="sortBy() === option.value"
+                  [class.!bg-[#efe4dc]]="sortBy() === option.value"
+                  [class.!text-serein-brand]="sortBy() === option.value"
+                  aria-hidden="true"
+                >
+                  @switch (option.value) {
+                    @case ('name-asc') {
+                      <svg
+                        viewBox="0 0 20 20"
+                        class="h-4 w-4"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="1.5"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      >
+                        <path d="m3 14 4-9 4 9M4.5 11h5M13 7h4l-4 7h4"></path>
+                      </svg>
+                    }
+                    @case ('name-desc') {
+                      <svg
+                        viewBox="0 0 20 20"
+                        class="h-4 w-4"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="1.5"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      >
+                        <path d="M3 6h4l-4 7h4M12 14l3-9 3 9M13 11h4"></path>
+                      </svg>
+                    }
+                    @case ('products-high') {
+                      <svg
+                        viewBox="0 0 20 20"
+                        class="h-4 w-4"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="1.5"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      >
+                        <path d="M3 16V9h3v7H3ZM8.5 16V5h3v11h-3ZM14 16V2h3v14h-3Z"></path>
+                      </svg>
+                    }
+                    @default {
+                      <svg
+                        viewBox="0 0 20 20"
+                        class="h-4 w-4"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="1.5"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      >
+                        <path d="M3 16V2h3v14H3ZM8.5 16V5h3v11h-3ZM14 16V9h3v7h-3Z"></path>
+                      </svg>
+                    }
+                  }
+                </span>
+
+                <span class="min-w-0 flex-1">
+                  <span class="block text-[13px] font-medium">{{ option.label }}</span>
+                  <span class="mt-0.5 block text-[11px] text-serein-text/45">{{
+                    option.description
+                  }}</span>
+                </span>
+
+                <span
+                  class="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-serein-brand text-white transition"
+                  [class.opacity-0]="sortBy() !== option.value"
+                  aria-hidden="true"
+                >
+                  <svg
+                    viewBox="0 0 16 16"
+                    class="h-3 w-3"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <path d="m3.5 8 3 3 6-6"></path>
+                  </svg>
+                </span>
+              </button>
+            }
+          </div>
+        }
+      </div>
+
+      <div class="hidden items-center gap-3">
         <label for="category-sort" class="text-sm text-serein-text/55"> Sort by </label>
 
         <div class="relative">
