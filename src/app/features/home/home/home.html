@@ -119,7 +119,7 @@
     <div class="mb-7 flex items-end justify-between gap-5">
       <h2 class="font-display text-3xl sm:text-4xl">Shop by category</h2>
       <a
-        routerLink="/products"
+        routerLink="/categories"
         class="shrink-0 text-sm font-medium transition hover:text-serein-brand"
       >
         View all categories <span aria-hidden="true">→</span>
@@ -182,7 +182,7 @@
         {{ productError() }}
       </p>
     } @else {
-      <div class="grid grid-cols-2 gap-4 md:grid-cols-3 xl:grid-cols-6">
+      <div class="grid grid-cols-1 gap-4 md:grid-cols-3 xl:grid-cols-6">
         @for (product of featuredProducts(); track product.productId) {
           <app-product-card [product]="product" />
         }

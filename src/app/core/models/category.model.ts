@@ -1,3 +1,4 @@
+export type CategorySortOption = 'name-asc' | 'name-desc' | 'products-high' | 'products-low';
 export interface Category {
   categoryId: number;
   categoryName: string;

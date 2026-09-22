@@ -1,0 +1,202 @@
+<div class="mx-auto max-w-7xl px-4 pb-12 pt-6 sm:px-6">
+  <!-- HERO -->
+  <section class="relative overflow-hidden rounded-3xl bg-serein-surface">
+    <img
+      src="/categories-page/categories-hero.png"
+      alt=""
+      class="absolute inset-0 h-full w-full object-cover object-center"
+    />
+
+    <div
+      class="absolute inset-0 bg-gradient-to-r from-[#f8f3ed] via-[#f8f3ed]/95 to-transparent"
+    ></div>
+
+    <div class="relative min-h-[330px] px-7 py-9 sm:px-10 md:px-14">
+      <!-- Breadcrumb -->
+      <nav aria-label="Breadcrumb" class="flex items-center gap-2 text-xs text-serein-text/50">
+        <a routerLink="/" class="transition hover:text-serein-text"> Home </a>
+
+        <span aria-hidden="true">›</span>
+
+        <span class="font-medium text-serein-text"> Categories </span>
+      </nav>
+
+      <!-- Main content -->
+      <div class="mt-7 max-w-xl">
+        <p class="text-xs font-medium uppercase tracking-[0.28em] text-serein-brand">
+          Explore our collection
+        </p>
+
+        <h1 class="mt-3 font-display text-5xl leading-none tracking-tight sm:text-6xl">
+          Browse categories
+        </h1>
+
+        <p class="mt-4 max-w-lg text-sm leading-6 text-serein-text/60 sm:text-base">
+          Shop by department and find exactly what you need for a healthier, happier home.
+        </p>
+
+        <!-- Search UI; functionality comes later -->
+        <div class="relative mt-7 max-w-lg">
+          <svg
+            viewBox="0 0 24 24"
+            class="pointer-events-none absolute left-5 top-1/2 h-5 w-5 -translate-y-1/2 text-serein-text/45"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.8"
+            stroke-linecap="round"
+            aria-hidden="true"
+          >
+            <circle cx="11" cy="11" r="7"></circle>
+            <path d="m20 20-4-4"></path>
+          </svg>
+
+          <label for="category-search" class="sr-only"> Search categories </label>
+
+          <input
+            id="category-search"
+            type="search"
+            placeholder="Search categories..."
+            class="w-full rounded-2xl border border-black/10 bg-white/90 py-4 pl-13 pr-5 text-sm outline-none backdrop-blur transition placeholder:text-serein-text/35 focus:border-serein-brand"
+            [value]="searchTerm()"
+            (input)="updateSearch($event)"
+          />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="mt-12">
+    <div class="mb-7 flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
+      <div>
+        <p class="text-xs font-medium uppercase tracking-[0.25em] text-serein-brand">
+          Shop by department
+        </p>
+
+        <h2 class="mt-2 font-display text-3xl sm:text-4xl">All categories</h2>
+      </div>
+
+      <div class="flex items-center gap-3">
+        <label for="category-sort" class="text-sm text-serein-text/55"> Sort by </label>
+
+        <div class="relative">
+          <select
+            id="category-sort"
+            [value]="sortBy()"
+            (change)="updateSort($event)"
+            class="appearance-none rounded-xl border border-black/10 bg-serein-surface py-3 pl-4 pr-10 text-sm outline-none transition focus:border-serein-brand"
+          >
+            <option value="name-asc">Name A–Z</option>
+
+            <option value="name-desc">Name Z–A</option>
+
+            <option value="products-high">Most products</option>
+
+            <option value="products-low">Fewest products</option>
+          </select>
+
+          <svg
+            viewBox="0 0 20 20"
+            class="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.5"
+            aria-hidden="true"
+          >
+            <path d="m6 8 4 4 4-4" stroke-linecap="round" stroke-linejoin="round"></path>
+          </svg>
+        </div>
+      </div>
+    </div>
+
+    @if (categoriesLoading() || productsLoading()) {
+      <div class="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+        @for (item of categorySkeletons; track $index) {
+          <div class="animate-pulse rounded-3xl bg-serein-surface p-3">
+            <div class="aspect-4/3 rounded-2xl bg-black/5"></div>
+
+            <div class="px-2 pb-3 pt-4">
+              <div class="h-5 w-1/2 rounded bg-black/5"></div>
+
+              <div class="mt-2 h-3 w-1/4 rounded bg-black/5"></div>
+            </div>
+          </div>
+        }
+      </div>
+    } @else if (categoryError() || productError()) {
+      <div
+        class="rounded-3xl border border-red-900/10 bg-red-50 px-6 py-8 text-sm text-red-800"
+        role="alert"
+      >
+        Categories could not be loaded right now.
+      </div>
+    } @else if (categories().length === 0) {
+      <div class="rounded-3xl bg-serein-surface px-6 py-12 text-center">
+        <h3 class="font-display text-2xl">No categories yet</h3>
+
+        <p class="mt-2 text-sm text-serein-text/55">
+          Categories will appear here once they are added.
+        </p>
+      </div>
+    } @else {
+      @if (visibleCategories().length === 0) {
+        <div class="rounded-3xl bg-serein-surface px-6 py-14 text-center">
+          <h3 class="font-display text-2xl">No matching categories</h3>
+
+          <p class="mt-2 text-sm text-serein-text/55">Try a different search term.</p>
+
+          <button
+            type="button"
+            class="mt-5 text-sm font-medium text-serein-brand underline underline-offset-4"
+            (click)="searchTerm.set('')"
+          >
+            Clear search
+          </button>
+        </div>
+      } @else {
+        <div class="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+          @for (category of visibleCategories(); track category.categoryId) {
+            <app-category-page-card
+              [category]="category"
+              [productCount]="categoryProductCounts().get(category.categoryId) ?? 0"
+            />
+          }
+        </div>
+      }
+    }
+  </section>
+
+  <section class="relative mt-14 overflow-hidden rounded-3xl bg-[#e9eadf]">
+    <img
+      src="/categories-page/seasonal-banner.png"
+      alt=""
+      class="absolute inset-0 h-full w-full object-cover object-center"
+    />
+
+    <div
+      class="absolute inset-0 bg-gradient-to-r from-[#f1f0e7] via-[#f1f0e7]/95 to-transparent"
+    ></div>
+
+    <div class="relative flex min-h-[260px] items-center px-7 py-10 sm:px-10 md:px-14">
+      <div class="max-w-xl">
+        <p class="text-xs font-medium uppercase tracking-[0.28em] text-serein-brand">
+          Good food, healthier you
+        </p>
+
+        <h2 class="mt-3 font-display text-4xl leading-tight sm:text-5xl">Seasonal favourites</h2>
+
+        <p class="mt-4 max-w-md text-sm leading-6 text-serein-text/60 sm:text-base">
+          Discover fresh, in-season produce for better meals and a brighter tomorrow.
+        </p>
+
+        <a
+          routerLink="/products"
+          class="mt-7 inline-flex items-center gap-3 rounded-2xl bg-serein-brand px-6 py-3.5 text-sm font-medium text-white transition hover:-translate-y-0.5 hover:shadow-lg focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-serein-brand"
+        >
+          Shop now
+
+          <span aria-hidden="true"> → </span>
+        </a>
+      </div>
+    </div>
+  </section>
+</div>

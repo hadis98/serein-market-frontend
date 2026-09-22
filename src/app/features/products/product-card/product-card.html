@@ -27,27 +27,23 @@
   </div>
 
   <div class="flex flex-1 flex-col p-5">
-    <p class="mb-2 text-xs uppercase tracking-widest text-serein-accent">
+    <p class="text-center sm:text-left mb-2 text-xs uppercase tracking-widest text-serein-accent">
       {{ product().categoryName }}
     </p>
 
     <a [routerLink]="['/products', product().productId]">
-      <h2 class="font-display text-xl text-serein-text">
+      <h2 class="text-center sm:text-left font-display text-xl text-serein-text">
         {{ product().productName }}
       </h2>
     </a>
 
-    <!-- <p class="mt-2 line-clamp-2 text-sm opacity-70">
-      {{ product().productDescription }}
-    </p> -->
-
     <div class="mt-auto pt-5">
-      <p class="text-lg font-semibold">
+      <p class="text-center text-lg font-semibold sm:text-left">
         {{ product().productPrice | currency: 'USD' : 'symbol' : '1.0-2' }}
       </p>
 
       <p
-        class="mt-2 flex items-center gap-2 text-sm"
+        class="mt-2 flex items-center justify-center gap-2 text-sm sm:justify-start"
         [class.text-serein-text]="isInStock()"
         [class.text-serein-accent]="!isInStock()"
         role="status"

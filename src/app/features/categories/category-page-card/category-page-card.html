@@ -1,0 +1,43 @@
+<a
+  routerLink="/products"
+  [queryParams]="{ category: category().categoryId }"
+  class="group block overflow-hidden rounded-3xl bg-serein-surface p-3 transition duration-300 hover:-translate-y-1 hover:shadow-[0_18px_50px_rgba(51,43,39,0.10)] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-serein-brand"
+>
+  <div class="aspect-4/3 overflow-hidden rounded-2xl bg-[#eee9e2]">
+    @if (category().categoryImageUrl) {
+      <img
+        [src]="category().categoryImageUrl"
+        [alt]="category().categoryName"
+        loading="lazy"
+        decoding="async"
+        class="h-full w-full object-cover transition duration-500 group-hover:scale-[1.04]"
+      />
+    } @else {
+      <div
+        class="flex h-full w-full items-center justify-center font-display text-5xl text-serein-text/25"
+        aria-hidden="true"
+      >
+        {{ category().categoryName.charAt(0) }}
+      </div>
+    }
+  </div>
+  <div class="flex items-end justify-between gap-4 px-2 pb-2 pt-4">
+    <div class="min-w-0">
+      <h2 class="truncate font-display text-xl leading-tight">
+        {{ category().categoryName }}
+      </h2>
+
+      <p class="mt-1 text-xs text-serein-text/50">
+        {{ productCount() }}
+        {{ productCount() === 1 ? 'product' : 'products' }}
+      </p>
+    </div>
+
+    <span
+      class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-serein-bg text-lg transition duration-300 group-hover:bg-serein-brand group-hover:text-white"
+      aria-hidden="true"
+    >
+      →
+    </span>
+  </div>
+</a>
