@@ -7,9 +7,10 @@ import { CartStore } from '../../../core/state/cart-store';
 import { WishlistStore } from '../../../core/state/wishlist-store';
 import { ToastStore } from '../../../core/state/toast-store';
 import { AuthStore } from '../../../core/auth/auth-store';
+import { Icon } from '../../../shared/ui/icon/icon';
 
 @Component({
-  imports: [CurrencyPipe, RouterLink],
+  imports: [CurrencyPipe, RouterLink, Icon],
   selector: 'app-product-card',
   styleUrl: './product-card.css',
   templateUrl: './product-card.html',

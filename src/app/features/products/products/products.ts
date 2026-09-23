@@ -20,6 +20,7 @@ import {
 import { SortOption } from '../../../core/models/product.model';
 import { ProductStore } from '../../../core/state/product-store';
 import { CategoryStore } from '../../../core/state/category-store';
+import { Icon } from '../../../shared/ui/icon/icon';
 
 const PAGE_SIZE = 8;
 type PaginationItem = number | 'ellipsis-start' | 'ellipsis-end';
@@ -30,7 +31,7 @@ type SortMenuOption = {
 };
 
 @Component({
-  imports: [ProductCard, ProductFilters],
+  imports: [ProductCard, ProductFilters, Icon],
   selector: 'app-products',
   styleUrl: './products.css',
   templateUrl: './products.html',
@@ -72,7 +73,7 @@ export class Products {
       description: 'Alphabetical order',
     },
   ];
-  
+
   readonly selectedSortLabel = computed(
     () => this.sortOptions.find((option) => option.value === this.sortBy())?.label ?? 'Featured',
   );

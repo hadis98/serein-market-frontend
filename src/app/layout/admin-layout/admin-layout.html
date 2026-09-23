@@ -13,19 +13,7 @@
         aria-label="Open administration navigation"
         (click)="openMobileNav()"
       >
-        <svg
-          viewBox="0 0 24 24"
-          class="h-5 w-5"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="1.7"
-          stroke-linecap="round"
-          aria-hidden="true"
-        >
-          <path d="M4 7h16"></path>
-          <path d="M4 12h16"></path>
-          <path d="M4 17h16"></path>
-        </svg>
+        <app-icon name="menu" class="h-5 w-5" stroke-width="1.7" />
       </button>
 
       <div>
@@ -149,18 +137,7 @@
           aria-label="Close administration navigation"
           (click)="closeMobileNav()"
         >
-          <svg
-            viewBox="0 0 24 24"
-            class="h-5 w-5"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="1.8"
-            stroke-linecap="round"
-            aria-hidden="true"
-          >
-            <path d="m6 6 12 12"></path>
-            <path d="m18 6-12 12"></path>
-          </svg>
+          <app-icon name="close" class="h-5 w-5" />
         </button>
       </div>
 
@@ -178,21 +155,7 @@
           class="flex items-center gap-4 rounded-2xl px-4 py-3.5 text-sm transition hover:bg-white/10"
           (click)="closeMobileNav()"
         >
-          <svg
-            viewBox="0 0 24 24"
-            class="h-5 w-5 opacity-70"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="1.6"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            aria-hidden="true"
-          >
-            <rect x="3" y="3" width="7" height="7" rx="1"></rect>
-            <rect x="14" y="3" width="7" height="7" rx="1"></rect>
-            <rect x="3" y="14" width="7" height="7" rx="1"></rect>
-            <rect x="14" y="14" width="7" height="7" rx="1"></rect>
-          </svg>
+          <app-icon name="dashboard-grid" class="h-5 w-5 opacity-70" />
 
           Dashboard
         </a>
@@ -205,35 +168,7 @@
           class="flex items-center gap-4 rounded-2xl px-4 py-3.5 text-sm transition hover:bg-white/10"
           (click)="closeMobileNav()"
         >
-          <svg
-            viewBox="0 0 24 24"
-            class="h-5 w-5 opacity-70"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="1.6"
-            stroke-linejoin="round"
-            aria-hidden="true"
-          >
-            <path
-              d="
-                M21 16V8
-                a2 2 0 0 0-1-1.73
-                l-7-4
-                a2 2 0 0 0-2 0
-                l-7 4
-                A2 2 0 0 0 3 8
-                v8
-                a2 2 0 0 0 1 1.73
-                l7 4
-                a2 2 0 0 0 2 0
-                l7-4
-                A2 2 0 0 0 21 16Z
-              "
-            ></path>
-
-            <path d="m3.3 7 8.7 5 8.7-5"></path>
-            <path d="M12 22V12"></path>
-          </svg>
+          <app-icon name="package" class="h-5 w-5 opacity-70" />
 
           Products
         </a>
@@ -246,29 +181,7 @@
           class="flex items-center gap-4 rounded-2xl px-4 py-3.5 text-sm transition hover:bg-white/10"
           (click)="closeMobileNav()"
         >
-          <svg
-            viewBox="0 0 24 24"
-            class="h-5 w-5 opacity-70"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="1.6"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            aria-hidden="true"
-          >
-            <path
-              d="
-                M20.59 13.41
-                11 3.83V3H4v7h.83
-                l9.58 9.59
-                a2 2 0 0 0 2.82 0
-                l3.36-3.36
-                a2 2 0 0 0 0-2.82Z
-              "
-            ></path>
-
-            <circle cx="7.5" cy="6.5" r="1"></circle>
-          </svg>
+          <app-icon name="tag" class="h-5 w-5 opacity-70" />
 
           Categories
         </a>
@@ -281,35 +194,7 @@
           class="flex items-center gap-4 rounded-2xl px-4 py-3.5 text-sm transition hover:bg-white/10"
           (click)="closeMobileNav()"
         >
-          <svg
-            viewBox="0 0 24 24"
-            class="h-5 w-5 opacity-70"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="1.6"
-            stroke-linecap="round"
-            aria-hidden="true"
-          >
-            <circle cx="9" cy="7" r="4"></circle>
-            <path
-              d="
-                M3 21v-2
-                a6 6 0 0 1 12 0v2
-              "
-            ></path>
-            <path
-              d="
-                M16 3.2
-                a4 4 0 0 1 0 7.6
-              "
-            ></path>
-            <path
-              d="
-                M21 21v-2
-                a5 5 0 0 0-3-4.6
-              "
-            ></path>
-          </svg>
+          <app-icon name="customers" class="h-5 w-5 opacity-70" />
 
           Customers
         </a>
@@ -322,18 +207,7 @@
           class="flex items-center gap-4 rounded-2xl px-4 py-3.5 text-sm transition hover:bg-white/10"
           (click)="closeMobileNav()"
         >
-          <svg
-            viewBox="0 0 24 24"
-            class="h-5 w-5 opacity-70"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="1.6"
-            stroke-linejoin="round"
-            aria-hidden="true"
-          >
-            <path d="M6 2h12l1 20H5L6 2Z"></path>
-            <path d="M9 6a3 3 0 0 0 6 0"></path>
-          </svg>
+          <app-icon name="shopping-bag" class="h-5 w-5 opacity-70" />
 
           Orders
         </a>

@@ -4,6 +4,7 @@ import { RouterLink } from '@angular/router';
 import { CategoryPageCard } from '../category-page-card/category-page-card';
 import { ProductStore } from '../../../core/state/product-store';
 import { CategorySortOption } from '../../../core/models/category.model';
+import { Icon } from '../../../shared/ui/icon/icon';
 
 type CategorySortMenuOption = {
   readonly value: CategorySortOption;
@@ -12,7 +13,7 @@ type CategorySortMenuOption = {
 };
 
 @Component({
-  imports: [RouterLink, CategoryPageCard],
+  imports: [RouterLink, CategoryPageCard, Icon],
   selector: 'app-categories',
   styleUrl: './categories.css',
   templateUrl: './categories.html',

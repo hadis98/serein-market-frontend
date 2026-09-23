@@ -3,9 +3,10 @@ import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { CartStore } from '../../core/state/cart-store';
 import { AuthStore } from '../../core/auth/auth-store';
 import { WishlistStore } from '../../core/state/wishlist-store';
+import { Icon } from '../../shared/ui/icon/icon';
 
 @Component({
-  imports: [RouterLink, RouterLinkActive],
+  imports: [RouterLink, RouterLinkActive, Icon],
   selector: 'app-header',
   styleUrl: './header.css',
   templateUrl: './header.html',

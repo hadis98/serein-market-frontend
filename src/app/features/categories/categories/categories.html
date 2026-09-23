@@ -37,18 +37,10 @@
 
         <!-- Search UI; functionality comes later -->
         <div class="relative mt-7 max-w-lg">
-          <svg
-            viewBox="0 0 24 24"
+          <app-icon
+            name="search"
             class="pointer-events-none absolute left-5 top-1/2 h-5 w-5 -translate-y-1/2 text-serein-text/45"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="1.8"
-            stroke-linecap="round"
-            aria-hidden="true"
-          >
-            <circle cx="11" cy="11" r="7"></circle>
-            <path d="m20 20-4-4"></path>
-          </svg>
+          />
 
           <label for="category-search" class="sr-only"> Search categories </label>
 
@@ -89,21 +81,7 @@
             class="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-serein-bg text-serein-brand transition group-hover:bg-[#efe4dc]"
             aria-hidden="true"
           >
-            <svg
-              viewBox="0 0 24 24"
-              class="h-[18px] w-[18px]"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="1.6"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            >
-              <path d="M4 7h11"></path>
-              <path d="M4 12h8"></path>
-              <path d="M4 17h5"></path>
-              <path d="m16 14 3 3 3-3"></path>
-              <path d="M19 5v12"></path>
-            </svg>
+            <app-icon name="sort" class="h-[18px] w-[18px]" />
           </span>
 
           <span class="min-w-0 flex-1">
@@ -116,19 +94,11 @@
             }}</span>
           </span>
 
-          <svg
-            viewBox="0 0 20 20"
+          <app-icon
+            name="chevron-down-wide"
             class="h-4 w-4 shrink-0 text-serein-text/45 transition-transform duration-200"
             [class.rotate-180]="sortMenuOpen()"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="1.5"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            aria-hidden="true"
-          >
-            <path d="m5 8 5 5 5-5"></path>
-          </svg>
+          />
         </button>
 
         @if (sortMenuOpen()) {
@@ -164,56 +134,16 @@
                 >
                   @switch (option.value) {
                     @case ('name-asc') {
-                      <svg
-                        viewBox="0 0 20 20"
-                        class="h-4 w-4"
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-width="1.5"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                      >
-                        <path d="m3 14 4-9 4 9M4.5 11h5M13 7h4l-4 7h4"></path>
-                      </svg>
+                      <app-icon name="sort-alphabetical-asc" class="h-4 w-4" />
                     }
                     @case ('name-desc') {
-                      <svg
-                        viewBox="0 0 20 20"
-                        class="h-4 w-4"
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-width="1.5"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                      >
-                        <path d="M3 6h4l-4 7h4M12 14l3-9 3 9M13 11h4"></path>
-                      </svg>
+                      <app-icon name="sort-alphabetical-desc" class="h-4 w-4" />
                     }
                     @case ('products-high') {
-                      <svg
-                        viewBox="0 0 20 20"
-                        class="h-4 w-4"
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-width="1.5"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                      >
-                        <path d="M3 16V9h3v7H3ZM8.5 16V5h3v11h-3ZM14 16V2h3v14h-3Z"></path>
-                      </svg>
+                      <app-icon name="sort-count-desc" class="h-4 w-4" />
                     }
                     @default {
-                      <svg
-                        viewBox="0 0 20 20"
-                        class="h-4 w-4"
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-width="1.5"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                      >
-                        <path d="M3 16V2h3v14H3ZM8.5 16V5h3v11h-3ZM14 16V9h3v7h-3Z"></path>
-                      </svg>
+                      <app-icon name="sort-count-asc" class="h-4 w-4" />
                     }
                   }
                 </span>
@@ -230,17 +160,7 @@
                   [class.opacity-0]="sortBy() !== option.value"
                   aria-hidden="true"
                 >
-                  <svg
-                    viewBox="0 0 16 16"
-                    class="h-3 w-3"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  >
-                    <path d="m3.5 8 3 3 6-6"></path>
-                  </svg>
+                  <app-icon name="check" class="h-3 w-3" />
                 </span>
               </button>
             }
@@ -267,16 +187,12 @@
             <option value="products-low">Fewest products</option>
           </select>
 
-          <svg
-            viewBox="0 0 20 20"
+          <app-icon
+            name="chevron-down"
             class="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="1.5"
-            aria-hidden="true"
-          >
-            <path d="m6 8 4 4 4-4" stroke-linecap="round" stroke-linejoin="round"></path>
-          </svg>
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
         </div>
       </div>
     </div>

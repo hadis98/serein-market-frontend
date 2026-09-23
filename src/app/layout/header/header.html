@@ -8,19 +8,7 @@
       [attr.aria-expanded]="mobileMenuOpen()"
       (click)="openMobileMenu()"
     >
-      <svg
-        viewBox="0 0 24 24"
-        class="h-6 w-6"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="1.8"
-        stroke-linecap="round"
-        aria-hidden="true"
-      >
-        <path d="M4 7h16"></path>
-        <path d="M4 12h16"></path>
-        <path d="M4 17h16"></path>
-      </svg>
+      <app-icon name="menu" class="h-6 w-6" />
     </button>
 
     <a
@@ -64,20 +52,7 @@
         class="relative flex h-10 w-10 items-center justify-center rounded-full transition hover:bg-black/5 focus-visible:outline-2 focus-visible:outline-serein-brand"
         aria-label="Wishlist"
       >
-        <svg
-          viewBox="0 0 24 24"
-          class="h-6 w-6"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="1.7"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          aria-hidden="true"
-        >
-          <path
-            d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8l1.1 1.1L12 21l7.8-7.5 1.1-1.1a5.5 5.5 0 0 0-.1-7.8Z"
-          ></path>
-        </svg>
+        <app-icon name="heart" class="h-6 w-6" />
         @if (wishlist.count() > 0) {
           <span
             class="absolute -right-0.5 -top-0.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-serein-brand px-1 text-[0.6rem] leading-none text-white"
@@ -91,20 +66,7 @@
         class="relative flex h-10 w-10 items-center justify-center rounded-full transition hover:bg-black/5 focus-visible:outline-2 focus-visible:outline-serein-brand"
         aria-label="Shopping cart"
       >
-        <svg
-          viewBox="0 0 24 24"
-          class="h-6 w-6"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="1.7"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          aria-hidden="true"
-        >
-          <circle cx="9" cy="20" r="1"></circle>
-          <circle cx="19" cy="20" r="1"></circle>
-          <path d="M3 4h2l2.4 10.4a2 2 0 0 0 2 1.6h7.7a2 2 0 0 0 2-1.6L21 7H6"></path>
-        </svg>
+        <app-icon name="cart" class="h-6 w-6" />
         @if (cart.itemCount() > 0) {
           <span
             class="absolute -right-0.5 -top-0.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-serein-brand px-1 text-[0.6rem] leading-none text-white"
@@ -119,19 +81,7 @@
           class="ml-1 flex h-10 w-10 items-center justify-center rounded-full bg-black/[0.05] transition hover:bg-black/[0.09] focus-visible:outline-2 focus-visible:outline-serein-brand lg:hidden"
           aria-label="Open profile"
         >
-          <svg
-            viewBox="0 0 24 24"
-            class="h-6 w-6"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="1.7"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            aria-hidden="true"
-          >
-            <circle cx="12" cy="8" r="4"></circle>
-            <path d="M4 21a8 8 0 0 1 16 0"></path>
-          </svg>
+          <app-icon name="user" class="h-6 w-6" />
         </a>
       } @else {
         <a
@@ -139,19 +89,7 @@
           class="ml-1 flex h-10 w-10 items-center justify-center rounded-full bg-black/[0.05] transition hover:bg-black/[0.09] focus-visible:outline-2 focus-visible:outline-serein-brand lg:hidden"
           aria-label="Sign in"
         >
-          <svg
-            viewBox="0 0 24 24"
-            class="h-6 w-6"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="1.7"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            aria-hidden="true"
-          >
-            <circle cx="12" cy="8" r="4"></circle>
-            <path d="M4 21a8 8 0 0 1 16 0"></path>
-          </svg>
+          <app-icon name="user" class="h-6 w-6" />
         </a>
       }
 
@@ -162,19 +100,7 @@
             class="inline-flex h-10 items-center justify-center gap-2 rounded-2xl bg-black/[0.045] px-3 text-sm font-semibold transition hover:bg-black/[0.08] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-serein-brand xl:px-4"
             aria-label="Open admin panel"
           >
-            <svg
-              viewBox="0 0 24 24"
-              class="h-5 w-5 shrink-0"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="1.7"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              aria-hidden="true"
-            >
-              <path d="M12 3 4 6v6c0 5 3.4 8 8 10 4.6-2 8-5 8-10V6l-8-3Z"></path>
-              <path d="m9 12 2 2 4-4"></path>
-            </svg>
+            <app-icon name="shield-check" class="h-5 w-5 shrink-0" stroke-width="1.7" />
             <span class="hidden xl:inline">Admin panel</span>
           </a>
         </div>
@@ -186,16 +112,7 @@
             class="flex cursor-pointer list-none items-center gap-1 rounded-full px-2 py-2 text-sm transition hover:bg-black/5"
           >
             Hi, {{ auth.firstName() }}
-            <svg
-              viewBox="0 0 20 20"
-              class="h-4 w-4 transition group-open:rotate-180"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="1.5"
-              aria-hidden="true"
-            >
-              <path d="m6 8 4 4 4-4"></path>
-            </svg>
+            <app-icon name="chevron-down" class="h-4 w-4 transition group-open:rotate-180" />
           </summary>
           <div
             class="absolute right-0 top-full mt-2 w-36 rounded-2xl border border-black/5 bg-serein-surface p-2 shadow-lg"
@@ -251,83 +168,10 @@
         Fresh groceries,<br />thoughtfully chosen
       </p>
 
-      <svg
-        viewBox="0 0 120 90"
+      <app-icon
+        name="botanical-branch"
         class="pointer-events-none absolute -right-[9px] bottom-[-6px] h-[78px] w-[105px] text-[#71805b]"
-        fill="none"
-        aria-hidden="true"
-      >
-        <path d="M122 72C91 65 61 50 31 22" stroke="currentColor" stroke-width="2.1"></path>
-        <path
-          d="M89 60C81 44 80 33 82 22M69 49C62 36 54 28 43 21M104 67C105 50 111 40 119 31"
-          stroke="currentColor"
-          stroke-width="1.3"
-        ></path>
-        <ellipse
-          cx="83"
-          cy="29"
-          rx="7"
-          ry="13"
-          fill="#87966f"
-          transform="rotate(8 83 29)"
-        ></ellipse>
-        <ellipse
-          cx="91"
-          cy="49"
-          rx="7"
-          ry="14"
-          fill="#60724e"
-          transform="rotate(-48 91 49)"
-        ></ellipse>
-        <ellipse
-          cx="65"
-          cy="38"
-          rx="6.5"
-          ry="13"
-          fill="#829268"
-          transform="rotate(-43 65 38)"
-        ></ellipse>
-        <ellipse
-          cx="51"
-          cy="28"
-          rx="6"
-          ry="12"
-          fill="#61764f"
-          transform="rotate(-45 51 28)"
-        ></ellipse>
-        <ellipse
-          cx="105"
-          cy="50"
-          rx="7"
-          ry="14"
-          fill="#91a178"
-          transform="rotate(38 105 50)"
-        ></ellipse>
-        <ellipse
-          cx="116"
-          cy="36"
-          rx="6.5"
-          ry="13"
-          fill="#657852"
-          transform="rotate(38 116 36)"
-        ></ellipse>
-        <ellipse
-          cx="42"
-          cy="24"
-          rx="5.5"
-          ry="11"
-          fill="#93a17b"
-          transform="rotate(132 42 24)"
-        ></ellipse>
-        <ellipse
-          cx="72"
-          cy="50"
-          rx="6"
-          ry="12"
-          fill="#526a45"
-          transform="rotate(130 72 50)"
-        ></ellipse>
-      </svg>
+      />
 
       <button
         type="button"
@@ -335,18 +179,7 @@
         aria-label="Close navigation menu"
         (click)="closeMobileMenu()"
       >
-        <svg
-          viewBox="0 0 24 24"
-          class="h-[18px] w-[18px]"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="1.7"
-          stroke-linecap="round"
-          aria-hidden="true"
-        >
-          <path d="m6 6 12 12"></path>
-          <path d="m18 6-12 12"></path>
-        </svg>
+        <app-icon name="close" class="h-[18px] w-[18px]" stroke-width="1.7" />
       </button>
     </div>
 
@@ -359,33 +192,9 @@
           class="group flex h-[47px] items-center rounded-[11px] px-[14px] text-[14px] transition hover:bg-black/[0.035]"
           (click)="closeMobileMenu()"
         >
-          <svg
-            viewBox="0 0 24 24"
-            class="mr-[22px] h-[20px] w-[20px] shrink-0"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="1.65"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            aria-hidden="true"
-          >
-            <path d="m3 11 9-8 9 8"></path>
-            <path d="M5 10v11h14V10"></path>
-            <path d="M9 21v-6h6v6"></path>
-          </svg>
+          <app-icon name="home" class="mr-[22px] h-[20px] w-[20px] shrink-0" />
           <span class="font-medium">Home</span>
-          <svg
-            viewBox="0 0 20 20"
-            class="ml-auto h-4 w-4 opacity-80"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="1.4"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            aria-hidden="true"
-          >
-            <path d="m8 5 5 5-5 5"></path>
-          </svg>
+          <app-icon name="chevron-right" class="ml-auto h-4 w-4 opacity-80" />
         </a>
         <a
           routerLink="/products"
@@ -393,32 +202,9 @@
           class="group flex h-[47px] items-center rounded-[11px] px-[14px] text-[14px] transition hover:bg-black/[0.035]"
           (click)="closeMobileMenu()"
         >
-          <svg
-            viewBox="0 0 24 24"
-            class="mr-[22px] h-[20px] w-[20px] shrink-0"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="1.65"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            aria-hidden="true"
-          >
-            <path d="M6 8h12l1 13H5L6 8Z"></path>
-            <path d="M9 9V6a3 3 0 0 1 6 0v3"></path>
-          </svg>
+          <app-icon name="shop" class="mr-[22px] h-[20px] w-[20px] shrink-0" />
           <span class="font-medium">Shop</span>
-          <svg
-            viewBox="0 0 20 20"
-            class="ml-auto h-4 w-4 opacity-80"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="1.4"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            aria-hidden="true"
-          >
-            <path d="m8 5 5 5-5 5"></path>
-          </svg>
+          <app-icon name="chevron-right" class="ml-auto h-4 w-4 opacity-80" />
         </a>
         <a
           routerLink="/categories"
@@ -426,34 +212,9 @@
           class="group flex h-[47px] items-center rounded-[11px] px-[14px] text-[14px] transition hover:bg-black/[0.035]"
           (click)="closeMobileMenu()"
         >
-          <svg
-            viewBox="0 0 24 24"
-            class="mr-[22px] h-[20px] w-[20px] shrink-0"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="1.65"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            aria-hidden="true"
-          >
-            <rect x="3.5" y="3.5" width="6.5" height="6.5" rx="1"></rect>
-            <rect x="14" y="3.5" width="6.5" height="6.5" rx="1"></rect>
-            <rect x="3.5" y="14" width="6.5" height="6.5" rx="1"></rect>
-            <rect x="14" y="14" width="6.5" height="6.5" rx="1"></rect>
-          </svg>
+          <app-icon name="categories-grid" class="mr-[22px] h-[20px] w-[20px] shrink-0" />
           <span class="font-medium">Categories</span>
-          <svg
-            viewBox="0 0 20 20"
-            class="ml-auto h-4 w-4 opacity-80"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="1.4"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            aria-hidden="true"
-          >
-            <path d="m8 5 5 5-5 5"></path>
-          </svg>
+          <app-icon name="chevron-right" class="ml-auto h-4 w-4 opacity-80" />
         </a>
         <a
           routerLink="/about"
@@ -461,33 +222,9 @@
           class="group flex h-[47px] items-center rounded-[11px] px-[14px] text-[14px] transition hover:bg-black/[0.035]"
           (click)="closeMobileMenu()"
         >
-          <svg
-            viewBox="0 0 24 24"
-            class="mr-[22px] h-[20px] w-[20px] shrink-0"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="1.65"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            aria-hidden="true"
-          >
-            <circle cx="12" cy="12" r="9"></circle>
-            <path d="M12 11v6"></path>
-            <path d="M12 7h.01"></path>
-          </svg>
+          <app-icon name="info" class="mr-[22px] h-[20px] w-[20px] shrink-0" />
           <span class="font-medium">About</span>
-          <svg
-            viewBox="0 0 20 20"
-            class="ml-auto h-4 w-4 opacity-80"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="1.4"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            aria-hidden="true"
-          >
-            <path d="m8 5 5 5-5 5"></path>
-          </svg>
+          <app-icon name="chevron-right" class="ml-auto h-4 w-4 opacity-80" />
         </a>
       </nav>
 
@@ -500,35 +237,16 @@
               class="flex h-[55px] items-center rounded-[9px] bg-[#f1eeea] px-[13px] transition hover:bg-[#ebe7e2]"
               (click)="closeMobileMenu()"
             >
-              <svg
-                viewBox="0 0 24 24"
+              <app-icon
+                name="user"
                 class="mr-[21px] h-[21px] w-[21px] shrink-0"
-                fill="none"
-                stroke="currentColor"
                 stroke-width="1.65"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                aria-hidden="true"
-              >
-                <circle cx="12" cy="8" r="4"></circle>
-                <path d="M4 21a8 8 0 0 1 16 0"></path>
-              </svg>
+              />
               <div class="min-w-0 flex-1 leading-none">
                 <p class="truncate text-[13px] font-medium">Hi, {{ auth.firstName() }}</p>
                 <p class="mt-[7px] truncate text-[10px] text-[#807975]">Manage your account</p>
               </div>
-              <svg
-                viewBox="0 0 20 20"
-                class="ml-2 h-4 w-4 opacity-55"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="1.35"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                aria-hidden="true"
-              >
-                <path d="m8 5 5 5-5 5"></path>
-              </svg>
+              <app-icon name="chevron-right" class="ml-2 h-4 w-4 opacity-55" stroke-width="1.35" />
             </a>
             @if (auth.isAdmin()) {
               <a
@@ -536,35 +254,20 @@
                 class="flex h-[57px] items-center rounded-[9px] bg-[#f1eeea] px-[13px] transition hover:bg-[#ebe7e2]"
                 (click)="closeMobileMenu()"
               >
-                <svg
-                  viewBox="0 0 24 24"
+                <app-icon
+                  name="shield-check"
                   class="mr-[21px] h-[21px] w-[21px] shrink-0"
-                  fill="none"
-                  stroke="currentColor"
                   stroke-width="1.65"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  aria-hidden="true"
-                >
-                  <path d="M12 3 4 6v6c0 5 3.4 8 8 10 4.6-2 8-5 8-10V6l-8-3Z"></path>
-                  <path d="m9 12 2 2 4-4"></path>
-                </svg>
+                />
                 <div class="min-w-0 flex-1 leading-none">
                   <p class="truncate text-[13px] font-medium">Admin panel</p>
                   <p class="mt-[7px] truncate text-[10px] text-[#807975]">Manage your store</p>
                 </div>
-                <svg
-                  viewBox="0 0 20 20"
+                <app-icon
+                  name="chevron-right"
                   class="ml-2 h-4 w-4 opacity-55"
-                  fill="none"
-                  stroke="currentColor"
                   stroke-width="1.35"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  aria-hidden="true"
-                >
-                  <path d="m8 5 5 5-5 5"></path>
-                </svg>
+                />
               </a>
             }
             <button
@@ -572,20 +275,7 @@
               class="flex h-[52px] w-full items-center rounded-[9px] px-[13px] text-left text-[13px] text-[#8a5140] transition hover:bg-[#f6ebe6]"
               (click)="logout()"
             >
-              <svg
-                viewBox="0 0 24 24"
-                class="mr-[21px] h-[20px] w-[20px] shrink-0"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="1.55"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                aria-hidden="true"
-              >
-                <path d="M10 8V5a2 2 0 0 1 2-2h7v18h-7a2 2 0 0 1-2-2v-3"></path>
-                <path d="M15 12H3"></path>
-                <path d="m7 8-4 4 4 4"></path>
-              </svg>
+              <app-icon name="logout" class="mr-[21px] h-[20px] w-[20px] shrink-0" />
               Sign out
             </button>
           </div>
@@ -595,32 +285,9 @@
             class="mt-[9px] flex h-[55px] w-full items-center rounded-[9px] bg-[#f1eeea] px-[13px] text-[13px] font-medium transition hover:bg-[#ebe7e2]"
             (click)="closeMobileMenu()"
           >
-            <svg
-              viewBox="0 0 24 24"
-              class="mr-[21px] h-[21px] w-[21px]"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="1.65"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              aria-hidden="true"
-            >
-              <circle cx="12" cy="8" r="4"></circle>
-              <path d="M4 21a8 8 0 0 1 16 0"></path>
-            </svg>
+            <app-icon name="user" class="mr-[21px] h-[21px] w-[21px]" stroke-width="1.65" />
             <span>Sign in</span>
-            <svg
-              viewBox="0 0 20 20"
-              class="ml-auto h-4 w-4 opacity-55"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="1.35"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              aria-hidden="true"
-            >
-              <path d="m8 5 5 5-5 5"></path>
-            </svg>
+            <app-icon name="chevron-right" class="ml-auto h-4 w-4 opacity-55" stroke-width="1.35" />
           </a>
         }
       </div>

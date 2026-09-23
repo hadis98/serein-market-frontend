@@ -6,8 +6,9 @@ import { ProductCard } from '../../products/product-card/product-card';
 import { ProductStore } from '../../../core/state/product-store';
 import { CategoryStore } from '../../../core/state/category-store';
 import { ToastStore } from '../../../core/state/toast-store';
+import { Icon, type IconName } from '../../../shared/ui/icon/icon';
 
-type BenefitIcon = 'delivery' | 'quality' | 'payment' | 'choices';
+type BenefitIcon = Extract<IconName, 'delivery-truck' | 'plant' | 'shield-check' | 'eco-bag'>;
 
 interface Benefit {
   readonly title: string;
@@ -29,7 +30,7 @@ interface PromotionCard extends Promotion {
 }
 
 @Component({
-  imports: [RouterLink, CategoryCard, ProductCard],
+  imports: [RouterLink, CategoryCard, ProductCard, Icon],
   selector: 'app-home',
   styleUrl: './home.css',
   templateUrl: './home.html',
@@ -53,10 +54,10 @@ export class Home {
   readonly productSkeletons = Array.from({ length: 6 });
 
   readonly benefits: readonly Benefit[] = [
-    { title: 'Free delivery', description: 'On orders over $40', icon: 'delivery' },
-    { title: 'Fresh & high quality', description: 'Carefully sourced', icon: 'quality' },
-    { title: 'Secure payment', description: 'Safe and encrypted', icon: 'payment' },
-    { title: 'Better choices', description: 'For you and the planet', icon: 'choices' },
+    { title: 'Free delivery', description: 'On orders over $40', icon: 'delivery-truck' },
+    { title: 'Fresh & high quality', description: 'Carefully sourced', icon: 'plant' },
+    { title: 'Secure payment', description: 'Safe and encrypted', icon: 'shield-check' },
+    { title: 'Better choices', description: 'For you and the planet', icon: 'eco-bag' },
   ];
 
   readonly promotions: readonly Promotion[] = [

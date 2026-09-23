@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, computed, input, output } from '@angular/core';
+import { Icon } from '../../../shared/ui/icon/icon';
 
 export interface CategoryFilterOption {
   readonly categoryId: number;
@@ -15,7 +16,7 @@ export interface ProductFilterValue {
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [],
+  imports: [Icon],
   selector: 'app-product-filters',
   styleUrl: './product-filters.css',
   templateUrl: './product-filters.html',

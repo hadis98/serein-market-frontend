@@ -40,21 +40,7 @@
               class="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-serein-bg text-serein-brand transition group-hover:bg-[#efe4dc]"
               aria-hidden="true"
             >
-              <svg
-                viewBox="0 0 24 24"
-                class="h-[18px] w-[18px]"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="1.6"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              >
-                <path d="M4 7h11"></path>
-                <path d="M4 12h8"></path>
-                <path d="M4 17h5"></path>
-                <path d="m16 14 3 3 3-3"></path>
-                <path d="M19 5v12"></path>
-              </svg>
+              <app-icon name="sort" class="h-[18px] w-[18px]" />
             </span>
 
             <span class="min-w-0 flex-1">
@@ -68,19 +54,11 @@
               </span>
             </span>
 
-            <svg
-              viewBox="0 0 20 20"
+            <app-icon
+              name="chevron-down-wide"
               class="h-4 w-4 shrink-0 text-serein-text/45 transition-transform duration-200"
               [class.rotate-180]="sortMenuOpen()"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="1.5"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              aria-hidden="true"
-            >
-              <path d="m5 8 5 5 5-5"></path>
-            </svg>
+            />
           </button>
 
           @if (sortMenuOpen()) {
@@ -116,58 +94,16 @@
                   >
                     @switch (option.value) {
                       @case ('price-low') {
-                        <svg
-                          viewBox="0 0 20 20"
-                          class="h-4 w-4"
-                          fill="none"
-                          stroke="currentColor"
-                          stroke-width="1.5"
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                        >
-                          <path d="M5 15V5m0 0L2 8m3-3 3 3M11 14h6M11 10h4M11 6h2"></path>
-                        </svg>
+                        <app-icon name="sort-price-asc" class="h-4 w-4" />
                       }
                       @case ('price-high') {
-                        <svg
-                          viewBox="0 0 20 20"
-                          class="h-4 w-4"
-                          fill="none"
-                          stroke="currentColor"
-                          stroke-width="1.5"
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                        >
-                          <path d="M5 5v10m0 0-3-3m3 3 3-3M11 6h6M11 10h4M11 14h2"></path>
-                        </svg>
+                        <app-icon name="sort-price-desc" class="h-4 w-4" />
                       }
                       @case ('name') {
-                        <svg
-                          viewBox="0 0 20 20"
-                          class="h-4 w-4"
-                          fill="none"
-                          stroke="currentColor"
-                          stroke-width="1.5"
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                        >
-                          <path d="m3 14 4-9 4 9M4.5 11h5M13 7h4l-4 7h4"></path>
-                        </svg>
+                        <app-icon name="sort-alphabetical-asc" class="h-4 w-4" />
                       }
                       @default {
-                        <svg
-                          viewBox="0 0 20 20"
-                          class="h-4 w-4"
-                          fill="none"
-                          stroke="currentColor"
-                          stroke-width="1.5"
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                        >
-                          <path
-                            d="m10 2 1.8 4.7L17 8.5l-4 3.2.1 5.3-3.1-2.8L6.9 17l.1-5.3-4-3.2 5.2-1.8L10 2Z"
-                          ></path>
-                        </svg>
+                        <app-icon name="star" class="h-4 w-4" />
                       }
                     }
                   </span>
@@ -184,17 +120,7 @@
                     [class.opacity-0]="sortBy() !== option.value"
                     aria-hidden="true"
                   >
-                    <svg
-                      viewBox="0 0 16 16"
-                      class="h-3 w-3"
-                      fill="none"
-                      stroke="currentColor"
-                      stroke-width="2"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                    >
-                      <path d="m3.5 8 3 3 6-6"></path>
-                    </svg>
+                    <app-icon name="check" class="h-3 w-3" />
                   </span>
                 </button>
               }
@@ -263,18 +189,7 @@
                 aria-label="Previous page"
                 (click)="goToPage(currentPage() - 1)"
               >
-                <svg
-                  viewBox="0 0 20 20"
-                  class="h-5 w-5"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="1.7"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  aria-hidden="true"
-                >
-                  <path d="m12 5-5 5 5 5"></path>
-                </svg>
+                <app-icon name="chevron-left" class="h-5 w-5" />
               </button>
 
               @for (item of paginationItems(); track $index) {
@@ -311,18 +226,7 @@
                 aria-label="Next page"
                 (click)="goToPage(currentPage() + 1)"
               >
-                <svg
-                  viewBox="0 0 20 20"
-                  class="h-5 w-5"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="1.7"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  aria-hidden="true"
-                >
-                  <path d="m8 5 5 5-5 5"></path>
-                </svg>
+                <app-icon name="chevron-right" class="h-5 w-5" stroke-width="1.7" />
               </button>
             </nav>
 

@@ -6,9 +6,10 @@ import { ProductStore } from '../../../core/state/product-store';
 import { CategoryStore } from '../../../core/state/category-store';
 import { RouterLink } from '@angular/router';
 import { CurrencyPipe, DatePipe } from '@angular/common';
+import { Icon } from '../../../shared/ui/icon/icon';
 
 @Component({
-  imports: [RouterLink, DatePipe, CurrencyPipe],
+  imports: [RouterLink, DatePipe, CurrencyPipe, Icon],
   selector: 'app-dashboard',
   styleUrl: './dashboard.css',
   templateUrl: './dashboard.html',
