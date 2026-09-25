@@ -40,7 +40,7 @@
               class="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-serein-bg text-serein-brand transition group-hover:bg-[#efe4dc]"
               aria-hidden="true"
             >
-              <app-icon name="sort" class="h-[18px] w-[18px]" />
+              <app-icon [name]="selectedSortIcon()" class="h-[18px] w-[18px]" />
             </span>
 
             <span class="min-w-0 flex-1">
@@ -92,20 +92,7 @@
                     [class.!text-serein-brand]="sortBy() === option.value"
                     aria-hidden="true"
                   >
-                    @switch (option.value) {
-                      @case ('price-low') {
-                        <app-icon name="sort-price-asc" class="h-4 w-4" />
-                      }
-                      @case ('price-high') {
-                        <app-icon name="sort-price-desc" class="h-4 w-4" />
-                      }
-                      @case ('name') {
-                        <app-icon name="sort-alphabetical-asc" class="h-4 w-4" />
-                      }
-                      @default {
-                        <app-icon name="star" class="h-4 w-4" />
-                      }
-                    }
+                    <app-icon [name]="option.icon" class="h-4 w-4" />
                   </span>
 
                   <span class="min-w-0 flex-1">

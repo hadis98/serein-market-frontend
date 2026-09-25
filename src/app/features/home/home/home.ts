@@ -42,7 +42,7 @@ export class Home {
 
   readonly featuredProducts = computed(() => this.productStore.products().slice(0, 6));
   readonly bestSellerProducts = computed(() => this.productStore.products().slice(6, 12));
-  readonly featuredCategories = computed(() => this.categories().slice(0, 6));
+  readonly featuredCategories = computed(() => this.categories().slice(0, 8));
 
   readonly categories = this.categoryStore.categories;
   readonly productsLoading = this.productStore.loading;
@@ -64,7 +64,8 @@ export class Home {
     {
       title: 'Fresh produce\nfor a healthier you',
       description: 'Seasonal fruits and vegetables, always fresh and full of goodness.',
-      imageUrl: '/serein-fresh-produce-banner.png',
+      imageUrl:
+        'https://res.cloudinary.com/eb1pqddp/image/upload/f_auto,q_auto/v1790334574/serein-fresh-produce-banner.png',
       buttonLabel: 'Shop fresh produce',
       categoryMatch: 'vegetable',
       tone: 'green',
@@ -72,7 +73,8 @@ export class Home {
     {
       title: 'Pantry essentials\nfor everyday living',
       description: 'Stock up on your favourites.',
-      imageUrl: '/serein-pantry-essentials-banner.png',
+      imageUrl:
+        'https://res.cloudinary.com/eb1pqddp/image/upload/f_auto,q_auto/v1790334584/serein-pantry-essentials-banner.png',
       buttonLabel: 'Shop pantry',
       categoryMatch: 'pantry',
       tone: 'brown',

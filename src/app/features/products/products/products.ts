@@ -20,7 +20,7 @@ import {
 import { SortOption } from '../../../core/models/product.model';
 import { ProductStore } from '../../../core/state/product-store';
 import { CategoryStore } from '../../../core/state/category-store';
-import { Icon } from '../../../shared/ui/icon/icon';
+import { Icon, type IconName } from '../../../shared/ui/icon/icon';
 
 const PAGE_SIZE = 8;
 type PaginationItem = number | 'ellipsis-start' | 'ellipsis-end';
@@ -28,6 +28,7 @@ type SortMenuOption = {
   readonly value: SortOption;
   readonly label: string;
   readonly description: string;
+  readonly icon: IconName;
 };
 
 @Component({
@@ -56,26 +57,33 @@ export class Products {
       value: 'default',
       label: 'Featured',
       description: 'Our recommended order',
+      icon: 'star',
     },
     {
       value: 'price-low',
       label: 'Price: Low to high',
       description: 'Lowest price first',
+      icon: 'sort-price-asc',
     },
     {
       value: 'price-high',
       label: 'Price: High to low',
       description: 'Highest price first',
+      icon: 'sort-price-desc',
     },
     {
       value: 'name',
       label: 'Name: A to Z',
       description: 'Alphabetical order',
+      icon: 'sort-alphabetical-asc',
     },
   ];
 
   readonly selectedSortLabel = computed(
     () => this.sortOptions.find((option) => option.value === this.sortBy())?.label ?? 'Featured',
+  );
+  readonly selectedSortIcon = computed<IconName>(
+    () => this.sortOptions.find((option) => option.value === this.sortBy())?.icon ?? 'star',
   );
 
   readonly products = this.productStore.products;

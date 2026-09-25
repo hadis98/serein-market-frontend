@@ -123,85 +123,87 @@
          ================================== -->
 
       <div class="hidden overflow-hidden rounded-3xl bg-white md:block">
-        <table class="w-full text-left">
-          <thead class="border-b border-black/10 text-xs uppercase tracking-wider opacity-50">
-            <tr>
-              <th class="px-6 py-5">Category</th>
-
-              <th class="px-6 py-5">Products</th>
-
-              <th class="px-6 py-5">Parent</th>
-
-              <th class="px-6 py-5">Actions</th>
-            </tr>
-          </thead>
-
-          <tbody class="divide-y divide-black/5">
-            @for (category of categoryStore.categories(); track category.categoryId) {
+        <div class="category-table-scroll" role="region" aria-label="Category list" tabindex="0">
+          <table class="w-full text-left">
+            <thead class="border-b border-black/10 text-xs uppercase tracking-wider opacity-50">
               <tr>
-                <td class="px-6 py-5">
-                  <div class="flex items-center gap-4">
-                    <div class="h-14 w-14 shrink-0 overflow-hidden rounded-2xl bg-serein-bg">
-                      @if (category.categoryImageUrl) {
-                        <img
-                          [src]="category.categoryImageUrl"
-                          [alt]="category.categoryName"
-                          loading="lazy"
-                          decoding="async"
-                          class="h-full w-full object-cover"
-                        />
-                      } @else {
-                        <div
-                          class="flex h-full w-full items-center justify-center font-display text-xl text-serein-text/35"
-                        >
-                          {{ category.categoryName.charAt(0) }}
-                        </div>
-                      }
-                    </div>
+                <th class="px-6 py-5">Category</th>
 
-                    <p class="font-medium">
-                      {{ category.categoryName }}
-                    </p>
-                  </div>
-                </td>
+                <th class="px-6 py-5">Products</th>
 
-                <td class="px-6 py-5">
-                  <span class="rounded-full bg-serein-bg px-3 py-1 text-sm">
-                    {{ productCounts().get(category.categoryId) ?? 0 }}
-                  </span>
-                </td>
+                <th class="px-6 py-5">Parent</th>
 
-                <td class="px-6 py-5 text-sm opacity-60">
-                  @if (category.parentCategoryId === null) {
-                    Root
-                  } @else {
-                    #{{ category.parentCategoryId }}
-                  }
-                </td>
-
-                <td class="px-6 py-5">
-                  <div class="flex items-center gap-4">
-                    <button
-                      type="button"
-                      class="text-sm text-serein-brand"
-                      (click)="openEditDialog(category)"
-                    >
-                      Edit
-                    </button>
-
-                    <button
-                      type="button"
-                      class="text-sm text-red-700"
-                      (click)="askToDelete(category)"
-                    >
-                      Delete
-                    </button>
-                  </div>
-                </td>
+                <th class="px-6 py-5">Actions</th>
               </tr>
-            }
-          </tbody>
-        </table>
+            </thead>
+
+            <tbody class="divide-y divide-black/5">
+              @for (category of categoryStore.categories(); track category.categoryId) {
+                <tr>
+                  <td class="px-6 py-5">
+                    <div class="flex items-center gap-4">
+                      <div class="h-14 w-14 shrink-0 overflow-hidden rounded-2xl bg-serein-bg">
+                        @if (category.categoryImageUrl) {
+                          <img
+                            [src]="category.categoryImageUrl"
+                            [alt]="category.categoryName"
+                            loading="lazy"
+                            decoding="async"
+                            class="h-full w-full object-cover"
+                          />
+                        } @else {
+                          <div
+                            class="flex h-full w-full items-center justify-center font-display text-xl text-serein-text/35"
+                          >
+                            {{ category.categoryName.charAt(0) }}
+                          </div>
+                        }
+                      </div>
+
+                      <p class="font-medium">
+                        {{ category.categoryName }}
+                      </p>
+                    </div>
+                  </td>
+
+                  <td class="px-6 py-5">
+                    <span class="rounded-full bg-serein-bg px-3 py-1 text-sm">
+                      {{ productCounts().get(category.categoryId) ?? 0 }}
+                    </span>
+                  </td>
+
+                  <td class="px-6 py-5 text-sm opacity-60">
+                    @if (category.parentCategoryId === null) {
+                      Root
+                    } @else {
+                      #{{ category.parentCategoryId }}
+                    }
+                  </td>
+
+                  <td class="px-6 py-5">
+                    <div class="flex items-center gap-4">
+                      <button
+                        type="button"
+                        class="text-sm text-serein-brand"
+                        (click)="openEditDialog(category)"
+                      >
+                        Edit
+                      </button>
+
+                      <button
+                        type="button"
+                        class="text-sm text-red-700"
+                        (click)="askToDelete(category)"
+                      >
+                        Delete
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
       </div>
     }
   </div>
