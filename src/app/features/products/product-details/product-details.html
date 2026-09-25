@@ -1,4 +1,4 @@
-<section class="mx-auto max-w-7xl px-6 py-14">
+<section class="mx-auto max-w-7xl px-6 py-2">
   <a routerLink="/products" class="mb-10 inline-block text-sm text-serein-brand">
     ← Back to shop
   </a>
@@ -45,7 +45,7 @@
         }
 
         <p class="mt-8 text-3xl font-semibold">
-          {{ product.productPrice | currency:'USD':'symbol':'1.0-2' }}
+          {{ product.productPrice | currency: 'USD' : 'symbol' : '1.0-2' }}
         </p>
 
         <p class="mt-7 max-w-xl leading-8 opacity-70">
@@ -79,18 +79,6 @@
               ♡ Save
             }
           </button>
-        </div>
-
-        <div class="mt-10 border-t border-black/10 pt-7">
-          <div class="flex justify-between py-2 text-sm">
-            <span class="opacity-60">SKU</span>
-            <span>{{ product.productSku }}</span>
-          </div>
-
-          <div class="flex justify-between py-2 text-sm">
-            <span class="opacity-60">Category</span>
-            <span>{{ product.categoryName }}</span>
-          </div>
         </div>
       </div>
     </div>

@@ -98,6 +98,12 @@
             <!-- Actions -->
 
             <div class="mt-4 flex items-center justify-end gap-2 border-t border-black/5 pt-4">
+              <a
+                [routerLink]="['/admin/categories', category.categoryId]"
+                 class="rounded-xl bg-serein-bg px-4 py-2 text-sm text-serein-brand"
+              >
+                View
+              </a>
               <button
                 type="button"
                 class="rounded-xl bg-serein-bg px-4 py-2 text-sm text-serein-brand"
@@ -182,6 +188,11 @@
 
                   <td class="px-6 py-5">
                     <div class="flex items-center gap-4">
+                      <a
+                        [routerLink]="['/admin/categories', category.categoryId]"
+                        class="text-sm font-medium text-serein-brand"
+                        >View</a
+                      >
                       <button
                         type="button"
                         class="text-sm text-serein-brand"

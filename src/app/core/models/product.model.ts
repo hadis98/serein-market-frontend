@@ -40,3 +40,40 @@ export interface ProductUpsertRequest {
 }
 
 export type SortOption = 'default' | 'price-low' | 'price-high' | 'name';
+
+export interface BackendProduct {
+  id: number;
+  sku: string;
+  name: string;
+  slug: string;
+
+  shortDescription: string | null;
+  description: string;
+
+  price: string | number;
+  imageUrl: string;
+
+  deliveryEstimate: string | null;
+  stockQuantity: number;
+  status: ProductStatus;
+
+  category: {
+    id: number;
+    name: string;
+    slug: string;
+  };
+
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface ProductListResponse {
+  data: BackendProduct[];
+
+  pagination: {
+    page: number;
+    limit: number;
+    total: number;
+    totalPages: number;
+  };
+}

@@ -48,6 +48,18 @@ export class ProductStore {
     }
   }
 
+  async loadByCategory(categoryId: number): Promise<Product[]> {
+    try {
+      return await firstValueFrom(
+        this.api.getAll({
+          categoryId,
+        }),
+      );
+    } catch (error) {
+      throw new Error(this.getErrorMessage(error, 'Category products could not be loaded.'));
+    }
+  }
+
   getById(id: number) {
     return this.productsState().find((product) => product.productId === id);
   }

@@ -1,7 +1,13 @@
 import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
-import { BackendCategory, CreateCategoryRequest } from '../models/category.model';
+import {
+  BackendCategory,
+  BackendCategoryDetails,
+  Category,
+  CategoryDetails,
+  CreateCategoryRequest,
+} from '../models/category.model';
 import { API_BASE_URL } from './api.config';
 import { map } from 'rxjs';
 
@@ -27,6 +33,12 @@ export class CategoryApi {
     );
   }
 
+  getById(id: number) {
+    return this.http
+      .get<BackendCategoryDetails>(`${this.baseUrl}/${id}`)
+      .pipe(map((category) => this.toDetails(category)));
+  }
+
   create(request: CreateCategoryRequest) {
     return this.http.post<BackendCategory>(this.baseUrl, request);
   }
@@ -37,5 +49,32 @@ export class CategoryApi {
 
   delete(id: number) {
     return this.http.delete(`${this.baseUrl}/${id}`);
+  }
+
+  private toCategory(category: BackendCategory): Category {
+    return {
+      categoryId: category.id,
+      categoryName: category.name,
+      categoryImageUrl: category.imageUrl,
+      categorySlug: category.slug,
+      parentCategoryId: category.parentId,
+    };
+  }
+
+  private toDetails(category: BackendCategoryDetails): CategoryDetails {
+    return {
+      ...this.toCategory(category),
+      parentCategory: category.parent
+        ? {
+            categoryId: category.parent.id,
+            categoryName: category.parent.name,
+            categorySlug: category.parent.slug,
+          }
+        : null,
+      productCount: category._count.products,
+      childCount: category._count.children,
+      createdAt: category.createdAt,
+      updatedAt: category.updatedAt,
+    };
   }
 }

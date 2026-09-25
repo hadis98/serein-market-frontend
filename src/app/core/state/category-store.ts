@@ -6,7 +6,7 @@ import { firstValueFrom } from 'rxjs';
 
 import { CategoryApi } from '../api/category-api';
 
-import type { Category } from '../models/category.model';
+import type { Category, CategoryDetails } from '../models/category.model';
 
 import type { CreateCategoryRequest } from '../models/category.model';
 
@@ -59,6 +59,14 @@ export class CategoryStore {
     }
   }
 
+  async loadById(id: number): Promise<CategoryDetails> {
+    try {
+      return await firstValueFrom(this.api.getById(id));
+    } catch (error) {
+      throw new Error(this.getErrorMessage(error, 'Category could not be loaded.'));
+    }
+  }
+
   async create(request: CreateCategoryRequest): Promise<void> {
     try {
       await firstValueFrom(this.api.create(request));
@@ -84,7 +92,7 @@ export class CategoryStore {
       await firstValueFrom(this.api.update(id, request));
       await this.load(true);
     } catch (error) {
-      this.getErrorMessage(error, 'Category could not be updated.');
+      throw new Error(this.getErrorMessage(error, 'Category could not be updated.'));
     }
   }
 

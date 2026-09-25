@@ -20,3 +20,35 @@ export interface BackendCategory {
   imageUrl: string | null;
   parentId: number | null;
 }
+
+export interface CategoryParent {
+  categoryId: number;
+  categoryName: string;
+  categorySlug: string;
+}
+
+export interface CategoryDetails extends Category {
+  parentCategory: CategoryParent | null;
+
+  productCount: number;
+  childCount: number;
+
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface BackendCategoryDetails extends BackendCategory {
+  parent: {
+    id: number;
+    name: string;
+    slug: string;
+  } | null;
+
+  _count: {
+    products: number;
+    children: number;
+  };
+
+  createdAt: string;
+  updatedAt: string;
+}

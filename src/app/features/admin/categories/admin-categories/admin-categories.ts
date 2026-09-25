@@ -4,6 +4,7 @@ import { CategoryStore } from '../../../../core/state/category-store';
 import { ProductStore } from '../../../../core/state/product-store';
 import { ToastStore } from '../../../../core/state/toast-store';
 import { Category } from '../../../../core/models/category.model';
+import { RouterLink } from '@angular/router';
 
 interface CategoryFormModel {
   name: string;
@@ -11,7 +12,7 @@ interface CategoryFormModel {
 }
 
 @Component({
-  imports: [FormField, FormRoot],
+  imports: [FormField, FormRoot, RouterLink],
   selector: 'app-admin-categories',
   styleUrl: './admin-categories.css',
   templateUrl: './admin-categories.html',

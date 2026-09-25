@@ -132,6 +132,8 @@
 
                 <th class="px-6 py-5">Price</th>
 
+                <th class="px-6 py-5">Stock</th>
+
                 <th class="px-6 py-5">Delivery</th>
 
                 <th class="px-6 py-5">Actions</th>
@@ -169,6 +171,10 @@
 
                   <td class="px-6 py-5 text-sm">
                     {{ product.productPrice | currency: 'USD' : 'symbol' : '1.0-2' }}
+                  </td>
+
+                  <td class="px-6 py-5 text-sm text-center">
+                    {{ product.stockQuantity }}
                   </td>
 
                   <td class="px-6 py-5 text-sm">

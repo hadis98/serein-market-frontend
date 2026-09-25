@@ -1,0 +1,314 @@
+<section>
+  @if (loading()) {
+    <div class="rounded-3xl bg-white p-10">Loading category...</div>
+  } @else if (error()) {
+    <div class="rounded-3xl bg-white p-10">
+      <p class="text-red-700">
+        {{ error() }}
+      </p>
+
+      <a routerLink="/admin/categories" class="mt-5 inline-block text-sm text-serein-brand">
+        ← Back to categories
+      </a>
+    </div>
+  } @else if (category(); as category) {
+    <!-- Breadcrumb / page heading -->
+
+    <div>
+      <div class="flex items-center gap-2 text-sm text-stone-500">
+        <a routerLink="/admin/categories" class="transition hover:text-serein-brand">
+          Categories
+        </a>
+
+        <span>/</span>
+
+        <span>{{ category.categoryName }}</span>
+      </div>
+
+      <p class="mt-8 text-xs uppercase tracking-[0.3em] text-serein-brand">Catalogue</p>
+
+      <h1 class="mt-2 font-display text-4xl">
+        {{ category.categoryName }}
+      </h1>
+
+      <p class="mt-3 text-stone-500">View category details and manage related products.</p>
+    </div>
+
+    <!-- Category overview -->
+
+    <section class="mt-7 rounded-[2rem] border border-black/5 bg-white p-5 sm:p-7">
+      <div class="flex flex-col gap-7 lg:flex-row lg:items-center lg:justify-between">
+        <div class="flex flex-col gap-6 sm:flex-row sm:items-center">
+          <!-- Category image -->
+
+          <div
+            class="flex h-36 w-36 shrink-0 items-center justify-center overflow-hidden rounded-full bg-serein-bg"
+          >
+            @if (category.categoryImageUrl) {
+              <img
+                [src]="category.categoryImageUrl"
+                [alt]="category.categoryName"
+                class="h-full w-full object-cover"
+              />
+            } @else {
+              <span class="font-display text-5xl text-serein-text/30" aria-hidden="true">
+                {{ category.categoryName.charAt(0).toUpperCase() }}
+              </span>
+            }
+          </div>
+
+          <!-- Identity -->
+
+          <div>
+            <h2 class="font-display text-3xl text-serein-text">
+              {{ category.categoryName }}
+            </h2>
+
+            <p class="mt-2 text-sm text-stone-500">
+              Parent category:
+              <span class="font-medium text-serein-text">
+                @if (category.parentCategory) {
+                  {{ category.parentCategory.categoryName }}
+                } @else {
+                  Root
+                }
+              </span>
+            </p>
+
+            <p class="mt-2 text-sm text-stone-400">/{{ category.categorySlug }}</p>
+          </div>
+        </div>
+
+        <a
+          routerLink="/admin/categories"
+          class="inline-flex items-center justify-center rounded-2xl border border-black/10 px-5 py-3 text-sm transition hover:bg-serein-bg"
+        >
+          ← Back to categories
+        </a>
+      </div>
+
+      <!-- Summary cards -->
+
+      <div class="mt-7 grid gap-3 sm:grid-cols-3">
+        <div class="rounded-2xl border border-black/5 p-5">
+          <p class="text-xs uppercase tracking-wider text-stone-400">Products</p>
+
+          <p class="mt-2 text-2xl font-medium">
+            {{ category.productCount }}
+          </p>
+        </div>
+
+        <div class="rounded-2xl border border-black/5 p-5">
+          <p class="text-xs uppercase tracking-wider text-stone-400">Parent</p>
+
+          <p class="mt-2 font-medium">
+            @if (category.parentCategory) {
+              {{ category.parentCategory.categoryName }}
+            } @else {
+              Root
+            }
+          </p>
+        </div>
+
+        <div class="rounded-2xl border border-black/5 p-5">
+          <p class="text-xs uppercase tracking-wider text-stone-400">Subcategories</p>
+
+          <p class="mt-2 text-2xl font-medium">
+            {{ category.childCount }}
+          </p>
+        </div>
+      </div>
+
+      <div
+        class="mt-6 flex flex-wrap gap-x-8 gap-y-2 border-t border-black/5 pt-5 text-xs text-stone-400"
+      >
+        <span> Created {{ category.createdAt | date: 'mediumDate' }} </span>
+
+        <span> Updated {{ category.updatedAt | date: 'mediumDate' }} </span>
+      </div>
+    </section>
+
+    <!-- Products -->
+
+    <section class="mt-6 overflow-hidden rounded-[2rem] border border-black/5 bg-white">
+      <header class="border-b border-black/5 px-5 py-6 sm:px-7">
+        <h2 class="font-display text-2xl sm:text-3xl">Products in this category</h2>
+
+        <p class="mt-1 text-sm text-stone-400">
+          {{ category.productCount }}
+          products in this category.
+        </p>
+      </header>
+
+      @if (products().length === 0) {
+        <div class="p-10 text-center">
+          <p class="text-stone-500">This category does not contain any active products.</p>
+
+          <a
+            routerLink="/admin/products/new"
+            class="mt-5 inline-block rounded-2xl bg-serein-brand px-5 py-3 text-sm text-white"
+          >
+            + Add product
+          </a>
+        </div>
+      } @else {
+        <!-- Mobile product cards -->
+
+        <div class="space-y-3 p-4 md:hidden">
+          @for (product of products(); track product.productId) {
+            <article class="rounded-2xl border border-black/5 p-4">
+              <div class="flex gap-4">
+                <div class="h-16 w-16 shrink-0 overflow-hidden rounded-2xl bg-serein-bg">
+                  <img
+                    [src]="product.productImageUrl"
+                    [alt]="product.productName"
+                    class="h-full w-full object-contain p-2"
+                  />
+                </div>
+
+                <div class="min-w-0">
+                  <p class="font-medium">
+                    {{ product.productName }}
+                  </p>
+
+                  <p class="mt-1 text-xs text-stone-400">
+                    {{ product.productSku }}
+                  </p>
+                </div>
+              </div>
+
+              <div class="mt-4 grid grid-cols-2 gap-3">
+                <div class="rounded-xl bg-serein-bg p-3">
+                  <p class="text-xs text-stone-400">Price</p>
+
+                  <p class="mt-1 font-medium">
+                    {{ product.productPrice | currency: 'USD' : 'symbol' : '1.2-2' }}
+                  </p>
+                </div>
+
+                <div class="rounded-xl bg-serein-bg p-3">
+                  <p class="text-xs text-stone-400">Stock</p>
+
+                  <p class="mt-1 font-medium">
+                    {{ product.stockQuantity }}
+                  </p>
+                </div>
+              </div>
+
+              <div class="mt-4 flex justify-end gap-4 border-t border-black/5 pt-4">
+                <a
+                  [routerLink]="['/products', product.productId]"
+                  class="text-sm text-serein-brand"
+                >
+                  View
+                </a>
+
+                <a
+                  [routerLink]="['/admin/products', product.productId, 'edit']"
+                  class="text-sm text-serein-brand"
+                >
+                  Edit
+                </a>
+              </div>
+            </article>
+          }
+        </div>
+
+        <!-- Desktop table -->
+
+        <div
+          class="category-product-table hidden overflow-auto md:block"
+          role="region"
+          aria-label="Products in category"
+          tabindex="0"
+        >
+          <table class="w-full text-left">
+            <thead class="border-b border-black/10 text-xs uppercase tracking-wider">
+              <tr>
+                <th class="px-6 py-5">Product</th>
+                <th class="px-6 py-5">SKU</th>
+                <th class="px-6 py-5">Price</th>
+                <th class="px-6 py-5">Stock</th>
+                <th class="px-6 py-5">Delivery</th>
+                <th class="px-6 py-5">Status</th>
+                <th class="px-6 py-5">Actions</th>
+              </tr>
+            </thead>
+
+            <tbody class="divide-y divide-black/5">
+              @for (product of products(); track product.productId) {
+                <tr>
+                  <td class="px-6 py-4">
+                    <div class="flex items-center gap-4">
+                      <div class="h-14 w-14 shrink-0 overflow-hidden rounded-xl bg-serein-bg">
+                        <img
+                          [src]="product.productImageUrl"
+                          [alt]="product.productName"
+                          class="h-full w-full object-contain p-2"
+                        />
+                      </div>
+
+                      <p class="font-medium">
+                        {{ product.productName }}
+                      </p>
+                    </div>
+                  </td>
+
+                  <td class="px-6 py-4 text-sm text-stone-500">
+                    {{ product.productSku }}
+                  </td>
+
+                  <td class="px-6 py-4 text-sm">
+                    {{ product.productPrice | currency: 'USD' : 'symbol' : '1.2-2' }}
+                  </td>
+
+                  <td class="px-6 py-4 text-sm">
+                    {{ product.stockQuantity }}
+                  </td>
+
+                  <td class="px-6 py-4 text-sm text-stone-500">
+                    {{ product.deliveryTimeSpan }}
+                  </td>
+
+                  <td class="px-6 py-4">
+                    @if (product.stockQuantity > 0) {
+                      <span
+                        class="inline-flex rounded-full bg-green-50 px-3 py-1 text-xs text-green-700"
+                      >
+                        In stock
+                      </span>
+                    } @else {
+                      <span
+                        class="inline-flex rounded-full bg-red-50 px-3 py-1 text-xs text-red-700"
+                      >
+                        Out of stock
+                      </span>
+                    }
+                  </td>
+
+                  <td class="px-6 py-4">
+                    <div class="flex gap-4">
+                      <a
+                        [routerLink]="['/products', product.productId]"
+                        class="text-sm text-serein-brand"
+                      >
+                        View
+                      </a>
+
+                      <a
+                        [routerLink]="['/admin/products', product.productId, 'edit']"
+                        class="text-sm text-serein-brand"
+                      >
+                        Edit
+                      </a>
+                    </div>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      }
+    </section>
+  }
+</section>

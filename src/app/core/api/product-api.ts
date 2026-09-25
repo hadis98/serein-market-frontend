@@ -1,47 +1,15 @@
 import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
-import { Product, ProductStatus } from '../models/product.model';
+import {
+  BackendProduct,
+  Product,
+  ProductListResponse,
+  ProductStatus,
+} from '../models/product.model';
 import { ProductUpsertRequest } from '../models/product.model';
 import { API_BASE_URL } from './api.config';
-import { map } from 'rxjs';
-
-interface BackendProduct {
-  id: number;
-  sku: string;
-  name: string;
-  slug: string;
-
-  shortDescription: string | null;
-  description: string;
-
-  price: string | number;
-  imageUrl: string;
-
-  deliveryEstimate: string | null;
-  stockQuantity: number;
-  status: ProductStatus;
-
-  category: {
-    id: number;
-    name: string;
-    slug: string;
-  };
-
-  createdAt: string;
-  updatedAt: string;
-}
-
-interface ProductListResponse {
-  data: BackendProduct[];
-
-  pagination: {
-    page: number;
-    limit: number;
-    total: number;
-    totalPages: number;
-  };
-}
+import { filter, map } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -51,12 +19,18 @@ export class ProductApi {
 
   private readonly baseUrl = `${API_BASE_URL}/products`;
 
-  getAll() {
+  getAll(filters: { categoryId?: number } = {}) {
+    const params: Record<string, string | number> = {
+      limit: 100,
+    };
+    
+    if (filters.categoryId !== undefined) {
+      params['categoryId'] = filters.categoryId;
+    }
+
     return this.http
       .get<ProductListResponse>(this.baseUrl, {
-        params: {
-          limit: 100,
-        },
+        params,
       })
       .pipe(map((response) => response.data.map((product) => this.toProduct(product))));
   }

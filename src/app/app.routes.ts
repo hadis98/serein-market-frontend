@@ -118,6 +118,13 @@ export const routes: Routes = [
           ),
       },
       {
+        path: 'categories/:id',
+        loadComponent: () =>
+          import('./features/admin/categories/category-details/category-details').then(
+            (m) => m.CategoryDetails,
+          ),
+      },
+      {
         path: 'customers',
 
         loadComponent: () =>
