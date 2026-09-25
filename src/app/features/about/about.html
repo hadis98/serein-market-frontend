@@ -25,7 +25,7 @@
       <!-- IMAGE -->
       <div class="min-h-[300px] lg:min-h-[410px]">
         <img
-          src="https://res.cloudinary.com/eb1pqddp/image/upload/f_auto,q_auto/v1790334683/about-hero.png"
+          [src]="heroImageUrl"
           alt="Interior of the Serein grocery market"
           class="h-full w-full object-cover"
         />
@@ -91,7 +91,7 @@
   <section id="our-story" class="mt-6 grid items-stretch gap-8 lg:grid-cols-2 lg:gap-10">
     <div class="overflow-hidden rounded-3xl bg-serein-surface">
       <img
-        src="https://res.cloudinary.com/eb1pqddp/image/upload/f_auto,q_auto/v1790334670/about-story.png"
+        [src]="storyImageUrl"
         alt="A Serein grocery box filled with everyday groceries"
         loading="lazy"
         decoding="async"

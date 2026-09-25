@@ -7,6 +7,11 @@ import { ProductStore } from '../../../core/state/product-store';
 import { CategoryStore } from '../../../core/state/category-store';
 import { ToastStore } from '../../../core/state/toast-store';
 import { Icon, type IconName } from '../../../shared/ui/icon/icon';
+import {
+  HOME_FRESH_PRODUCE_PROMOTION_IMAGE_URL,
+  HOME_HERO_IMAGE_URL,
+  HOME_PANTRY_ESSENTIALS_PROMOTION_IMAGE_URL,
+} from '../../../core/config/image-urls';
 
 type BenefitIcon = Extract<IconName, 'delivery-truck' | 'plant' | 'shield-check' | 'eco-bag'>;
 
@@ -52,6 +57,7 @@ export class Home {
 
   readonly categorySkeletons = Array.from({ length: 6 });
   readonly productSkeletons = Array.from({ length: 6 });
+  readonly heroImageUrl = HOME_HERO_IMAGE_URL;
 
   readonly benefits: readonly Benefit[] = [
     { title: 'Free delivery', description: 'On orders over $40', icon: 'delivery-truck' },
@@ -64,8 +70,7 @@ export class Home {
     {
       title: 'Fresh produce\nfor a healthier you',
       description: 'Seasonal fruits and vegetables, always fresh and full of goodness.',
-      imageUrl:
-        'https://res.cloudinary.com/eb1pqddp/image/upload/f_auto,q_auto/v1790334574/serein-fresh-produce-banner.png',
+      imageUrl: HOME_FRESH_PRODUCE_PROMOTION_IMAGE_URL,
       buttonLabel: 'Shop fresh produce',
       categoryMatch: 'vegetable',
       tone: 'green',
@@ -73,8 +78,7 @@ export class Home {
     {
       title: 'Pantry essentials\nfor everyday living',
       description: 'Stock up on your favourites.',
-      imageUrl:
-        'https://res.cloudinary.com/eb1pqddp/image/upload/f_auto,q_auto/v1790334584/serein-pantry-essentials-banner.png',
+      imageUrl: HOME_PANTRY_ESSENTIALS_PROMOTION_IMAGE_URL,
       buttonLabel: 'Shop pantry',
       categoryMatch: 'pantry',
       tone: 'brown',

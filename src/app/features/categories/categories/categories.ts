@@ -4,6 +4,10 @@ import { RouterLink } from '@angular/router';
 import { CategoryPageCard } from '../category-page-card/category-page-card';
 import { ProductStore } from '../../../core/state/product-store';
 import { CategorySortOption } from '../../../core/models/category.model';
+import {
+  CATEGORIES_HERO_IMAGE_URL,
+  CATEGORIES_SEASONAL_BANNER_IMAGE_URL,
+} from '../../../core/config/image-urls';
 import { Icon } from '../../../shared/ui/icon/icon';
 
 type CategorySortMenuOption = {
@@ -31,6 +35,8 @@ export class Categories {
   readonly productError = this.productStore.error;
 
   readonly categorySkeletons = Array.from({ length: 8 });
+  readonly heroImageUrl = CATEGORIES_HERO_IMAGE_URL;
+  readonly seasonalBannerImageUrl = CATEGORIES_SEASONAL_BANNER_IMAGE_URL;
   readonly searchTerm = signal('');
   readonly sortBy = signal<CategorySortOption>('name-asc');
   readonly sortMenuOpen = signal(false);
