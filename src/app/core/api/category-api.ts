@@ -28,6 +28,8 @@ export class CategoryApi {
           categorySlug: category.slug,
           categoryImageUrl: category.imageUrl,
           parentCategoryId: category.parentId,
+          productCount: category._count.products,
+          childCount: category._count.children,
         })),
       ),
     );
@@ -58,6 +60,8 @@ export class CategoryApi {
       categoryImageUrl: category.imageUrl,
       categorySlug: category.slug,
       parentCategoryId: category.parentId,
+      productCount: category._count.products,
+      childCount: category._count.children,
     };
   }
 

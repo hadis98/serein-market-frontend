@@ -78,7 +78,7 @@
                 <p class="text-[0.65rem] uppercase tracking-wider text-stone-400">Products</p>
 
                 <p class="mt-1 font-medium">
-                  {{ productCounts().get(category.categoryId) ?? 0 }}
+                  {{ category.productCount ?? 0 }}
                 </p>
               </div>
 
@@ -174,7 +174,7 @@
 
                   <td class="px-6 py-5">
                     <span class="rounded-full bg-serein-bg px-3 py-1 text-sm">
-                      {{ productCounts().get(category.categoryId) ?? 0 }}
+                      {{ category.productCount ?? 0 }}
                     </span>
                   </td>
 
@@ -336,11 +336,11 @@
           <strong> {{ category.categoryName }} </strong>.
         </p>
 
-        @if ((productCounts().get(category.categoryId) ?? 0) > 0) {
+        @if ((category.productCount ?? 0) > 0) {
           <div class="mt-5 rounded-2xl bg-red-50 p-4 text-sm text-red-800">
             This category currently contains
 
-            {{ productCounts().get(category.categoryId) ?? 0 }}
+            {{ category.productCount ?? 0 }}
 
             products. The backend may prevent deletion while products still reference this category.
           </div>

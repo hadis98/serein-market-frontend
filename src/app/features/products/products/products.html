@@ -12,12 +12,13 @@
       <div class="relative w-full max-w-md">
         <label for="product-search" class="sr-only">Search products</label>
         <input
+          #productSearch
           id="product-search"
           type="search"
           placeholder="Search products..."
           class="w-full rounded-2xl border border-black/10 bg-serein-surface px-5 py-4 outline-none transition focus:border-serein-brand"
           [value]="searchTerm()"
-          (input)="updateSearch($event)"
+          (input)="updateSearch(productSearch.value)"
         />
       </div>
 
@@ -25,95 +26,7 @@
         <p class="text-sm text-serein-text/55">
           {{ totalProducts() }} {{ totalProducts() === 1 ? 'product' : 'products' }}
         </p>
-
-        <div class="relative" data-product-sort>
-          <button
-            type="button"
-            id="product-sort"
-            class="group flex h-14 min-w-[190px] items-center gap-3 rounded-2xl border border-black/10 bg-serein-surface px-3.5 text-left shadow-[0_3px_12px_rgba(51,43,39,0.035)] transition hover:border-serein-brand/40 hover:shadow-[0_6px_18px_rgba(51,43,39,0.07)] focus-visible:border-serein-brand focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-serein-brand/10 sm:min-w-[210px]"
-            aria-haspopup="listbox"
-            aria-controls="product-sort-options"
-            [attr.aria-expanded]="sortMenuOpen()"
-            (click)="toggleSortMenu()"
-          >
-            <span
-              class="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-serein-bg text-serein-brand transition group-hover:bg-[#efe4dc]"
-              aria-hidden="true"
-            >
-              <app-icon [name]="selectedSortIcon()" class="h-[18px] w-[18px]" />
-            </span>
-
-            <span class="min-w-0 flex-1">
-              <span
-                class="block text-[9px] font-medium uppercase leading-none tracking-[0.2em] text-serein-text/40"
-              >
-                Sort by
-              </span>
-              <span class="mt-1.5 block truncate text-[13px] font-medium leading-none">
-                {{ selectedSortLabel() }}
-              </span>
-            </span>
-
-            <app-icon
-              name="chevron-down-wide"
-              class="h-4 w-4 shrink-0 text-serein-text/45 transition-transform duration-200"
-              [class.rotate-180]="sortMenuOpen()"
-            />
-          </button>
-
-          @if (sortMenuOpen()) {
-            <div
-              id="product-sort-options"
-              class="product-sort-menu absolute right-0 top-full z-40 mt-2 w-[min(17rem,calc(100vw-3rem))] overflow-hidden rounded-2xl border border-black/[0.07] bg-serein-surface p-2 shadow-[0_20px_55px_rgba(51,43,39,0.16)]"
-              role="listbox"
-              aria-label="Sort products"
-              [attr.aria-activedescendant]="'product-sort-' + sortBy()"
-            >
-              <div class="px-3 pb-2 pt-1.5">
-                <p class="text-[10px] font-medium uppercase tracking-[0.2em] text-serein-text/40">
-                  Sort products
-                </p>
-              </div>
-
-              @for (option of sortOptions; track option.value) {
-                <button
-                  type="button"
-                  [id]="'product-sort-' + option.value"
-                  class="group/option flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left transition hover:bg-serein-bg focus-visible:bg-serein-bg focus-visible:outline-none"
-                  role="option"
-                  [attr.aria-selected]="sortBy() === option.value"
-                  [class.bg-serein-bg]="sortBy() === option.value"
-                  (click)="selectSort(option.value)"
-                >
-                  <span
-                    class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-black/[0.06] bg-white/70 text-serein-text/55 transition group-hover/option:border-serein-brand/20 group-hover/option:text-serein-brand"
-                    [class.!border-serein-brand/20]="sortBy() === option.value"
-                    [class.!bg-[#efe4dc]]="sortBy() === option.value"
-                    [class.!text-serein-brand]="sortBy() === option.value"
-                    aria-hidden="true"
-                  >
-                    <app-icon [name]="option.icon" class="h-4 w-4" />
-                  </span>
-
-                  <span class="min-w-0 flex-1">
-                    <span class="block text-[13px] font-medium">{{ option.label }}</span>
-                    <span class="mt-0.5 block text-[11px] text-serein-text/45">
-                      {{ option.description }}
-                    </span>
-                  </span>
-
-                  <span
-                    class="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-serein-brand text-white transition"
-                    [class.opacity-0]="sortBy() !== option.value"
-                    aria-hidden="true"
-                  >
-                    <app-icon name="check" class="h-3 w-3" />
-                  </span>
-                </button>
-              }
-            </div>
-          }
-        </div>
+        <app-product-sort [value]="sortBy()" (valueChange)="updateSort($event)" />
       </div>
     </div>
 
@@ -165,65 +78,13 @@
         }
 
         @if (!loading() && !error() && totalProducts() > 0) {
-          <footer
-            class="mt-12 flex flex-col items-center gap-6 border-t border-black/5 pt-8 sm:grid sm:grid-cols-[1fr_auto_1fr]"
-          >
-            <nav class="flex items-center gap-2 sm:col-start-2" aria-label="Product pagination">
-              <button
-                type="button"
-                class="flex h-11 w-11 items-center justify-center rounded-xl border border-black/10 bg-serein-surface transition hover:border-serein-brand hover:text-serein-brand disabled:cursor-not-allowed disabled:opacity-35"
-                [disabled]="currentPage() === 1"
-                aria-label="Previous page"
-                (click)="goToPage(currentPage() - 1)"
-              >
-                <app-icon name="chevron-left" class="h-5 w-5" />
-              </button>
-
-              @for (item of paginationItems(); track $index) {
-                @if (item === 'ellipsis-start' || item === 'ellipsis-end') {
-                  <span
-                    class="flex h-11 min-w-8 items-center justify-center text-serein-text/45"
-                    aria-hidden="true"
-                  >
-                    …
-                  </span>
-                } @else {
-                  <button
-                    type="button"
-                    class="flex h-11 min-w-11 items-center justify-center rounded-xl border px-3 text-sm font-medium transition"
-                    [class.border-serein-brand]="item === currentPage()"
-                    [class.bg-serein-brand]="item === currentPage()"
-                    [class.text-white]="item === currentPage()"
-                    [class.border-black/10]="item !== currentPage()"
-                    [class.bg-serein-surface]="item !== currentPage()"
-                    [class.hover:border-serein-brand]="item !== currentPage()"
-                    [attr.aria-current]="item === currentPage() ? 'page' : null"
-                    [attr.aria-label]="'Go to page ' + item"
-                    (click)="goToPage(item)"
-                  >
-                    {{ item }}
-                  </button>
-                }
-              }
-
-              <button
-                type="button"
-                class="flex h-11 w-11 items-center justify-center rounded-xl border border-black/10 bg-serein-surface transition hover:border-serein-brand hover:text-serein-brand disabled:cursor-not-allowed disabled:opacity-35"
-                [disabled]="currentPage() === totalPages()"
-                aria-label="Next page"
-                (click)="goToPage(currentPage() + 1)"
-              >
-                <app-icon name="chevron-right" class="h-5 w-5" stroke-width="1.7" />
-              </button>
-            </nav>
-
-            <p
-              class="text-sm text-serein-text/55 sm:col-start-3 sm:justify-self-end"
-              aria-live="polite"
-            >
-              Showing {{ showingFrom() }}–{{ showingTo() }} of {{ totalProducts() }} products
-            </p>
-          </footer>
+          <app-product-pagination
+            [currentPage]="currentPage()"
+            [totalPages]="totalPages()"
+            [totalItems]="totalProducts()"
+            [pageSize]="pageSize"
+            (pageChange)="goToPage($event)"
+          />
         }
       </div>
     </div>

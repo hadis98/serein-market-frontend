@@ -58,9 +58,12 @@ export class ProductFilters {
 
   toggleCategory(categoryId: number, event: Event): void {
     const checked = (event.target as HTMLInputElement).checked;
-    const categoryIds = checked
-      ? [...new Set([...this.value().categoryIds, categoryId])]
-      : this.value().categoryIds.filter((id) => id !== categoryId);
+    let categoryIds: number[];
+    if (checked) {
+      categoryIds = [...this.value().categoryIds, categoryId];
+    } else {
+      categoryIds = this.value().categoryIds.filter((id) => id !== categoryId);
+    }
 
     this.emitValue({ categoryIds });
   }

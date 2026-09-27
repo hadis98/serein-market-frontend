@@ -5,6 +5,9 @@ export interface Category {
   categorySlug: string;
   categoryImageUrl: string | null;
   parentCategoryId: number | null;
+
+  productCount: number;
+  childCount: number;
 }
 
 export interface CreateCategoryRequest {
@@ -19,6 +22,11 @@ export interface BackendCategory {
   slug: string;
   imageUrl: string | null;
   parentId: number | null;
+
+  _count: {
+    products: number;
+    children: number;
+  };
 }
 
 export interface CategoryParent {

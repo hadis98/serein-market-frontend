@@ -1,0 +1,56 @@
+<footer
+  class="mt-12 flex flex-col items-center gap-6 border-t border-black/5 pt-8 sm:grid sm:grid-cols-[1fr_auto_1fr]"
+>
+  <nav class="flex items-center gap-2 sm:col-start-2" aria-label="Product pagination">
+    <button
+      type="button"
+      class="flex h-11 w-11 items-center justify-center rounded-xl border border-black/10 bg-serein-surface transition hover:border-serein-brand hover:text-serein-brand disabled:cursor-not-allowed disabled:opacity-35"
+      [disabled]="currentPage() === 1"
+      aria-label="Previous page"
+      (click)="goToPage(currentPage() - 1)"
+    >
+      <app-icon name="chevron-left" class="h-5 w-5" />
+    </button>
+
+    @for (item of paginationItems(); track item) {
+      @if (item === 'ellipsis-start' || item === 'ellipsis-end') {
+        <span
+          class="flex h-11 min-w-8 items-center justify-center text-serein-text/45"
+          aria-hidden="true"
+        >
+          …
+        </span>
+      } @else {
+        <button
+          type="button"
+          class="flex h-11 min-w-11 items-center justify-center rounded-xl border px-3 text-sm font-medium transition"
+          [class.border-serein-brand]="item === currentPage()"
+          [class.bg-serein-brand]="item === currentPage()"
+          [class.text-white]="item === currentPage()"
+          [class.border-black/10]="item !== currentPage()"
+          [class.bg-serein-surface]="item !== currentPage()"
+          [class.hover:border-serein-brand]="item !== currentPage()"
+          [attr.aria-current]="item === currentPage() ? 'page' : null"
+          [attr.aria-label]="'Go to page ' + item"
+          (click)="goToPage(item)"
+        >
+          {{ item }}
+        </button>
+      }
+    }
+
+    <button
+      type="button"
+      class="flex h-11 w-11 items-center justify-center rounded-xl border border-black/10 bg-serein-surface transition hover:border-serein-brand hover:text-serein-brand disabled:cursor-not-allowed disabled:opacity-35"
+      [disabled]="currentPage() === totalPages()"
+      aria-label="Next page"
+      (click)="goToPage(currentPage() + 1)"
+    >
+      <app-icon name="chevron-right" class="h-5 w-5" stroke-width="1.7" />
+    </button>
+  </nav>
+
+  <p class="text-sm text-serein-text/55 sm:col-start-3 sm:justify-self-end" aria-live="polite">
+    Showing {{ showingFrom() }}–{{ showingTo() }} of {{ totalItems() }} products
+  </p>
+</footer>

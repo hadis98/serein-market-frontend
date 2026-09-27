@@ -1,7 +1,6 @@
 import { Component, computed, inject, signal } from '@angular/core';
 import { form, FormField, FormRoot, minLength, required } from '@angular/forms/signals';
 import { CategoryStore } from '../../../../core/state/category-store';
-import { ProductStore } from '../../../../core/state/product-store';
 import { ToastStore } from '../../../../core/state/toast-store';
 import { Category } from '../../../../core/models/category.model';
 import { RouterLink } from '@angular/router';
@@ -19,7 +18,6 @@ interface CategoryFormModel {
 })
 export class AdminCategories {
   readonly categoryStore = inject(CategoryStore);
-  private readonly productStore = inject(ProductStore);
   private readonly toast = inject(ToastStore);
 
   readonly showCreateDialog = signal(false);
@@ -28,17 +26,6 @@ export class AdminCategories {
   readonly deleting = signal(false);
 
   readonly model = signal<CategoryFormModel>({ name: '', imageUrl: '' });
-
-  readonly productCounts = computed(() => {
-    const counts = new Map<number, number>();
-
-    for (const product of this.productStore.products()) {
-      const current = counts.get(product.categoryId) ?? 0;
-      counts.set(product.categoryId, current + 1);
-    }
-
-    return counts;
-  });
 
   readonly categoryForm = form(
     this.model,
@@ -93,7 +80,6 @@ export class AdminCategories {
 
   constructor() {
     void this.categoryStore.load();
-    void this.productStore.load();
   }
 
   openCreateDialog() {
