@@ -1,225 +1,348 @@
-<section class="mx-auto max-w-5xl">
-  <a routerLink="/admin/products" class="text-sm text-serein-brand"> ← Back to products </a>
+<section class="mx-auto w-full max-w-[1360px]">
+  <a
+    routerLink="/admin/products"
+    class="group inline-flex items-center gap-2 text-sm text-serein-brand transition hover:text-serein-text"
+  >
+    <svg
+      aria-hidden="true"
+      class="h-4 w-4 transition-transform group-hover:-translate-x-0.5"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="1.8"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    >
+      <path d="m15 18-6-6 6-6" />
+    </svg>
+    Back to products
+  </a>
 
-  <div class="mt-8">
-    <p class="text-xs uppercase tracking-[0.3em] text-serein-brand">Catalogue</p>
-
-    <h1 class="mt-2 font-display text-4xl">
+  <header class="mt-6">
+    <h1 class="font-display text-3xl leading-none text-serein-text sm:text-[2.65rem]">
       @if (isEditMode()) {
         Edit product
       } @else {
         Add product
       }
     </h1>
-  </div>
+  </header>
 
   @if (isEditMode() && productStore.loading()) {
-    <div class="mt-10 rounded-3xl bg-white p-10">Loading product...</div>
+    <div class="mt-7 rounded-[1.5rem] border border-black/5 bg-white p-10 shadow-sm">
+      Loading product...
+    </div>
   } @else if (isEditMode() && productStore.loaded() && !product()) {
-    <div class="mt-10 rounded-3xl bg-white p-10">
+    <div class="mt-7 rounded-[1.5rem] border border-black/5 bg-white p-10 shadow-sm">
       <h2 class="font-display text-3xl">Product not found</h2>
-
-      <p class="mt-3 opacity-60">This product does not exist.</p>
+      <p class="mt-3 text-sm text-serein-text/60">This product does not exist.</p>
     </div>
   } @else {
-    <form [formRoot]="productForm" class="mt-10 rounded-[2.5rem] bg-white p-8 md:p-10">
-      <div class="grid gap-6 md:grid-cols-2">
-        <!-- PRODUCT NAME -->
-        <div class="md:col-span-2">
-          <label class="mb-2 block text-sm"> Product name </label>
-
-          <input
-            type="text"
-            [formField]="productForm.name"
-            class="w-full rounded-2xl border border-black/10 px-5 py-4 outline-none focus:border-serein-brand"
-          />
-
-          @if (productForm.name().touched() && productForm.name().invalid()) {
-            <p class="mt-2 text-sm text-red-700">
-              {{ productForm.name().errors()[0].message }}
-            </p>
-          }
-        </div>
-
-        <!-- SKU -->
-        <div>
-          <label class="mb-2 block text-sm"> SKU </label>
-
-          <input
-            type="text"
-            [formField]="productForm.sku"
-            class="w-full rounded-2xl border border-black/10 px-5 py-4 outline-none focus:border-serein-brand"
-          />
-
-          @if (productForm.sku().touched() && productForm.sku().invalid()) {
-            <p class="mt-2 text-sm text-red-700">
-              {{ productForm.sku().errors()[0].message }}
-            </p>
-          }
-        </div>
-
-        <!-- SHORT NAME -->
-        <div>
-          <label class="mb-2 block text-sm"> Short description </label>
-
-          <input
-            type="text"
-            [formField]="productForm.shortDescription"
-            class="w-full rounded-2xl border border-black/10 px-5 py-4 outline-none focus:border-serein-brand"
-          />
-        </div>
-
-        <!-- PRICE -->
-        <div>
-          <label class="mb-2 block text-sm"> Price </label>
-
-          <input
-            type="number"
-            [formField]="productForm.price"
-            class="w-full rounded-2xl border border-black/10 px-5 py-4 outline-none focus:border-serein-brand"
-          />
-
-          @if (productForm.price().touched() && productForm.price().invalid()) {
-            <p class="mt-2 text-sm text-red-700">
-              {{ productForm.price().errors()[0].message }}
-            </p>
-          }
-        </div>
-
-        <!-- STOCK QUANTITY -->
-        <div>
-          <label class="mb-2 block text-sm"> Stock quantity </label>
-          <input
-            type="number"
-            [formField]="productForm.stockQuantity"
-            class="w-full rounded-2xl border border-black/10 px-5 py-4 outline-none focus:border-serein-brand"
-          />
-
-          @if (productForm.stockQuantity().touched() && productForm.stockQuantity().invalid()) {
-            <p class="mt-2 text-sm text-red-700">
-              {{ productForm.stockQuantity().errors()[0].message }}
-            </p>
-          }
-        </div>
-
-        <!-- CATEGORY -->
-        <div>
-          <label class="mb-2 block text-sm"> Category </label>
-
-          <select
-            [formField]="productForm.categoryId"
-            class="w-full rounded-2xl border border-black/10 bg-white px-5 py-4 outline-none focus:border-serein-brand"
+    <form
+      [formRoot]="productForm"
+      class="mt-6 grid items-start gap-6 xl:grid-cols-[minmax(0,2.15fr)_minmax(310px,1fr)]"
+    >
+      <div
+        class="overflow-hidden rounded-[1.5rem] border border-black/5 bg-white px-5 shadow-sm sm:px-7 py-5"
+      >
+        <div class="mb-5 flex items-center gap-4">
+          <span
+            class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#f6f0ea] text-serein-brand"
           >
-            <option value="">Select category</option>
+            <svg
+              aria-hidden="true"
+              class="h-5 w-5"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.8"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="m21 8-9 5-9-5" />
+              <path d="M3 8l9-5 9 5v8l-9 5-9-5Z" />
+              <path d="M12 13v8" />
+            </svg>
+          </span>
+          <div>
+            <h2 class="font-display text-xl leading-tight text-serein-text">Product information</h2>
+            <p class="mt-0.5 text-xs text-serein-text/50">Basic details about your product</p>
+          </div>
+        </div>
 
-            @for (category of categoryStore.categories(); track category.categoryId) {
-              <option [value]="category.categoryId">
-                {{ category.categoryName }}
-              </option>
+        <div class="grid gap-x-6 gap-y-4 md:grid-cols-2 py-3">
+          <div class="md:col-span-2">
+            <label for="product-name" class="mb-2 block text-sm font-medium">Product name</label>
+            <input
+              id="product-name"
+              type="text"
+              placeholder="e.g. Fresh Strawberries"
+              [formField]="productForm.name"
+              class="h-11 w-full rounded-xl border border-black/15 bg-white px-4 text-sm outline-none transition placeholder:text-serein-text/35 hover:border-black/25 focus:border-serein-brand focus:ring-3 focus:ring-serein-brand/10"
+            />
+            @if (productForm.name().touched() && productForm.name().invalid()) {
+              <p class="mt-1.5 text-xs text-red-700">
+                {{ productForm.name().errors()[0].message }}
+              </p>
             }
-          </select>
-          @if (productForm.categoryId().touched() && productForm.categoryId().invalid()) {
-            <p class="mt-2 text-sm text-red-700">
-              {{ productForm.categoryId().errors()[0].message }}
-            </p>
-          }
-        </div>
+          </div>
 
-        <!-- DELIVERY -->
-        <div>
-          <label class="mb-2 block text-sm"> Delivery time </label>
+          <div>
+            <label for="product-sku" class="mb-2 block text-sm font-medium">SKU</label>
+            <input
+              id="product-sku"
+              type="text"
+              placeholder="e.g. STRAWBERRY-001"
+              [formField]="productForm.sku"
+              class="h-11 w-full rounded-xl border border-black/15 bg-white px-4 text-sm outline-none transition placeholder:text-serein-text/35 hover:border-black/25 focus:border-serein-brand focus:ring-3 focus:ring-serein-brand/10"
+            />
+            @if (productForm.sku().touched() && productForm.sku().invalid()) {
+              <p class="mt-1.5 text-xs text-red-700">
+                {{ productForm.sku().errors()[0].message }}
+              </p>
+            }
+          </div>
 
-          <input
-            type="text"
-            placeholder="e.g. 30 Min"
-            [formField]="productForm.deliveryTimeSpan"
-            class="w-full rounded-2xl border border-black/10 px-5 py-4 outline-none focus:border-serein-brand"
-          />
-
-          @if (
-            productForm.deliveryTimeSpan().touched() && productForm.deliveryTimeSpan().invalid()
-          ) {
-            <p class="mt-2 text-sm text-red-700">
-              {{ productForm.deliveryTimeSpan().errors()[0].message }}
-            </p>
-          }
-        </div>
-
-        <!-- IMAGE URL -->
-        <div>
-          <label class="mb-2 block text-sm"> Image URL </label>
-
-          <input
-            type="url"
-            [formField]="productForm.imageUrl"
-            class="w-full rounded-2xl border border-black/10 px-5 py-4 outline-none focus:border-serein-brand"
-          />
-
-          @if (productForm.imageUrl().touched() && productForm.imageUrl().invalid()) {
-            <p class="mt-2 text-sm text-red-700">
-              {{ productForm.imageUrl().errors()[0].message }}
-            </p>
-          }
-        </div>
-
-        <!-- DESCRIPTION -->
-        <div class="md:col-span-2">
-          <label class="mb-2 block text-sm"> Description </label>
-
-          <textarea
-            rows="5"
-            [formField]="productForm.description"
-            class="w-full resize-none rounded-2xl border border-black/10 px-5 py-4 outline-none focus:border-serein-brand"
-          ></textarea>
-
-          @if (productForm.description().touched() && productForm.description().invalid()) {
-            <p class="mt-2 text-sm text-red-700">
-              {{ productForm.description().errors()[0].message }}
-            </p>
-          }
-        </div>
-      </div>
-
-      <!-- IMAGE PREVIEW -->
-
-      @if (model().imageUrl) {
-        <div class="mt-10 border-t border-black/10 pt-8">
-          <p class="mb-4 text-xs uppercase tracking-widest opacity-50">Preview</p>
-
-          <div
-            class="flex h-48 w-48 items-center justify-center overflow-hidden rounded-3xl bg-serein-bg"
-          >
-            <img
-              class="h-full w-full object-contain p-4"
-              [src]="model().imageUrl"
-              [alt]="model().name"
+          <div>
+            <label for="product-short-description" class="mb-2 block text-sm font-medium"
+              >Short description</label
+            >
+            <input
+              id="product-short-description"
+              type="text"
+              placeholder="A brief summary..."
+              [formField]="productForm.shortDescription"
+              class="h-11 w-full rounded-xl border border-black/15 bg-white px-4 text-sm outline-none transition placeholder:text-serein-text/35 hover:border-black/25 focus:border-serein-brand focus:ring-3 focus:ring-serein-brand/10"
             />
           </div>
         </div>
-      }
 
-      <div class="mt-10 flex flex-wrap gap-4">
-        <button
-          type="submit"
-          class="rounded-2xl bg-serein-brand px-8 py-4 text-sm text-white disabled:opacity-50"
-          [disabled]="productForm().submitting()"
-        >
-          @if (productForm().submitting()) {
-            Saving...
-          } @else if (isEditMode()) {
-            Save changes
-          } @else {
-            Create product
-          }
-        </button>
+        <div class="grid gap-x-6 gap-y-4 md:grid-cols-2 py-3">
+          <div>
+            <label for="product-price" class="mb-2 block text-sm font-medium">Price</label>
+            <input
+              id="product-price"
+              type="number"
+              placeholder="e.g. 4.99"
+              [formField]="productForm.price"
+              class="h-11 w-full rounded-xl border border-black/15 bg-white px-4 text-sm outline-none transition placeholder:text-serein-text/35 hover:border-black/25 focus:border-serein-brand focus:ring-3 focus:ring-serein-brand/10"
+            />
+            @if (productForm.price().touched() && productForm.price().invalid()) {
+              <p class="mt-1.5 text-xs text-red-700">
+                {{ productForm.price().errors()[0].message }}
+              </p>
+            }
+          </div>
 
-        <a
-          routerLink="/admin/products"
-          class="rounded-2xl border border-black/10 px-8 py-4 text-sm"
-        >
-          Cancel
-        </a>
+          <div>
+            <label for="product-stock" class="mb-2 block text-sm font-medium">Stock quantity</label>
+            <input
+              id="product-stock"
+              type="number"
+              [formField]="productForm.stockQuantity"
+              class="h-11 w-full rounded-xl border border-black/15 bg-white px-4 text-sm outline-none transition placeholder:text-serein-text/35 hover:border-black/25 focus:border-serein-brand focus:ring-3 focus:ring-serein-brand/10"
+            />
+            @if (productForm.stockQuantity().touched() && productForm.stockQuantity().invalid()) {
+              <p class="mt-1.5 text-xs text-red-700">
+                {{ productForm.stockQuantity().errors()[0].message }}
+              </p>
+            }
+          </div>
+        </div>
+
+        <div class="grid gap-x-6 gap-y-4 md:grid-cols-2 py-3">
+          <div>
+            <label for="product-category" class="mb-2 block text-sm font-medium">Category</label>
+            <select
+              id="product-category"
+              [formField]="productForm.categoryId"
+              class="h-11 w-full rounded-xl border border-black/15 bg-white px-4 text-sm outline-none transition hover:border-black/25 focus:border-serein-brand focus:ring-3 focus:ring-serein-brand/10"
+            >
+              <option value="">Select category</option>
+              @for (category of categoryStore.categories(); track category.categoryId) {
+                <option [value]="category.categoryId">{{ category.categoryName }}</option>
+              }
+            </select>
+            @if (productForm.categoryId().touched() && productForm.categoryId().invalid()) {
+              <p class="mt-1.5 text-xs text-red-700">
+                {{ productForm.categoryId().errors()[0].message }}
+              </p>
+            }
+          </div>
+
+          <div>
+            <label for="product-delivery" class="mb-2 block text-sm font-medium"
+              >Delivery time</label
+            >
+            <input
+              id="product-delivery"
+              type="text"
+              placeholder="e.g. 30 Min"
+              [formField]="productForm.deliveryTimeSpan"
+              class="h-11 w-full rounded-xl border border-black/15 bg-white px-4 text-sm outline-none transition placeholder:text-serein-text/35 hover:border-black/25 focus:border-serein-brand focus:ring-3 focus:ring-serein-brand/10"
+            />
+            @if (
+              productForm.deliveryTimeSpan().touched() && productForm.deliveryTimeSpan().invalid()
+            ) {
+              <p class="mt-1.5 text-xs text-red-700">
+                {{ productForm.deliveryTimeSpan().errors()[0].message }}
+              </p>
+            }
+          </div>
+        </div>
+
+        <div class="grid gap-x-6 gap-y-4 md:grid-cols-2 py-3">
+          <div>
+            <label for="product-image" class="mb-2 block text-sm font-medium">Image URL</label>
+            <input
+              id="product-image"
+              type="url"
+              placeholder="https://res.cloudinary.com/..."
+              [formField]="productForm.imageUrl"
+              class="h-11 w-full rounded-xl border border-black/15 bg-white px-4 text-sm outline-none transition placeholder:text-serein-text/35 hover:border-black/25 focus:border-serein-brand focus:ring-3 focus:ring-serein-brand/10"
+            />
+            @if (productForm.imageUrl().touched() && productForm.imageUrl().invalid()) {
+              <p class="mt-1.5 text-xs text-red-700">
+                {{ productForm.imageUrl().errors()[0].message }}
+              </p>
+            }
+          </div>
+
+          <div>
+            <label for="product-description" class="mb-2 block text-sm font-medium"
+              >Description</label
+            >
+            <textarea
+              id="product-description"
+              rows="3"
+              placeholder="Enter product description..."
+              [formField]="productForm.description"
+              class="min-h-20 w-full resize-y rounded-xl border border-black/15 bg-white px-4 py-3 text-sm outline-none transition placeholder:text-serein-text/35 hover:border-black/25 focus:border-serein-brand focus:ring-3 focus:ring-serein-brand/10"
+            ></textarea>
+            @if (productForm.description().touched() && productForm.description().invalid()) {
+              <p class="mt-1.5 text-xs text-red-700">
+                {{ productForm.description().errors()[0].message }}
+              </p>
+            }
+          </div>
+        </div>
+
+        <div class="flex flex-col-reverse gap-3 py-4 sm:flex-row sm:justify-end">
+          <a
+            routerLink="/admin/products"
+            class="inline-flex h-10 items-center justify-center rounded-xl border border-black/15 px-7 text-sm transition hover:border-serein-brand hover:text-serein-brand"
+            >Cancel</a
+          >
+          <button
+            type="submit"
+            class="inline-flex h-10 min-w-36 items-center justify-center rounded-xl bg-serein-brand px-7 text-sm font-medium text-white shadow-sm transition hover:bg-[#69493c] disabled:cursor-not-allowed disabled:opacity-50"
+            [disabled]="productForm().submitting()"
+          >
+            @if (productForm().submitting()) {
+              Saving...
+            } @else if (isEditMode()) {
+              Save changes
+            } @else {
+              Create product
+            }
+          </button>
+        </div>
       </div>
+
+      <aside
+        class="rounded-[1.5rem] border border-black/5 bg-white p-5 shadow-sm sm:p-6 xl:sticky xl:top-10"
+      >
+        <div class="flex items-center gap-4">
+          <span
+            class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#f6f0ea] text-serein-brand"
+          >
+            <svg
+              aria-hidden="true"
+              class="h-5 w-5"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.8"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6S2 12 2 12Z" />
+              <circle cx="12" cy="12" r="2.5" />
+            </svg>
+          </span>
+          <div>
+            <h2 class="font-display text-xl leading-tight text-serein-text">Product preview</h2>
+            <p class="mt-0.5 text-xs text-serein-text/50">
+              How your product will appear to customers
+            </p>
+          </div>
+        </div>
+
+        <div
+          class="mt-6 flex aspect-[4/3] items-center justify-center overflow-hidden rounded-2xl bg-[#f7f4ef]"
+        >
+          @if (model().imageUrl) {
+            <img
+              class="h-full w-full object-contain p-5"
+              [src]="model().imageUrl"
+              [alt]="model().name || 'Product preview'"
+            />
+          } @else {
+            <div class="flex flex-col items-center gap-3 text-serein-text/30">
+              <svg
+                aria-hidden="true"
+                class="h-12 w-12"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.4"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <rect x="3" y="3" width="18" height="18" rx="2" />
+                <circle cx="8.5" cy="8.5" r="1.5" />
+                <path d="m21 15-5-5L5 21" />
+              </svg>
+              <span class="text-xs">Product image preview</span>
+            </div>
+          }
+        </div>
+
+        <h3 class="mt-5 truncate font-display text-2xl text-serein-text">
+          {{ model().name || 'Product name' }}
+        </h3>
+        <p class="mt-2 min-h-5 truncate text-sm text-serein-text/50">
+          {{ model().shortDescription || 'A brief summary of the product...' }}
+        </p>
+
+        <dl class="mt-5 space-y-3 border-t border-black/10 pt-5 text-sm">
+          <div class="flex items-center justify-between gap-4">
+            <dt class="text-serein-text/50">Price</dt>
+            <dd class="font-display text-lg font-semibold text-serein-brand">
+              ${{ model().price ?? '0.00' }}
+            </dd>
+          </div>
+          <div class="flex items-center justify-between gap-4">
+            <dt class="text-serein-text/50">Category</dt>
+            <dd class="max-w-[60%] truncate font-medium text-serein-brand">
+              @for (category of categoryStore.categories(); track category.categoryId) {
+                @if (category.categoryId.toString() === model().categoryId) {
+                  {{ category.categoryName }}
+                }
+              }
+              @if (!model().categoryId) {
+                Not selected
+              }
+            </dd>
+          </div>
+          <div class="flex items-center justify-between gap-4">
+            <dt class="text-serein-text/50">Delivery time</dt>
+            <dd class="max-w-[60%] truncate font-medium text-serein-brand">
+              {{ model().deliveryTimeSpan || 'Not specified' }}
+            </dd>
+          </div>
+        </dl>
+      </aside>
     </form>
   }
 </section>
