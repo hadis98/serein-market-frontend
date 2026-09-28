@@ -175,7 +175,8 @@
 
           <div class="h-2 overflow-hidden rounded-full bg-stone-100">
             <div
-              class="h-full rounded-full bg-serein-brand transition-all"
+              class="h-full rounded-full transition-all"
+              [style.background-color]="orderStatusPresentation[status.status].chartColor"
               [style.width.%]="(status.value / maxOrderStatusCount()) * 100"
             ></div>
           </div>
@@ -266,9 +267,7 @@
             {{ order.totalAmount | currency: 'USD' : 'symbol' : '1.0-2' }}
           </span>
 
-          <span class="w-fit rounded-full bg-stone-100 px-3 py-1 text-xs">
-            {{ order.status }}
-          </span>
+          <app-order-status-badge [status]="order.status" />
         </a>
       } @empty {
         <p class="px-7 py-10 text-center text-stone-400">No orders yet.</p>

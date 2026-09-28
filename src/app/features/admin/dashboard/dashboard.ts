@@ -7,14 +7,19 @@ import { CategoryStore } from '../../../core/state/category-store';
 import { RouterLink } from '@angular/router';
 import { CurrencyPipe, DatePipe } from '@angular/common';
 import { Icon } from '../../../shared/ui/icon/icon';
+import {
+  ORDER_STATUS_PRESENTATION,
+  OrderStatusBadge,
+} from '../../../shared/ui/order-status-badge/order-status-badge';
 
 @Component({
-  imports: [RouterLink, DatePipe, CurrencyPipe, Icon],
+  imports: [RouterLink, DatePipe, CurrencyPipe, Icon, OrderStatusBadge],
   selector: 'app-dashboard',
   styleUrl: './dashboard.css',
   templateUrl: './dashboard.html',
 })
 export class Dashboard {
+  readonly orderStatusPresentation = ORDER_STATUS_PRESENTATION;
   readonly productStore = inject(ProductStore);
   readonly categoryStore = inject(CategoryStore);
   readonly orderStore = inject(AdminOrderStore);
@@ -53,22 +58,27 @@ export class Dashboard {
 
     return [
       {
+        status: 'PENDING' as const,
         label: 'Pending',
         value: orders.filter((order) => order.status === 'PENDING').length,
       },
       {
+        status: 'CONFIRMED' as const,
         label: 'Confirmed',
         value: orders.filter((order) => order.status === 'CONFIRMED').length,
       },
       {
+        status: 'SHIPPED' as const,
         label: 'Shipped',
         value: orders.filter((order) => order.status === 'SHIPPED').length,
       },
       {
+        status: 'DELIVERED' as const,
         label: 'Delivered',
         value: orders.filter((order) => order.status === 'DELIVERED').length,
       },
       {
+        status: 'CANCELLED' as const,
         label: 'Cancelled',
         value: orders.filter((order) => order.status === 'CANCELLED').length,
       },

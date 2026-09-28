@@ -109,23 +109,50 @@
       @if (auth.isLoggedIn()) {
         <details class="group relative hidden lg:block">
           <summary
-            class="flex cursor-pointer list-none items-center gap-1 rounded-full px-2 py-2 text-sm transition hover:bg-black/5"
+            class="ml-1 flex h-12 min-w-[150px] cursor-pointer list-none items-center gap-3 rounded-full border border-black/10 bg-serein-surface px-2.5 pr-4 text-sm shadow-[0_3px_12px_rgba(54,40,32,0.03)] transition hover:border-serein-brand/30 hover:shadow-[0_5px_18px_rgba(54,40,32,0.07)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-serein-brand"
+            aria-label="Open account menu"
           >
-            Hi, {{ auth.firstName() }}
-            <app-icon name="chevron-down" class="h-4 w-4 transition group-open:rotate-180" />
-          </summary>
-          <div
-            class="absolute right-0 top-full mt-2 w-36 rounded-2xl border border-black/5 bg-serein-surface p-2 shadow-lg"
-          >
-            <a routerLink="/profile" class="block rounded-xl px-3 py-2 text-sm hover:bg-black/5"
-              >Profile</a
+            <span
+              class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#e8ded4] text-serein-brand"
             >
+              <app-icon name="user" class="h-5 w-5" stroke-width="1.6" />
+            </span>
+
+            <span class="min-w-0 flex-1 truncate text-left text-sm"
+              >Hi, {{ auth.firstName() }}</span
+            >
+
+            <app-icon
+              name="chevron-down"
+              class="h-5 w-5 shrink-0 transition-transform duration-200 group-open:rotate-180"
+              stroke-width="1.8"
+            />
+          </summary>
+
+          <div
+            class="absolute right-0 top-full z-20 mt-3 w-40 rounded-[1.5rem] border border-black/5 bg-serein-surface p-3 shadow-[0_20px_55px_rgba(53,39,31,0.15)] before:absolute before:-top-2 before:right-10 before:h-4 before:w-4 before:rotate-45 before:border-l before:border-t before:border-black/5 before:bg-serein-surface before:content-['']"
+          >
+            <a
+              routerLink="/profile"
+              class="text-sm relative flex h-10 items-center gap-4 rounded-2xl bg-[#f6f0ea] px-5 transition hover:bg-[#f0e8df] focus-visible:outline-2 focus-visible:outline-serein-brand"
+            >
+              <app-icon name="user" class="h-5 w-5 shrink-0 text-serein-brand" stroke-width="1.6" />
+              <span>Profile</span>
+            </a>
+
+            <div class="mx-2 my-2 border-t border-black/10"></div>
+
             <button
               type="button"
-              class="block w-full rounded-xl px-3 py-2 text-left text-sm text-serein-brand hover:bg-black/5"
+              class="relative flex h-10 w-full items-center gap-4 rounded-2xl px-5 text-left text-serein-text transition hover:bg-black/[0.035] focus-visible:outline-2 focus-visible:outline-serein-brand"
               (click)="logout()"
             >
-              Logout
+              <app-icon
+                name="logout"
+                class="h-5 w-5 shrink-0 text-serein-brand"
+                stroke-width="1.6"
+              />
+              <span class="text-sm">Logout</span>
             </button>
           </div>
         </details>

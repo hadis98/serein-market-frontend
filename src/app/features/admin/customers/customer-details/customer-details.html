@@ -8,14 +8,12 @@
 
   @if (loading()) {
     <div class="rounded-3xl bg-white p-10">Loading customer...</div>
-
   } @else if (error()) {
     <div class="rounded-3xl bg-white p-10">
       <p class="text-red-700">
         {{ error() }}
       </p>
     </div>
-
   } @else if (customer(); as customer) {
     <header>
       <p class="text-xs uppercase tracking-[0.35em] text-serein-brand">Customer</p>
@@ -94,9 +92,7 @@
               </p>
             </div>
 
-            <span class="text-sm">
-              {{ order.status }}
-            </span>
+            <app-order-status-badge [status]="order.status" />
 
             <span class="text-sm text-stone-500">
               {{ order.paymentMethod }}

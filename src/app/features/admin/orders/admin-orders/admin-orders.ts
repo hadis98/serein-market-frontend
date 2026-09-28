@@ -1,18 +1,14 @@
 import { Component, computed, inject, signal } from '@angular/core';
-
 import { CurrencyPipe, DatePipe } from '@angular/common';
-
 import { RouterLink } from '@angular/router';
 
 import { AdminOrderStore } from '../../../../core/state/admin-order-store';
+import { OrderStatusBadge } from '../../../../shared/ui/order-status-badge/order-status-badge';
 
 @Component({
-  imports: [RouterLink, DatePipe, CurrencyPipe],
-
+  imports: [RouterLink, DatePipe, CurrencyPipe, OrderStatusBadge],
   selector: 'app-admin-orders',
-
   styleUrl: './admin-orders.css',
-
   templateUrl: './admin-orders.html',
 })
 export class AdminOrders {

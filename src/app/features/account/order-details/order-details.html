@@ -38,24 +38,7 @@
               <p class="mt-3 text-sm text-serein-text/55">{{ order.createdAt | date: 'medium' }}</p>
             </div>
 
-            <span
-              class="inline-flex w-fit shrink-0 items-center gap-2 rounded-full bg-[#f7f0e8] px-4 py-2.5 text-xs font-medium text-serein-brand"
-            >
-              <svg
-                aria-hidden="true"
-                class="h-4 w-4"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="1.8"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              >
-                <circle cx="12" cy="12" r="9" />
-                <path d="M12 7v5l3 2" />
-              </svg>
-              {{ order.status }}
-            </span>
+            <app-order-status-badge class="w-fit shrink-0" [status]="order.status" />
           </div>
         </section>
 
@@ -247,8 +230,8 @@
           </dl>
 
           <div class="flex items-center justify-between gap-5 py-6">
-            <span class="font-display text-xl font-semibold">Total</span>
-            <strong class="font-display text-xl">
+            <span class="font-display text-lg font-semibold">Total</span>
+            <strong class="font-display text-lg">
               {{ order.totalAmount | currency: 'USD' : 'symbol' : '1.0-2' }}
             </strong>
           </div>
@@ -257,7 +240,7 @@
             <button
               type="button"
               class="h-14 w-full rounded-2xl bg-serein-surface px-6 font-display text-lg text-serein-brand shadow-sm transition hover:bg-white focus:outline-none focus:ring-3 focus:ring-white/30"
-              (click)="cancelOrder()"
+              (click)="askToCancel()"
             >
               Cancel order
             </button>
@@ -278,3 +261,54 @@
     </div>
   }
 </section>
+
+<!-- Cancel order confirmation -->
+@if (cancelConfirmationOpen()) {
+  <div
+    class="fixed inset-0 z-[100] flex items-center justify-center bg-black/30 px-5 backdrop-blur-sm"
+    (click)="closeCancelConfirmation()"
+  >
+    <div
+      class="w-full max-w-md rounded-[2rem] bg-serein-surface p-7 shadow-2xl sm:p-8"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="cancel-order-title"
+      aria-describedby="cancel-order-description"
+      (click)="$event.stopPropagation()"
+    >
+      <p class="text-xs font-medium uppercase tracking-[0.25em] text-red-700">Cancel order</p>
+
+      <h2 id="cancel-order-title" class="mt-3 font-display text-3xl text-serein-text">
+        Are you sure?
+      </h2>
+
+      <p id="cancel-order-description" class="mt-4 leading-7 text-serein-text/65">
+        Are you sure you want to cancel your order?
+      </p>
+
+      <div class="mt-8 flex flex-col-reverse gap-3 sm:flex-row sm:gap-4">
+        <button
+          type="button"
+          class="inline-flex h-12 items-center justify-center rounded-2xl border border-black/10 px-6 text-sm text-serein-text transition hover:bg-black/[0.03] disabled:cursor-not-allowed disabled:opacity-50 sm:min-w-28"
+          [disabled]="cancelling()"
+          (click)="closeCancelConfirmation()"
+        >
+          Keep order
+        </button>
+
+        <button
+          type="button"
+          class="inline-flex h-12 items-center justify-center rounded-2xl bg-red-700 px-6 text-sm font-medium text-white transition hover:bg-red-800 disabled:cursor-not-allowed disabled:opacity-50 sm:min-w-40"
+          [disabled]="cancelling()"
+          (click)="cancelOrder()"
+        >
+          @if (cancelling()) {
+            Cancelling...
+          } @else {
+            Yes, cancel order
+          }
+        </button>
+      </div>
+    </div>
+  </div>
+}

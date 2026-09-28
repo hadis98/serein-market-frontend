@@ -11,9 +11,10 @@ import { ToastStore } from '../../../../core/state/toast-store';
 import type { AdminOrderDetails as AdminOrderDetailsModel } from '../../../../core/models/admin-order.model';
 
 import type { OrderStatus } from '../../../../core/models/order.model';
+import { OrderStatusBadge } from '../../../../shared/ui/order-status-badge/order-status-badge';
 
 @Component({
-  imports: [CurrencyPipe, DatePipe, RouterLink],
+  imports: [CurrencyPipe, DatePipe, RouterLink, OrderStatusBadge],
 
   selector: 'app-admin-order-details',
 

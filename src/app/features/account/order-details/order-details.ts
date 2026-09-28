@@ -11,9 +11,10 @@ import { AuthStore } from '../../../core/auth/auth-store';
 import { ToastStore } from '../../../core/state/toast-store';
 
 import type { OrderDetails as OrderDetailsModel } from '../../../core/models/order.model';
+import { OrderStatusBadge } from '../../../shared/ui/order-status-badge/order-status-badge';
 
 @Component({
-  imports: [CurrencyPipe, DatePipe, RouterLink],
+  imports: [CurrencyPipe, DatePipe, RouterLink, OrderStatusBadge],
 
   selector: 'app-order-details',
 
@@ -34,8 +35,24 @@ export class OrderDetails {
 
   readonly loading = signal(true);
 
+  readonly cancelConfirmationOpen = signal(false);
+
+  readonly cancelling = signal(false);
+
   constructor() {
     void this.load();
+  }
+
+  askToCancel(): void {
+    this.cancelConfirmationOpen.set(true);
+  }
+
+  closeCancelConfirmation(): void {
+    if (this.cancelling()) {
+      return;
+    }
+
+    this.cancelConfirmationOpen.set(false);
   }
 
   async cancelOrder(): Promise<void> {
@@ -45,14 +62,20 @@ export class OrderDetails {
       return;
     }
 
+    this.cancelling.set(true);
+
     try {
       await this.store.cancelOrder(order.id);
 
       await this.load();
 
+      this.cancelConfirmationOpen.set(false);
+
       this.toast.show('Order cancelled.');
     } catch (error) {
       this.toast.show(error instanceof Error ? error.message : 'Could not cancel order.', 'error');
+    } finally {
+      this.cancelling.set(false);
     }
   }
 

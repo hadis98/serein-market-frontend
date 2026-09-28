@@ -7,9 +7,10 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 import { AdminCustomerStore } from '../../../../core/state/admin-customer-store';
 
 import type { AdminCustomerDetails as AdminCustomerDetailsModel } from '../../../../core/models/admin-customer.model';
+import { OrderStatusBadge } from '../../../../shared/ui/order-status-badge/order-status-badge';
 
 @Component({
-  imports: [CurrencyPipe, DatePipe, RouterLink],
+  imports: [CurrencyPipe, DatePipe, RouterLink, OrderStatusBadge],
 
   selector: 'app-admin-customer-details',
 

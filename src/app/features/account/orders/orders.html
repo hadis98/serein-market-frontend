@@ -51,9 +51,7 @@
                 </p>
               </div>
 
-              <span class="rounded-full bg-black/5 px-4 py-2 text-xs">
-                {{ order.status }}
-              </span>
+              <app-order-status-badge [status]="order.status" />
             </div>
           </div>
         </a>
