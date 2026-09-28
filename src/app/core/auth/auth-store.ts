@@ -13,7 +13,6 @@ import type {
   AuthUser,
   LoginRequest,
   RegisterRequest,
-  SessionUser,
 } from '../models/auth.model';
 
 const USER_STORAGE_KEY = 'serein-user';
@@ -26,14 +25,9 @@ export class AuthStore {
 
   private readonly tokenService = inject(AuthTokenService);
 
-  private readonly userState = signal<SessionUser | null>(this.loadStoredUser());
+  private readonly userState = signal<AuthUser | null>(this.loadStoredUser());
 
   readonly user = this.userState.asReadonly();
-
-  // Temporary compatibility alias.
-  // Some existing templates currently use
-  // auth.customer().
-  readonly customer = this.user;
 
   readonly isLoggedIn = computed(
     () => this.userState() !== null && this.tokenService.token() !== null,
@@ -103,7 +97,7 @@ export class AuthStore {
     localStorage.setItem(USER_STORAGE_KEY, JSON.stringify(user));
   }
 
-  private loadStoredUser(): SessionUser | null {
+  private loadStoredUser(): AuthUser | null {
     const saved = localStorage.getItem(USER_STORAGE_KEY);
 
     if (!saved) {
@@ -142,13 +136,7 @@ export class AuthStore {
     throw new Error('Profile editing is temporarily unavailable.');
   }
 
-  private toSessionUser(user: AuthUser): SessionUser {
-    return {
-      ...user,
-
-      // Temporary old-name aliases
-      custId: user.id,
-      mobileNo: user.phoneNumber,
-    };
+  private toSessionUser(user: AuthUser): AuthUser {
+    return user;
   }
 }

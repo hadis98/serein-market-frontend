@@ -6,7 +6,7 @@ import { ToastStore } from '../../../core/state/toast-store';
 
 interface ProfileFormModel {
   name: string;
-  mobileNo: string;
+  phoneNumber: string;
   password: string;
 }
 
@@ -23,11 +23,11 @@ export class Profile {
   readonly editing = signal(false);
   readonly errorMessage = signal('');
 
-  private readonly customer = this.auth.customer();
+  readonly user = this.auth.user();
 
   readonly model = signal<ProfileFormModel>({
-    name: this.customer?.name ?? '',
-    mobileNo: this.customer?.mobileNo ?? '',
+    name: this.user?.name ?? '',
+    phoneNumber: this.user?.phoneNumber ?? '',
     password: '',
   });
 
@@ -39,11 +39,11 @@ export class Profile {
         message: 'Name is required',
       });
 
-      required(path.mobileNo, {
+      required(path.phoneNumber, {
         message: 'Mobile number is required',
       });
 
-      minLength(path.mobileNo, 10, {
+      minLength(path.phoneNumber, 10, {
         message: 'Enter a valid mobile number',
       });
 
@@ -60,9 +60,9 @@ export class Profile {
       submission: {
         action: async () => {
           console.log('submit');
-          const customer = this.auth.customer();
+          const user = this.auth.user();
 
-          if (!customer) {
+          if (!user) {
             return;
           }
 
@@ -70,9 +70,9 @@ export class Profile {
 
           try {
             await this.auth.updateProfile({
-              CustId: customer.custId,
+              CustId: user.id,
               Name: this.model().name,
-              MobileNo: this.model().mobileNo,
+              MobileNo: this.model().phoneNumber,
               Password: this.model().password,
             });
 
@@ -88,7 +88,7 @@ export class Profile {
   );
 
   startEditing() {
-    const customer = this.auth.customer();
+    const customer = this.auth.user();
 
     if (!customer) {
       return;
@@ -96,7 +96,7 @@ export class Profile {
 
     this.model.set({
       name: customer.name,
-      mobileNo: customer.mobileNo,
+      phoneNumber: customer.phoneNumber,
       password: '',
     });
 

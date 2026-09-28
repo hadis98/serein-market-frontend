@@ -5,21 +5,19 @@
     <h1 class="font-display text-5xl md:text-6xl">Your profile</h1>
   </div>
 
-  @if (auth.customer(); as customer) {
+  @if (user) {
     <div class="grid gap-8 lg:grid-cols-[280px_1fr]">
       <!-- ACCOUNT MENU -->
       <aside class="h-fit rounded-[2rem] bg-serein-surface p-6">
         <div
           class="flex h-16 w-16 items-center justify-center rounded-full bg-serein-brand text-2xl text-white"
         >
-          {{ customer.name.charAt(0).toUpperCase() }}
+          {{ user.name.charAt(0).toUpperCase() }}
         </div>
 
         <h2 class="mt-5 font-display text-2xl">
-          {{ customer.name }}
+          {{ user.name }}
         </h2>
-
-        <p class="mt-1 text-sm opacity-60">Customer #{{ customer.custId }}</p>
 
         <nav class="mt-8 space-y-2">
           <a routerLink="/profile" class="block rounded-xl bg-serein-bg px-4 py-3 text-sm">
@@ -47,7 +45,7 @@
             <h2 class="mt-2 font-display text-3xl">Account details</h2>
           </div>
 
-          @if (!editing()) {
+          <!-- @if (!editing()) {
             <button
               type="button"
               class="rounded-2xl border border-serein-brand px-5 py-3 text-sm transition hover:bg-serein-brand hover:text-white"
@@ -55,33 +53,33 @@
             >
               Edit profile
             </button>
-          }
+          } -->
         </div>
 
         @if (!editing()) {
-          @if (auth.customer(); as customer) {
+          @if (auth.user(); as user) {
             <div class="mt-10 space-y-6">
               <div class="border-b border-black/10 pb-5">
                 <p class="text-xs uppercase tracking-widest opacity-50">Name</p>
 
                 <p class="mt-2 text-lg">
-                  {{ customer.name }}
+                  {{ user.name }}
                 </p>
               </div>
 
               <div class="border-b border-black/10 pb-5">
-                <p class="text-xs uppercase tracking-widest opacity-50">Mobile</p>
+                <p class="text-xs uppercase tracking-widest opacity-50">phone number</p>
 
                 <p class="mt-2 text-lg">
-                  {{ customer.mobileNo }}
+                  {{ user.phoneNumber }}
                 </p>
               </div>
 
               <div>
-                <p class="text-xs uppercase tracking-widest opacity-50">Customer ID</p>
+                <p class="text-xs uppercase tracking-widest opacity-50">Email</p>
 
                 <p class="mt-2 text-lg">
-                  {{ customer.custId }}
+                  {{ user.email}}
                 </p>
               </div>
             </div>
@@ -109,7 +107,7 @@
               }
             </div>
 
-            <!-- MOBILE -->
+            <!-- phoneNumber -->
 
             <div>
               <label for="profile-mobile" class="mb-2 block text-sm"> Mobile number </label>
@@ -117,7 +115,7 @@
               <input
                 id="profile-mobile"
                 type="tel"
-                [formField]="profileForm.mobileNo"
+                [formField]="profileForm.phoneNumber"
                 class="w-full rounded-2xl border border-black/10 bg-white px-5 py-4 outline-none focus:border-serein-brand"
               />
             </div>
@@ -140,9 +138,6 @@
                 </p>
               }
 
-              <p class="mt-2 text-xs opacity-50">
-                The API requires a password when updating your profile.
-              </p>
             </div>
 
             @if (errorMessage()) {

@@ -10,15 +10,6 @@ export interface AuthUser {
   updatedAt: string;
 }
 
-export interface SessionUser extends AuthUser {
-  /**
-   * Temporary compatibility with the
-   * old BigBasket frontend.
-   */
-  custId: number;
-  mobileNo: string;
-}
-
 export interface AuthResponse {
   user: AuthUser;
   accessToken: string;
