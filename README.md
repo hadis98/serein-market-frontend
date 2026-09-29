@@ -178,7 +178,7 @@ The public repository contains the **Angular frontend**. The backend is a separa
 
 ## Architecture
 
-The frontend separates transport, application state, and presentation concerns:
+The frontend separates api, application state, and presentation concerns:
 
 ```text
 src/app/
