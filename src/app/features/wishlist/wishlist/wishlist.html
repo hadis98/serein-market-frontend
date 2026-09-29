@@ -30,7 +30,7 @@
       </a>
     </div>
   } @else {
-    <div class="grid gap-7 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+    <div class="grid gap-7 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
       @for (item of wishlist.items(); track item.wishlistItemId) {
         <app-product-card [product]="item.product"></app-product-card>
       }

@@ -1,4 +1,4 @@
-import { computed, inject, Injectable, signal } from '@angular/core';
+import { inject, Injectable, signal } from '@angular/core';
 
 import { firstValueFrom } from 'rxjs';
 
@@ -35,7 +35,7 @@ export class OrderStore {
       this.ordersState.set(orders);
       this.loadedState.set(true);
     } finally {
-      this.loadingState.set(true);
+      this.loadingState.set(false);
     }
   }
 

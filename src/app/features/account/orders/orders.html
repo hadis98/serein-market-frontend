@@ -5,7 +5,13 @@
     <h1 class="font-display text-5xl md:text-6xl">Your orders</h1>
   </div>
 
-  @if (orderStore.orders().length === 0) {
+  @if (orderStore.loading()) {
+    <app-loading-state
+      label="Your orders"
+      title="Loading your orders..."
+      description="We're gathering your recent purchases and latest order updates."
+    />
+  } @else if (orderStore.orders().length === 0) {
     <div class="rounded-[2.5rem] bg-serein-surface py-24 text-center">
       <h2 class="font-display text-3xl">No orders yet</h2>
 

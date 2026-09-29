@@ -17,19 +17,13 @@ export class CategoryStore {
   private readonly api = inject(CategoryApi);
 
   private readonly categoriesState = signal<Category[]>([]);
-
   private readonly loadingState = signal(false);
-
   private readonly loadedState = signal(false);
-
   private readonly errorState = signal<string | null>(null);
 
   readonly categories = this.categoriesState.asReadonly();
-
   readonly loading = this.loadingState.asReadonly();
-
   readonly loaded = this.loadedState.asReadonly();
-
   readonly error = this.errorState.asReadonly();
 
   readonly count = computed(() => this.categoriesState().length);

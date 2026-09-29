@@ -18,7 +18,13 @@
     Back to orders
   </a>
 
-  @if (order(); as order) {
+  @if (loading()) {
+    <app-loading-state
+      label="Order details"
+      title="Loading your order..."
+      description="We're gathering your items, delivery information, and order summary."
+    />
+  } @else if (order(); as order) {
     <div class="grid items-start gap-5 lg:grid-cols-[minmax(0,2fr)_minmax(320px,1fr)]">
       <div class="space-y-5">
         <!-- Order header -->

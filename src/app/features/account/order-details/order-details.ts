@@ -1,42 +1,30 @@
 import { Component, inject, signal } from '@angular/core';
-
 import { CurrencyPipe, DatePipe } from '@angular/common';
-
 import { ActivatedRoute, RouterLink } from '@angular/router';
 
 import { OrderStore } from '../../../core/state/order-store';
-
 import { AuthStore } from '../../../core/auth/auth-store';
-
 import { ToastStore } from '../../../core/state/toast-store';
 
 import type { OrderDetails as OrderDetailsModel } from '../../../core/models/order.model';
+import { LoadingState } from '../../../shared/ui/loading-state/loading-state';
 import { OrderStatusBadge } from '../../../shared/ui/order-status-badge/order-status-badge';
 
 @Component({
-  imports: [CurrencyPipe, DatePipe, RouterLink, OrderStatusBadge],
-
+  imports: [CurrencyPipe, DatePipe, RouterLink, OrderStatusBadge, LoadingState],
   selector: 'app-order-details',
-
   styleUrl: './order-details.css',
-
   templateUrl: './order-details.html',
 })
 export class OrderDetails {
   private readonly route = inject(ActivatedRoute);
-
   private readonly store = inject(OrderStore);
-
   private readonly toast = inject(ToastStore);
-
   readonly auth = inject(AuthStore);
 
   readonly order = signal<OrderDetailsModel | null>(null);
-
   readonly loading = signal(true);
-
   readonly cancelConfirmationOpen = signal(false);
-
   readonly cancelling = signal(false);
 
   constructor() {
@@ -51,7 +39,6 @@ export class OrderDetails {
     if (this.cancelling()) {
       return;
     }
-
     this.cancelConfirmationOpen.set(false);
   }
 
@@ -66,7 +53,6 @@ export class OrderDetails {
 
     try {
       await this.store.cancelOrder(order.id);
-
       await this.load();
 
       this.cancelConfirmationOpen.set(false);

@@ -178,12 +178,9 @@
             (change)="updateSort($event)"
             class="appearance-none rounded-xl border border-black/10 bg-serein-surface py-3 pl-4 pr-10 text-sm outline-none transition focus:border-serein-brand"
           >
-            <option value="name-asc">Name A–Z</option>
-
-            <option value="name-desc">Name Z–A</option>
-
+            <option value="name-asc">Name A-Z</option>
+            <option value="name-desc">Name Z-A</option>
             <option value="products-high">Most products</option>
-
             <option value="products-low">Fewest products</option>
           </select>
 
@@ -242,7 +239,7 @@
           </button>
         </div>
       } @else {
-        <div class="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+        <div class="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
           @for (category of visibleCategories(); track category.categoryId) {
             <app-category-page-card
               [category]="category"
